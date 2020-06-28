@@ -1,0 +1,26 @@
+{
+  "name": "pokerquarantine-master",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd client && npm run build",
+    "start": "npm run build && node ./bin/www",
+    "server": "nodemon ./bin/www --ignore client/",
+    "client": "cd client && npm start",
+    "test": "cd client && npm run test",
+    "local": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.4"
+  }
+}
