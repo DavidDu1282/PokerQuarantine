@@ -1,0 +1,25 @@
+.PanelContainer {
+  margin: none;
+  display: block;
+  padding: none;
+  height: 850px;
+
+  &.main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
+    width: 1280px;
+  }
+
+  &.left {
+    float: left;
+    width: 280px;
+  }
+
+  &.right {
+    float: right;
+    width: 1000px;
+  }
+}
