@@ -7,13 +7,20 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var keys = require("./config/keys");
 var passport = require("passport");
-var indexRouter = require("./routes/index");
-
+var cookieSession = require("cookie-session");
 // connect to mongoDB
-require("./models/User");
 mongoose.connect(keys.mongoURI);
+// import models
+require("./models/User");
+require("./models/Creditcards");
 
+var indexRouter = require("./routes/index");
 var app = express();
+
+//use cookie session for user login, store cookie for 31 days
+app.use(
+  cookieSession({ maxAge: 31 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] })
+);
 
 // passport setup
 require("./services/passport");
