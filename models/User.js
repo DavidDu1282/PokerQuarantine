@@ -10,7 +10,7 @@ const userSchema = new Schema({
   name: { type: String },
   dob: { type: Date },
 
-  type: { type: Boolean },
+  role: { type: Boolean },
   balance: { type: Number },
   games_played: { type: Number },
   wins: { type: Number },

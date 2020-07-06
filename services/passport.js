@@ -26,16 +26,13 @@ passport.use(
     (email, password, done) => {
       User.findOne({ email: email })
         .then((user) => {
-          if (!user)
-            return done(null, false, { message: "Email does not exist" });
+          if (!user) return done(null, false);
           bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) throw err;
             if (isMatch) {
               return done(null, user);
             } else {
-              return done(null, false, {
-                message: "Invalid Email and Password",
-              });
+              return done(null, false);
             }
           });
         })
@@ -61,7 +58,7 @@ passport.use(
           googleId: profile.id,
           email: profile.emails[0].value,
           name: profile.displayName,
-          type: false,
+          role: false,
           balance: 0,
           games_played: 0,
           wins: 0,

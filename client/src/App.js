@@ -1,27 +1,118 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+
+import "./App.css";
+
+import axios from "axios";
 
 function App() {
+  //user fetch
+  const [data, setData] = useState({});
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
+  useEffect(() => {
+    axios.get("/api/current_user").then((res) => {
+      setData(res.data);
+    });
+  }, {});
+
+  //data from user fetch
+  const { name, email, balance, role } = data;
+
+  //login form
+  const [login_email, setLogin] = useState("");
+  const [login_password, setPassword] = useState("");
+  const onSubmitForm = (e) => {
+    e.preventDefault();
+
+    axios
+      .post("/api/login", { email: login_email, password: login_password })
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
+  //sign up form
+  const [signup_email, setSemail] = useState("");
+  const [signup_password, setSpassword] = useState("");
+  const [date, setDate] = useState("");
+
+  const signupSubmit = (e) => {
+    e.preventDefault();
+    const signupData = {
+      name: "test",
+      email: signup_email,
+      password: signup_password,
+      dob: date,
+    };
+    axios.post("/api/signup", signupData).then((res) => console.log(res));
+  };
+  //render
+  if (data) {
+    if (role) {
+      return <div>MOD PAGE</div>;
+    } else {
+      return (
+        <div>
+          <span>{name + email}</span>
+          <a href="/api/logout">
+            {" "}
+            <button>log out</button>
+          </a>
+        </div>
+      );
+    }
+  } else {
+    return (
+      <div>
+        <form action="" onSubmit={onSubmitForm}>
+          <input
+            type="email"
+            name="email"
+            placeholder="email"
+            value={login_email}
+            onChange={(e) => setLogin(e.target.value)}
+          ></input>
+          <input
+            type="password"
+            name="password"
+            placeholder="password"
+            value={login_password}
+            onChange={(e) => setPassword(e.target.value)}
+          ></input>
+          <button type="submit">log in</button>
+        </form>
+        <a href="/auth/google">
+          <button> google oauth</button>
         </a>
-      </header>
-    </div>
-  );
+        <br></br>
+        signup
+        <form onSubmit={signupSubmit}>
+          <input
+            type="email"
+            name="s_email"
+            value={signup_email}
+            onChange={(e) => {
+              setSemail(e.target.value);
+            }}
+          ></input>
+          <input
+            name="s_password"
+            value={signup_password}
+            onChange={(e) => {
+              setSpassword(e.target.value);
+            }}
+          ></input>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => {
+              setDate(e.target.value);
+            }}
+          ></input>
+          <button type="submit">Sign up</button>
+        </form>
+      </div>
+    );
+  }
 }
 
 export default App;
