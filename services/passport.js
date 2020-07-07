@@ -61,7 +61,7 @@ passport.use(
           googleId: profile.id,
           email: profile.emails[0].value,
           name: profile.displayName,
-          role: false,
+          role: 0,
           balance: 0,
           games_played: 0,
           wins: 0,

@@ -13,8 +13,8 @@ mongoose.connect(keys.mongoURI);
 // import models
 require("./models/User");
 require("./models/Creditcards");
+require("./models/NewsPosts");
 
-var indexRouter = require("./routes/index");
 var app = express();
 
 //use cookie session for user login, store cookie for 31 days
@@ -34,7 +34,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "client/build")));
 
 //routes
-app.use("/", indexRouter);
+require("./routes/authRoutes")(app);
+require("./routes/newsRoutes")(app);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
