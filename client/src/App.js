@@ -37,7 +37,7 @@ function App() {
       password: login_password,
     });
     console.log(res.data.message);
-    LoginError(res.data.message);
+    setLoginError(res.data.message);
   };
 
   //sign up form
