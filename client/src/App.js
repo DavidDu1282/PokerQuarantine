@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import "./App.css";
+import Button from "@material-ui/core/Button";
+
+import TextField from "@material-ui/core/TextField";
+
+import { useForm } from "react-hook-form";
 
 import axios from "axios";
 
@@ -8,11 +12,14 @@ function App() {
   //user fetch
   const [data, setData] = useState({});
 
-  useEffect(() => {
-    axios.get("/api/current_user").then((res) => {
-      setData(res.data);
-    });
-  }, {});
+  useEffect(
+    () => {
+      axios.get("/api/current_user").then((res) => {
+        setData(res.data);
+      });
+    },
+    { data }
+  );
 
   //data from user fetch
   const { name, email, balance, role } = data;
@@ -45,6 +52,10 @@ function App() {
     };
     axios.post("/api/signup", signupData).then((res) => console.log(res));
   };
+
+  //react-hook-form
+  const { register, handleSubmit, errors } = useForm();
+
   //render
   if (data) {
     if (role) {
@@ -109,6 +120,37 @@ function App() {
             }}
           ></input>
           <button type="submit">Sign up</button>
+        </form>
+        <form
+          noValidate
+          onSubmit={handleSubmit((data) => alert(JSON.stringify(data)))}
+        >
+          <TextField
+            variant="outlined"
+            margin="normal"
+            inputRef={register({
+              validate: async (value) => {
+                const res = await axios.post("/api/check_email", {
+                  email: value,
+                });
+
+                return res === 200;
+              },
+            })}
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            error={errors.email ? true : false}
+          />
+          {errors.email && "Email already exist"}
+
+          <Button type="submit" fullWidth variant="contained" color="primary">
+            Sign up
+          </Button>
         </form>
       </div>
     );

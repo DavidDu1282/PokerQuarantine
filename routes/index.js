@@ -43,6 +43,15 @@ router.post("/api/signup", (req, res) => {
   });
 });
 
+/*POST Sign up email validation */
+router.post("/api/check_email", (req, res) => {
+  User.findOne({ email: req.body.email }, (err, user) => {
+    console.log(user);
+    if (err) console.log(err);
+    if (user) return res.send(200);
+  });
+});
+
 /*POST Log in */
 router.post(
   "/api/login",
