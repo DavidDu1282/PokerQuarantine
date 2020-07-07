@@ -5,8 +5,6 @@ import { Paper } from "@material-ui/core";
 const useStyles = makeStyles({
   root: {
     backgroundColor: '#FFFFFF',
-    color: '#000000',
-    padding: "40px",
     height: "100%"
   }
 });
