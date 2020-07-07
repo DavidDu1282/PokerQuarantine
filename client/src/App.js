@@ -1,12 +1,15 @@
 import React from 'react';
-import { MainPanel } from './views';
-import { CssBaseline } from "@material-ui/core";
+//import { MainPanel } from './views';
+import { CssBaseline, ListSubheader } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Theme } from './theme';
+//import NewsPage from './News/news.js';
 
+import PlayerInfo from './Info/info.js';
+import NewsPage from './News/news';
+import Board from './Leaderboard/leaderboard';
 
-import NewsPage from './News/news.js';
-import Board from './Leaderboard/leaderboard.js'
+//import Board from './Leaderboard/leaderboard.js';
 
 function App() {
 
@@ -14,9 +17,10 @@ function App() {
     
        
           <ThemeProvider theme={Theme}>
+            
           <CssBaseline />
-          
-          <Board></Board>
+          <PlayerInfo></PlayerInfo>
+         
           </ThemeProvider>
     
 

@@ -1,61 +1,77 @@
-import React from "react";
-import './leaderboard.scss'
+import React from 'react';
 import { DarkContainer, LightContainer } from '.././components';
 import { Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import './leaderboard.scss'
 
-const Board = () => {
-    return (
-        <div className="PanelContainer main">
-        <div className="PanelContainer left">
-        <DarkContainer style={{borderRadius: "4px 0 0 4px"}}>
-          <Typography>Nagivation Bar</Typography>
-        </DarkContainer>
-        </div>
-        <div className="PanelContainer right">
-        <LightContainer style={{borderRadius: "0 4px 4px 0"}}>
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+});
 
-        <div className="newsHeader"> <b><header>Leaderboard</header></b>
-        <br></br><div id="container">
-            <div class="row">
-            <div class="name">Player1</div><div class="score">430</div>
-            </div>
-    
-            <div class="row">
-            <div class="name">Player2</div><div class="score">580</div>
-            </div>
-    
-            <div class="row">
-            <div class="name">Player3</div><div class="score">310</div>
-            </div>
-    
-            <div class="row">
-            <div class="name">Player4</div><div class="score">640</div>
-            </div>
-    
-            <div class="row">
-                <div class="name">Player5</div><div class="score">495</div>
-            </div>
-        </div>
-        </div>
-     
+function createData(name, username, chips) {
+  return { name, username, chips};
+}
 
-        </LightContainer>
-        </div>
-      </div>
-    );
-  };
+const data = [
+  createData('Jason', 'poker123', 300),
+  createData('Marian', 'marmar', 5000),
+  createData('John', 'jayjay1', 20),
+  createData('Emily', 'emlee', 100),
+];
+
+const sortedData = data.sort((a, b) => b.chips - a.chips);
+
+export default function Board() {
+  const classes = useStyles();
+
   
-  document.addEventListener('DOMContentLoaded', () => {
-    let elements = []
-    let container = document.querySelector('#container')
-    // Add each row to the array
-    container.querySelectorAll('.row').forEach(el => elements.push(el))
-    // Clear the container
-    container.innerHTML = ''
-    // Sort the array from highest to lowest
-    elements.sort((a, b) => b.querySelector('.score').textContent - a.querySelector('.score').textContent)
-    // Put the elements back into the container
-    elements.forEach(e => container.appendChild(e))
-  })
+  return (
+    <div className="PanelContainer main">
+      <div className="PanelContainer left">
+          <DarkContainer style={{borderRadius: "4px 0 0 4px"}}>
+          <Typography>Nagivation Bar</Typography>
+          </DarkContainer>
+          </div>
+    <div className="PanelContainer right">
+    <LightContainer style={{borderRadius: "0 4px 4px 0"}}>
+    
+    <Typography><b><header className = "newsH1">LEADERBOARD</header></b></Typography>
 
-export default Board;
+    
+    <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><b>Name</b></TableCell>
+            <TableCell align="left"><b>Username</b></TableCell>
+            <TableCell align="right"><b>Chips</b></TableCell>
+
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sortedData.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="left">{row.username}</TableCell>
+              <TableCell align="right">{row.chips}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      </LightContainer>
+           </div>
+           </div>
+  );
+}
+
