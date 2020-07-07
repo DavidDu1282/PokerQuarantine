@@ -30,7 +30,7 @@ router.post("/api/signup", (req, res) => {
         password: hash,
         name: name,
         dob: dob,
-        type: false,
+        role: false,
         balance: 0,
         games_played: 0,
         wins: 0,
@@ -52,14 +52,26 @@ router.post("/api/check_email", (req, res) => {
   });
 });
 
-/*POST Log in */
+/*POST Log in 
 router.post(
   "/api/login",
 
   passport.authenticate("local", {
     successRedirect: "/",
   })
-);
+); 
+
+*/
+router.post("/api/login", (req, res, next) => {
+  passport.authenticate("local", (e, user, info) => {
+    if (e) return next(e);
+    if (info) return res.send(info);
+    req.logIn(user, (e) => {
+      if (e) return next(e);
+      return res.send(user);
+    });
+  })(req, res, next);
+});
 
 router.get(
   "/auth/google",

@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import { useForm } from "react-hook-form";
 
 import axios from "axios";
+import { set } from "mongoose";
 
 function App() {
   //user fetch
@@ -27,14 +28,16 @@ function App() {
   //login form
   const [login_email, setLogin] = useState("");
   const [login_password, setPassword] = useState("");
-  const onSubmitForm = (e) => {
+  const [LoginError, setLoginError] = useState("");
+  const onSubmitForm = async (e) => {
     e.preventDefault();
 
-    axios
-      .post("/api/login", { email: login_email, password: login_password })
-      .then((res) => {
-        console.log(res);
-      });
+    const res = await axios.post("/api/login", {
+      email: login_email,
+      password: login_password,
+    });
+    console.log(res.data.message);
+    LoginError(res.data.message);
   };
 
   //sign up form
@@ -74,6 +77,7 @@ function App() {
   } else {
     return (
       <div>
+        {LoginError}
         <form action="" onSubmit={onSubmitForm}>
           <input
             type="email"
