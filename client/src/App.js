@@ -6,6 +6,7 @@ import { Theme } from './theme';
 
 
 import NewsPage from './News/news.js';
+import Board from './Leaderboard/leaderboard.js'
 
 function App() {
 
@@ -15,8 +16,7 @@ function App() {
           <ThemeProvider theme={Theme}>
           <CssBaseline />
           
-          
-          <NewsPage></NewsPage>
+          <Board></Board>
           </ThemeProvider>
     
 
