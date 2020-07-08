@@ -1,15 +1,12 @@
 import React from 'react';
-import { DarkContainer, LightContainer } from '.././components';
+import { DarkContainer, LightContainer } from '../../components';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import './leaderboard.scss'
 
 const useStyles = makeStyles({
@@ -31,21 +28,17 @@ const data = [
 
 const sortedData = data.sort((a, b) => b.chips - a.chips);
 
-export default function Board() {
+export default function LeaderBoard() {
   const classes = useStyles();
 
   
   return (
-    <div className="PanelContainer main">
-      <div className="PanelContainer left">
-          <DarkContainer style={{borderRadius: "4px 0 0 4px"}}>
-          <Typography>Nagivation Bar</Typography>
-          </DarkContainer>
-          </div>
-    <div className="PanelContainer right">
-    <LightContainer style={{borderRadius: "0 4px 4px 0"}}>
+   
+
+    <div className="">
     
-    <Typography><b><header className = "newsH1">LEADERBOARD</header></b></Typography>
+    
+    <Typography><b><header className = "newsH1">Leaderboard</header></b></Typography>
 
     
     <Table className={classes.table} aria-label="simple table">
@@ -69,9 +62,9 @@ export default function Board() {
           ))}
         </TableBody>
       </Table>
-      </LightContainer>
+     
            </div>
-           </div>
+           
   );
 }
 

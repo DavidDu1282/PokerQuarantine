@@ -3,8 +3,8 @@
     display: block;
     padding: none;
     height: 850px;
-    overflow-y: auto;
-    overflow-x: visible;
+    overflow: auto;
+    
   
     &.main {
       position: absolute;
@@ -25,14 +25,15 @@
     &.right {
       float: right;
       width: 1000px;
+      background-color: white;
+      overflow-y: auto;
     }
 }
 
 
 .newsH1{
     
-  display: block;
-  background-color: white;  
+  display: block; 
   font-size: 50px;
   color: black;
   padding-left: 20px;
