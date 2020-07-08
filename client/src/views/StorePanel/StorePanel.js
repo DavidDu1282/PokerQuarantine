@@ -1,12 +1,12 @@
 import React from 'react';
 //import logo from './logo.svg';
-import './Store.scss'
 
 import StoreCard from './StoreCard.js'
 import {
-    Grid,
+    Grid, Typography,
 } from '@material-ui/core/'
-class Store extends React.Component{
+
+class StorePanel extends React.Component{
   state = {
     StoreCard:[
       {
@@ -32,20 +32,28 @@ class Store extends React.Component{
   render() {
     console.log(this.state.StoreCard);
     return (
-      <div className="Store" >
-        <header>
-          <Grid container spacing={2} direction="row" justify="flex-end" alignItems="flex-start" >
+      <div className="container-padded" >
+        <Grid
+          container
+          direction="column"
+          justify="flex-start"
+          alignItems="flex-start"
+          alignContent="flex-start"
+          spacing={2}
+        >
+          <Grid item><Typography variant="h4">Store</Typography></Grid>
+          <Grid item container spacing={2} direction="row" justify="flex-end" alignItems="flex-start" >
             {this.state.StoreCard.map(elem => (
               <Grid item xs={16} sm={4} md={4} key={this.state.StoreCard.indexOf(elem)}>
                 <StoreCard storeCard = {this.state.StoreCard[this.state.StoreCard.indexOf(elem)]}> </StoreCard>
               </Grid>
             ))}
           </Grid>
-        </header>
+        </Grid>
       </div>
 
     );
   }
 }
 
-export default Store;
+export default StorePanel;

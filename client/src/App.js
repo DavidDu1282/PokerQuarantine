@@ -1,5 +1,5 @@
 import React from 'react';
-import { LoginPanel, Navigator, UserInfoPanel } from './views';
+import { LoginPanel, Navigator, UserInfoPanel, MatchPanel, StorePanel} from './views';
 import { User } from './models';
 import { CssBaseline, Typography } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -65,8 +65,8 @@ class App extends React.Component {
 
     const list = {
       'login / register': <LoginPanel client={this} />,
-      'match': <Typography>Match</Typography>,
-      'store': <Typography>Store</Typography>,
+      'match': <MatchPanel client={this} />,
+      'store': <StorePanel client={this} />,
       'leaderboard': <Typography>Leaderboard</Typography>,
       'news': <Typography>News</Typography>,
       'management': <Typography>Management</Typography>,

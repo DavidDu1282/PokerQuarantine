@@ -3,8 +3,10 @@ import React from 'react';
 import MatchCard from './MatchCard.js'
 import {
     Grid,
+    Typography
 } from '@material-ui/core/'
-class Match extends React.Component{
+
+class MatchPanel extends React.Component {
 
   state = {
     matchCard:[
@@ -35,25 +37,31 @@ class Match extends React.Component{
   render() {
     return (
 
-      <div className="Match" float = 'right'>
-      <header className="App-header" float = 'right'>
-      <Grid container
-      justify="flex-end"
-      alignItems="center"
-      spacing={2}
-      direction="row">
-        {this.state.matchCard.map(elem => (
-          <Grid item xs={12} sm={4} md={4} key={this.state.matchCard.indexOf(elem)}>
-            <MatchCard matchCard = {this.state.matchCard[this.state.matchCard.indexOf(elem)]}> </MatchCard>
+      <div className="container-padded" float = 'right'>
+        <Grid
+          container
+          direction="column"
+          justify="flex-start"
+          alignItems="flex-start"
+          alignContent="flex-start"
+          spacing={2}
+        >
+          <Grid item><Typography variant="h4">Match</Typography></Grid>
+          <Grid item container
+          justify="flex-end"
+          alignItems="center"
+          spacing={2}
+          direction="row">
+            {this.state.matchCard.map(elem => (
+              <Grid item xs={12} sm={4} md={4} key={this.state.matchCard.indexOf(elem)}>
+                <MatchCard matchCard = {this.state.matchCard[this.state.matchCard.indexOf(elem)]}> </MatchCard>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-      </header>
+        </Grid>
       </div>
     )
   };
 }
 
-
-
-export default Match;
+export default MatchPanel;

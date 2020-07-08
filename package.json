@@ -23,17 +23,7 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-<<<<<<< HEAD
     "morgan": "~1.9.1"
-=======
-    "material-table": "^1.64.0",
-    "morgan": "~1.9.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-native": "^0.62.2",
-    "react-scripts": "3.4.1",
-    "sass": "^1.26.9"
->>>>>>> poker/DBranch
   },
   "devDependencies": {
     "concurrently": "^5.2.0",

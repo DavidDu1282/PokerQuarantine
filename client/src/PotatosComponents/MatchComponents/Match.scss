@@ -1,9 +1,0 @@
-@use ".././config.scss" as config;
-
-.Match {
-  padding: config.$app-height*0.05 config.$content-width*0.05;
-  display: flex;
-  margin: none;
-  width: config.$content-width;
-  height: config.$app-height;
-}
