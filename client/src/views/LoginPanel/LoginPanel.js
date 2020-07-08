@@ -6,6 +6,7 @@ import {
   Link
 } from '@material-ui/core';
 import { Spacing, GoogleIcon, QuickForm } from '../../components';
+import moment from 'moment';
 import './LoginPanel.scss';
 
 class LoginPanel extends React.Component {
@@ -17,6 +18,7 @@ class LoginPanel extends React.Component {
     super(props);
 
     this.login_form = React.createRef();
+    this.register_form = React.createRef();
     this.state = {
       page_index: 0
     }
@@ -43,10 +45,56 @@ class LoginPanel extends React.Component {
     // alert(JSON.stringify(result.body));
   }
 
+  onRegister(result) {
+    // if error
+    if (!result) return;
+
+    const { username, email, dob, password, re_password, tnc } = result.body;
+    let email_regrex = /(\w+@\w+\.\w+)/g;
+
+
+    // detect formatting errors
+    if (password !== re_password) {
+      this.register_form.current.setErrorState('re_password', `Passwords do not match.`);
+      return;
+    } else if (!email.match(email_regrex)) {
+      this.register_form.current.setErrorState('email', 'Please enter a valid email.');
+      return;
+    } else if (dob.isAfter(moment().subtract(19, 'years'))) {
+      this.register_form.current.setErrorState('dob', 'You must be 19 or older to register.');
+      return;
+    } else if (!tnc) {
+      this.register_form.current.setErrorState('tnc', 'Please agree to the terms and conditions.');
+      return;
+    } 
+
+    const data = {
+      username: username,
+      email: email,
+      dob: dob,
+      password: password
+    };
+
+    try {
+      this.props.client.auth(data, true);
+    } catch (err) {
+      switch (err.message) {
+        case 'username-duplicate':
+          this.register_form.setErrorState('username', 'Username already exists.');
+          break;
+        case 'email-duplicate':
+          this.register_form.setErrorState('email', 'Email has been registered with an existing account.');
+      }
+    }
+  }
+
 
   render() {
     const handleLogin = (result) => {
       this.onLogin(result);
+    };
+    const handleRegister = (result) => {
+      this.onRegister(result);
     };
 
     const login_page = (
@@ -60,7 +108,7 @@ class LoginPanel extends React.Component {
       >
         <Grid item xs><Typography variant="h5">Welcome Back</Typography></Grid>
         <Grid item xs><Typography variant="body2" color="textSecondary">
-          Sign in with your PokerQuarantine account.
+          Login with your PokerQuarantine account.
         </Typography></Grid>
         <Grid item xs><Spacing height={1}/></Grid>
         <QuickForm 
@@ -78,11 +126,11 @@ class LoginPanel extends React.Component {
           name="signin"
           tBoxVariant="filled"
           button={
-            <React.Fragment>
+            <React.Fragment key="spacing button">
               <Grid item xs>
                 <Spacing height={2}/>
               </Grid>
-              <Grid container alignItems="center">
+              <Grid container key="button" alignItems="center">
                 <Grid item xs={10}>
                   <Link
                     href="#"
@@ -103,7 +151,7 @@ class LoginPanel extends React.Component {
                     variant="contained"
                     fullWidth
                   >
-                    sign in
+                    Login
                   </Button>
                 </Grid>
               </Grid>
@@ -113,13 +161,23 @@ class LoginPanel extends React.Component {
           onSubmit={handleLogin}
         />
         
-        <Grid item xs><Button
-          size="medium"
-          variant="outlined"
-          startIcon={<GoogleIcon />}
-        >
-          Sign in with Google
-        </Button></Grid>
+        <Grid item xs>
+          <Spacing height={3}/>
+          <Typography variant="body2" color="textSecondary">
+            Or sign in with a third-party account:
+          </Typography>
+          <Spacing height={1}/>
+        </Grid>
+        <Grid item xs>
+          <Button
+            size="medium"
+            variant="outlined"
+            startIcon={<GoogleIcon />}
+            disabled
+          >
+            Sign in with Google
+          </Button>
+        </Grid>
         
       </Grid>
     );
@@ -145,10 +203,13 @@ class LoginPanel extends React.Component {
             "email": {
               label: "Email",
               type: "email" },
+            "dob": {
+              label: "Date of Birth",
+              type: "date" },
             "password": {
               label: "Password",
               type: "password" },
-            "re-password": {
+            "re_password": {
               label: "Re-enter Password",
               type: "password" },
             "tnc": {
@@ -158,11 +219,11 @@ class LoginPanel extends React.Component {
           name="register"
           tBoxVariant="filled"
           button={
-            <React.Fragment>
+            <React.Fragment key="spacing button">
               <Grid item xs>
                 <Spacing height={2}/>
               </Grid>
-              <Grid container alignItems="center">
+              <Grid container key="button" alignItems="center">
                 <Grid item xs={10}>
                   <Link
                     href="#"
@@ -172,7 +233,7 @@ class LoginPanel extends React.Component {
                         return {page_index: 0};
                       });
                     }}
-                  >Already have an account? Sign in</Link>
+                  >Already have an account? Login</Link>
                 </Grid>
                 <Grid item xs={2}>
                   <Button
@@ -187,7 +248,8 @@ class LoginPanel extends React.Component {
               </Grid>
             </React.Fragment>
           }
-          onSubmit={this.onLogin}
+          onSubmit={handleRegister}
+          ref={this.register_form}
         />
       </Grid>
     );

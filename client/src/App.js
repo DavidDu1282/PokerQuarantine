@@ -22,14 +22,21 @@ class App extends React.Component {
     return this.state.user;
   }
 
-  auth(data) {
+  auth(data, create=false) {
     /**
      * try auth the user with the given data
      * throws error if auth failed
      */
 
     try {
-      let logged_user = this.state.user.login(data);
+      var logged_user;
+
+      if (create) {
+        logged_user = this.state.user.create(data);
+      } else {
+        logged_user = this.state.user.login(data);
+      }
+
       this.setState((state) => {
         return {user: logged_user};
       });
@@ -38,6 +45,19 @@ class App extends React.Component {
       throw err;
     }
     
+  }
+
+  logout() {
+    /**
+     * logs out the logged in user
+     */
+    
+    this.user.logout();
+    var empty_user = new User();
+    this.setState((state) => {
+      return {user: empty_user};
+    });
+    this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
 
   render() {

@@ -1,13 +1,16 @@
 import React from 'react';
 import {
   TextField,
-  FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid,
   Button,
   Typography,
   Checkbox
 } from '@material-ui/core';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
+import moment from 'moment';
 
 class QuickForm extends React.Component {
   /**
@@ -30,8 +33,12 @@ class QuickForm extends React.Component {
       switch (options.type) {
         case 'checkbox':
           field_values[field_name] = false;
+          error_states[field_name] = '';
           break;
         case 'date':
+          error_states[field_name] = '';
+          let date = moment();
+          field_values[field_name] = date;
           break;
         default:
           error_states[field_name] = '';
@@ -89,14 +96,29 @@ class QuickForm extends React.Component {
      */
 
     let name = e.target.getAttribute('name');
-    this.setValue(name, e.target.value);
+    let type = e.target.getAttribute('type');
+    if (type === 'checkbox') {
+      console.log('triggered');
+
+      this.setValue(name, e.target.checked);
+    } else {
+      this.setValue(name, e.target.value);
+    }
 
     // errors
-    if ( e.target.value === '') {
+    if ( type !== 'checkbox' && e.target.value === '') {
       this.setErrorState(name, `This field must not be empty.`);
     } else {
       this.setErrorState(name, '');
     }
+  }
+
+  handleDateChange(name, date) {
+    /**
+     * Update date
+     */
+
+    this.setValue(name, date);
   }
 
   handleSubmit(e) {
@@ -132,16 +154,42 @@ class QuickForm extends React.Component {
                 control={<Checkbox
                   name={field_name}
                   checked={this.state.field_values[field_name]}
-                  onChange={e => this.setValue(field_name, e.target.checked)}  
+                  onChange={e => this.handleChange(e)}  
                   color="primary"
                   size="small"
                 />}
                 label={<Typography variant="body2">{options.label}</Typography>}
-              />
+              /><br/>
+              <FormHelperText
+                variant={tBoxVariant}
+                error={(this.state.error_states[field_name] === '') ? false : true}
+              >
+                {this.state.error_states[field_name]}
+              </FormHelperText>
             </Grid>
           );
           break;
         case 'date':
+          fields_display.push(
+            <Grid item xs key={field_name}>
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+              <DatePicker
+                disableFuture
+                fullWidth
+                name={field_name}
+                variant="inline"
+                inputVariant={tBoxVariant}
+                format="MMMM DD, yyyy"
+                margin="normal"
+                label={options.label}
+                value={this.state.field_values[field_name]}
+                onChange={(date) => this.handleDateChange(field_name, date)}
+                error={(this.state.error_states[field_name] === '') ? false : true}
+                helperText={this.state.error_states[field_name]}
+              />
+            </MuiPickersUtilsProvider>
+            </Grid>
+          )
           break;
         default:
           fields_display.push(
@@ -151,10 +199,11 @@ class QuickForm extends React.Component {
                 name={field_name}
                 variant={tBoxVariant}
                 type={options.type}
+                value={this.state.field_values[field_name]}
                 error={(this.state.error_states[field_name] === '') ? false : true}
                 helperText={this.state.error_states[field_name]}
                 margin="normal"
-                onChange={e => this.handleChange(e)}
+                onChange={(e) => this.handleChange(e)}
                 fullWidth
               />
             </Grid>

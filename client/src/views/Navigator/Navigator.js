@@ -1,6 +1,6 @@
 import React from 'react';
 import { DarkContainer, LightContainer } from '../../components';
-import { Tab, Tabs, withStyles, ButtonBase, Grid, Typography, IconButton } from '@material-ui/core';
+import { Tab, Tabs, withStyles, ButtonBase, Grid, Typography, IconButton, Avatar } from '@material-ui/core';
 import { AccountCircle, ExitToApp } from '@material-ui/icons';
 import './Navigator.scss';
 import styles from './../../config.scss';
@@ -100,6 +100,8 @@ class Navigator extends React.Component {
         <div className="panelContainer left">
         <DarkContainer style={{borderRadius: "4px 0 0 4px"}}>
           <div className="nav-content">
+            <img src={'/Logo-withText-dark.png'} style={{width: "90%", margin: "1em auto"}} alt="logo" />
+
             <Tabs
               orientation="vertical"
               value={this.state.selectedTab}
@@ -114,7 +116,7 @@ class Navigator extends React.Component {
             {this.props.client.user.raw_type !== 9 && (
               <Grid
                 container
-                style={{padding: "0.5em 1em", alignSelf: "flex-end", marginTop: "auto"}}
+                style={{padding: "0.8em 1em", alignSelf: "flex-end", marginTop: "auto"}}
                 alignItems="center"
                 spacing={0}
               >
@@ -124,18 +126,19 @@ class Navigator extends React.Component {
                     disableTouchRipple
                     onClick={e => this.setSelectedTab(6)}
                   >
-                    <AccountCircle style={{fontSize: "4em"}} color="secondary"/>
-                    <Typography style={{color: "white", marginLeft: "0.5em"}} variant="body2">{this.props.client.user.name}</Typography>
+                    <Avatar src={this.props.client.user.avatar_url} alt={this.props.client.user.name}/>
+                    <Typography style={{color: "white", marginLeft: "0.8em"}} variant="body2">{this.props.client.user.name}</Typography>
                   </ButtonBase>
                 </Grid>
                 <Grid item xs={2}>
-                  <IconButton size="small">
+                  <IconButton size="small" onClick={e => this.props.client.logout()}>
                     <ExitToApp color="secondary"/>
                   </IconButton>
                 </Grid>
               </Grid>
             )}
           </div>
+
         </DarkContainer>
         </div>
 
