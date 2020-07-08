@@ -1,12 +1,14 @@
 /* Global theme for material ui */
 
 import { createMuiTheme } from "@material-ui/core/styles";
-import teal from "@material-ui/core/colors/teal";
-import pink from "@material-ui/core/colors/pink";
+
+import { teal, pink } from "@material-ui/core/colors";
+
+
 
 const Theme = createMuiTheme({
   palette: {
-    type: 'dark',
+    type: 'light',
     primary: teal,
     secondary: pink,
     background: {
@@ -15,4 +17,6 @@ const Theme = createMuiTheme({
   }
 });
 
+
 export { Theme };
+

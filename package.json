@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "cd client && npm run build && cd ..",
+    "build": "cd client && npm i && npm run build && cd ..",
     "start": "npm run build && node ./bin/www",
     "server": "nodemon ./bin/www --ignore client/",
     "client": "cd client && npm start",
@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+
     "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "acorn": "^7.3.1",
+
     "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -29,7 +31,10 @@
     "react-dom": "^16.13.1",
     "react-native": "^0.62.2",
     "react-scripts": "3.4.1",
-    "sass": "^1.26.9"
+    "sass": "^1.26.9",
+
+    "react-scripts": "^3.4.1"
+
   },
   "devDependencies": {
     "concurrently": "^5.2.0",

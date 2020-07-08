@@ -2,15 +2,18 @@
   margin: none;
   display: block;
   padding: none;
-  height: 850px;
+  height: 880px;
+  overflow: hidden;
 
   &.main {
     position: absolute;
-    top: 50%;
+    top: 60%;
     left: 50%;
     -ms-transform: translateY(-50%) translateX(-50%);
     transform: translateY(-50%) translateX(-50%);
     width: 1280px;
+  
+
   }
 
   &.left {
@@ -24,3 +27,9 @@
   }
 }
 
+.newsH1
+{
+height: 50px;
+background-color: white;
+margin-bottom: 50px;
+}
