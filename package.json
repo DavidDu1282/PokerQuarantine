@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "cd client && npm run build",
+    "build": "cd client && npm i && npm run build && cd ..",
     "start": "npm run build && node ./bin/www",
     "server": "nodemon ./bin/www --ignore client/",
     "client": "cd client && npm start",

@@ -1,0 +1,11 @@
+@use "./../../config.scss" as config;
+
+
+.container {
+  padding: 0 config.$content-width*0.20;
+  display: flex;
+  align-items: center;
+  margin: none;
+  width: config.$content-width;
+  height: config.$app-height;
+}
