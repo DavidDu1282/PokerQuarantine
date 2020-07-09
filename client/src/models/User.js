@@ -99,7 +99,7 @@ class User {
     //}
 
     return axios.post('/api/signup', {
-      username: data.email,
+      email: data.email,
       password: data.password,
       name: data.username,
       dob: data.dob.toDate()

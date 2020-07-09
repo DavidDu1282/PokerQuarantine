@@ -12,13 +12,12 @@ module.exports = (router) => {
   });
 
   router.get("/api/logout", (req, res) => {
-    req.body.logout();
+    req.logout();
     res.send(200);
   });
   /*POST Sign up */
   router.post("/api/signup", (req, res) => {
     const { name, email, password, dob } = req.body;
-    console.log(req.body);
     
     //encrypt password then redirect to "/"
     bcrypt.genSalt(10, (err, salt) => {
