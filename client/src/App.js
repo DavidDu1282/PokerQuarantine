@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { LoginPanel, Navigator, UserInfoPanel, MatchPanel, StorePanel} from './views';
+import { LoginPanel,
+  Navigator,
+  UserInfoPanel,
+  MatchPanel,
+  StorePanel,
+  LeaderBoardPanel,
+  NewsPanel
+} from './views';
 import { User } from './models';
 import { CssBaseline, Typography } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -68,8 +75,8 @@ class App extends React.Component {
       'login / register': <LoginPanel client={this} />,
       'match': <MatchPanel client={this} />,
       'store': <StorePanel client={this} />,
-      'leaderboard': <Typography>Leaderboard</Typography>,
-      'news': <Typography>News</Typography>,
+      'leaderboard': <LeaderBoardPanel client={this} />,
+      'news': <NewsPanel client={this} />,
       'management': <Typography>Management</Typography>,
       'user info': <UserInfoPanel client={this} />,
     };

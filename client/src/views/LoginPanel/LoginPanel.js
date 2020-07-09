@@ -84,6 +84,8 @@ class LoginPanel extends React.Component {
           break;
         case 'email-duplicate':
           this.register_form.setErrorState('email', 'Email has been registered with an existing account.');
+          break;
+        default:
       }
     }
   }

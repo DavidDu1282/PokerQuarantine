@@ -8,7 +8,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Cards from './cards.jpg';
 /*
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -36,7 +35,7 @@ export default function MatchCard(props) {
           component="img"
           alt={props.matchCard.title}
           height="140"
-          image={Cards}
+          image="/cards.jpg"
           title={props.matchCard.title}
         />
         <CardContent>

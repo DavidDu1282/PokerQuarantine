@@ -119,6 +119,7 @@ class QuickForm extends React.Component {
      */
 
     this.setValue(name, date);
+    this.setErrorState(name, '');
   }
 
   handleSubmit(e) {

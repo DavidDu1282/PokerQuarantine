@@ -17,6 +17,7 @@ export default function LightContainer(props) {
   return (
     <Paper
       classes={{root: classes.root}}
+      className="scroll-container"
       elevation={1 | props.elevation}
       style={props.style}
     >

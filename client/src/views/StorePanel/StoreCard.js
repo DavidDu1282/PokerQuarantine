@@ -8,7 +8,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Chips from './chips.png';
 import Box from '@material-ui/core/Box';
 const useStyles = makeStyles({
   root: {
@@ -29,7 +28,7 @@ export default function StoreCard(props) {
           component="img"
           alt={props.storeCard.title}
           height="140"
-          image={Chips}
+          image="/chips.png"
           title={props.storeCard.title}
         />
         <CardContent>

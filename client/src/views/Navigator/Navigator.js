@@ -1,7 +1,7 @@
 import React from 'react';
 import { DarkContainer, LightContainer } from '../../components';
 import { Tab, Tabs, withStyles, ButtonBase, Grid, Typography, IconButton, Avatar } from '@material-ui/core';
-import { AccountCircle, ExitToApp } from '@material-ui/icons';
+import { ExitToApp } from '@material-ui/icons';
 import './Navigator.scss';
 import styles from './../../config.scss';
 

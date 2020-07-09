@@ -39,7 +39,7 @@ class StorePanel extends React.Component{
           justify="flex-start"
           alignItems="flex-start"
           alignContent="flex-start"
-          spacing={2}
+          spacing={4}
         >
           <Grid item><Typography variant="h4">Store</Typography></Grid>
           <Grid item container spacing={2} direction="row" justify="flex-end" alignItems="flex-start" >
