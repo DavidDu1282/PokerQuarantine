@@ -72,10 +72,8 @@ class User {
 
     return axios.post('/api/login', authdata)
       .then((res) => {
-        console.log(res.data);
 
         const user_new = new User();
-        user_new.passport = res;
         user_new.userdata = res.data;
 
         return user_new;
@@ -88,51 +86,51 @@ class User {
 
   async create(data) {
     // @TODO: add real create
-    axios.post('/api/check_email', {email: data.email})
+    return axios.post('/api/check_email', {email: data.email})
       .then((res) => {
         throw new Error('email-duplicate');
-      }).catch((err) => {});
+      }).catch((err) => {
+        if (err.message === 'email-duplicate') throw err;
+
+        return axios.post('/api/signup', {
+          email: data.email,
+          password: data.password,
+          name: data.username,
+          dob: data.dob.toDate()
+        })
+          .then((res) => {
+            const user_new = new User();
+            user_new.userdata = {
+              email: data.email,
+              name: data.username,
+              dob: data.dob.toDate(),
+              role: 0,
+              balance: 0,
+              games_played: 0,
+              wins: 0,
+              losses: 0,
+            };
+    
+            return user_new;
+          }).catch((err) => {throw err;})
+      });
 
 
     //else if (result === 2) {
       //throw new Error("username-duplicate");
     //}
 
-    return axios.post('/api/signup', {
-      email: data.email,
-      password: data.password,
-      name: data.username,
-      dob: data.dob.toDate()
-    })
-      .then((res) => {
-        console.log(res);
-
-        const user_new = new User();
-        user_new.userdata = {
-          email: data.email,
-          name: data.username,
-          dob: data.dob.toDate(),
-          role: 0,
-          balance: 0,
-          games_played: 0,
-          wins: 0,
-          losses: 0,
-        };
-
-        return user_new;
-      }).catch((err) => {throw err;})
+    
 
   }
 
   async logout() {
     // @TODO: add real logout
 
-    return true;
-
-    /*return axios.get('/api/logout', this.passport)
+    return axios.get('/api/logout')
       .then((res) => {
-        return true;
-      });*/
+        return new User();
+      });
   }
 
   // getters --------------------------

@@ -6,7 +6,8 @@ import { LoginPanel,
   MatchPanel,
   StorePanel,
   LeaderBoardPanel,
-  NewsPanel
+  NewsPanel,
+  ManagementPanel
 } from './views';
 import { User } from './models';
 import { CssBaseline, Typography } from "@material-ui/core";
@@ -49,7 +50,6 @@ class App extends React.Component {
         return {user: logged_user};
       });
 
-      console.log(logged_user);
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     } catch (err) {
       throw err;
@@ -62,8 +62,7 @@ class App extends React.Component {
      * logs out the logged in user
      */
     
-    await this.user.logout();
-    var empty_user = new User();
+    const empty_user = await this.user.logout();
     this.setState((state) => {
       return {user: empty_user};
     });
@@ -79,7 +78,7 @@ class App extends React.Component {
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
       'news': <NewsPanel client={this} />,
-      'management': <Typography>Management</Typography>,
+      'management': <ManagementPanel client={this} />,
       'user info': <UserInfoPanel client={this} />,
     };
 

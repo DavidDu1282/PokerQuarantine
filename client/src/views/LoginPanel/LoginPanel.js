@@ -121,9 +121,9 @@ class LoginPanel extends React.Component {
             "password": {
               label: "Password",
               type: "password" },
-            "remember": {
-              label: "Remember me",
-              type: "checkbox" }
+            //"remember": {
+              //label: "Remember me",
+              //type: "checkbox" }
           }}
           name="signin"
           tBoxVariant="filled"
