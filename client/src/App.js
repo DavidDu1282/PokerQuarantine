@@ -10,7 +10,7 @@ import { LoginPanel,
   ManagementPanel
 } from './views';
 import { User } from './models';
-import { CssBaseline, Typography } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Theme } from './theme';
 import './global.scss'

@@ -1,6 +1,6 @@
 import React from 'react';
 import { DarkContainer, LightContainer } from '../../components';
-import { Tab, Tabs, withStyles, ButtonBase, Grid, Typography, IconButton, Avatar } from '@material-ui/core';
+import { Tab, Tabs, withStyles, ButtonBase, Grid, Typography, IconButton, Avatar, Fade } from '@material-ui/core';
 import { ExitToApp } from '@material-ui/icons';
 import './Navigator.scss';
 import styles from './../../config.scss';
@@ -91,7 +91,7 @@ class Navigator extends React.Component {
 
     this.state.display.forEach((item, index) => {
       tabs.push(<GreyTextTab label={this.state.tabs[index]} key={index} disabled={!item}/>);
-      panes.push(<TabPanel value={this.state.selectedTab} index={index} key={index}>{this.state.panes[index]}</TabPanel>);
+      panes.push(<Fade in={this.state.selectedTab === index}><TabPanel value={this.state.selectedTab} index={index} key={index}>{this.state.panes[index]}</TabPanel></Fade>);
     })
 
     return (

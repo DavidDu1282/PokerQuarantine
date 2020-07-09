@@ -30,7 +30,6 @@ class StorePanel extends React.Component{
     ]
   }
   render() {
-    console.log(this.state.StoreCard);
     return (
       <div className="container-padded" >
         <Grid
@@ -44,7 +43,7 @@ class StorePanel extends React.Component{
           <Grid item><Typography variant="h4">Store</Typography></Grid>
           <Grid item container spacing={2} direction="row" justify="flex-end" alignItems="flex-start" >
             {this.state.StoreCard.map(elem => (
-              <Grid item xs={16} sm={4} md={4} key={this.state.StoreCard.indexOf(elem)}>
+              <Grid item xs={12} sm={4} md={4} key={this.state.StoreCard.indexOf(elem)}>
                 <StoreCard storeCard = {this.state.StoreCard[this.state.StoreCard.indexOf(elem)]}> </StoreCard>
               </Grid>
             ))}

@@ -50,8 +50,8 @@ export default function MatchCard(props) {
 
         <Box justifyContent="flex-end">
           <Box p={0} bgcolor="grey.300">
-          <CardActions justifyContent = "flex-end">
-            <Button size="Medium" color="primary" justifyContent = "flex-end" onClick={() => { alert('playing ' + props.matchCard.title + ' with $'+ amounttobet + ' worth of chips') }}>
+          <CardActions>
+            <Button size="medium" color="primary" onClick={() => { alert('playing ' + props.matchCard.title + ' with $'+ amounttobet + ' worth of chips') }}>
               Play
             </Button>
           </CardActions>

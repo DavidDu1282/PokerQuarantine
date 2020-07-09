@@ -1,6 +1,7 @@
 import moment from 'moment';
 import axios from 'axios';
 
+/*
 function fakeAuth(auth) {
   if (auth.username === "name" && auth.password === "pass") {
     return {
@@ -41,6 +42,7 @@ function fakeCreate(data) {
   }
   return 'userid-222222';
 }
+*/
 
 const user_types = {
   0: "Regular User",

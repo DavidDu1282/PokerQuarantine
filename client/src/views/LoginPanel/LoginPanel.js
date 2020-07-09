@@ -3,7 +3,8 @@ import {
   Grid,
   Typography,
   Button,
-  Link
+  Link,
+  Fade
 } from '@material-ui/core';
 import { Spacing, GoogleIcon, QuickForm } from '../../components';
 import moment from 'moment';
@@ -144,7 +145,7 @@ class LoginPanel extends React.Component {
                     }}>
                     Register
                   </Link> <br/>
-                  <Link href="#">Reset Password</Link>
+                  <Link>Reset Password</Link>
                 </Grid>
                 <Grid item xs={2}>
                   <Button
@@ -258,8 +259,8 @@ class LoginPanel extends React.Component {
 
     return (
       <div className="container">
-        {this.state.page_index === 0 && login_page}
-        {this.state.page_index === 1 && register_page}
+        {this.state.page_index === 0 && (<Fade in={this.state.page_index === 0}>{login_page}</Fade>)}
+        {this.state.page_index === 1 && (<Fade in={this.state.page_index === 1}>{register_page}</Fade>)}
       </div>
     );
   }
