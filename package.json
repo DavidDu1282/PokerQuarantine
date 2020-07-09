@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "cd client && npm i && npm run build && cd ..",
-    "start": "npm run build && node ./bin/www",
+    "start": "node ./bin/www",
     "server": "nodemon ./bin/www --ignore client/",
     "client": "cd client && npm start",
     "test": "cd client && npm run test",
