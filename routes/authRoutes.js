@@ -13,7 +13,7 @@ router.get("/current_user", (req, res) => {
 
 router.get("/logout", (req, res) => {
   req.logout();
-  res.send(200);
+  res.sendStatus(200);
 });
 /*POST Sign up */
 router.post("/signup", (req, res) => {
@@ -45,8 +45,9 @@ router.post("/signup", (req, res) => {
 /*POST Sign up email validation */
 router.post("/check_email", (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
-    if (err) return res.send(400);
-    if (user) return res.send(200);
+    // to @vincent: I reverted the 400 and 200 to make is easier on the frontend since 400 triggers an err
+    if (err) return res.sendStatus(200);
+    else if (user) return res.sendStatus(400);
   });
 });
 
@@ -62,11 +63,11 @@ passport.authenticate("local", {
 */
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (e, user, info) => {
-    if (e) return res.send(400);
-    if (!user) return res.send(400);
+    if (e) return res.sendStatus(400);
+    if (!user) return res.sendStatus(400);
     if (info) return res.send(info);
     req.logIn(user, (e) => {
-      if (e) return res.send(400);
+      if (e) return res.sendStatus(400);
       return res.send(user);
     });
   })(req, res, next);

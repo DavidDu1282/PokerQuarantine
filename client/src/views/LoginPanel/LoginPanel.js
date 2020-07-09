@@ -117,7 +117,7 @@ class LoginPanel extends React.Component {
         <QuickForm 
           fields={{
             "username": {
-              label: "Username / Email",
+              label: "Email",
               type: "text" },
             "password": {
               label: "Password",
