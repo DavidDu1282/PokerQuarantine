@@ -26,7 +26,7 @@ class LoginPanel extends React.Component {
 
   // event handlers
 
-  onLogin(result) {
+  async onLogin(result) {
     // if error
     if (!result) return;
 
@@ -36,7 +36,7 @@ class LoginPanel extends React.Component {
     };
 
     try {
-      this.props.client.auth(data);
+      await this.props.client.auth(data);
     } catch (err) {
       this.login_form.current.setErrorState("password", err.message);
       return;
@@ -45,7 +45,7 @@ class LoginPanel extends React.Component {
     // alert(JSON.stringify(result.body));
   }
 
-  onRegister(result) {
+  async onRegister(result) {
     // if error
     if (!result) return;
 
@@ -76,14 +76,14 @@ class LoginPanel extends React.Component {
     };
 
     try {
-      this.props.client.auth(data, true);
+      await this.props.client.auth(data, true);
     } catch (err) {
       switch (err.message) {
         case 'username-duplicate':
-          this.register_form.setErrorState('username', 'Username already exists.');
+          this.register_form.current.setErrorState('username', 'Username already exists.');
           break;
         case 'email-duplicate':
-          this.register_form.setErrorState('email', 'Email has been registered with an existing account.');
+          this.register_form.current.setErrorState('email', 'Email has been registered with an existing account.');
           break;
         default:
       }
@@ -92,11 +92,11 @@ class LoginPanel extends React.Component {
 
 
   render() {
-    const handleLogin = (result) => {
-      this.onLogin(result);
+    const handleLogin = async (result) => {
+      await this.onLogin(result);
     };
-    const handleRegister = (result) => {
-      this.onRegister(result);
+    const handleRegister = async (result) => {
+      await this.onRegister(result);
     };
 
     const login_page = (

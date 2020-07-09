@@ -12,13 +12,14 @@ module.exports = (router) => {
   });
 
   router.get("/api/logout", (req, res) => {
-    req.logout();
+    req.body.logout();
     res.send(200);
   });
   /*POST Sign up */
   router.post("/api/signup", (req, res) => {
     const { name, email, password, dob } = req.body;
-
+    console.log(req.body);
+    
     //encrypt password then redirect to "/"
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hash) => {
@@ -63,9 +64,10 @@ router.post(
   router.post("/api/login", (req, res, next) => {
     passport.authenticate("local", (e, user, info) => {
       if (e) return res.send(400);
+      if (!user) return res.send(400);
       if (info) return res.send(info);
       req.logIn(user, (e) => {
-        if (e) return next(e);
+        if (e) return res.send(400);
         return res.send(user);
       });
     })(req, res, next);

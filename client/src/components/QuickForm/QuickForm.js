@@ -98,7 +98,6 @@ class QuickForm extends React.Component {
     let name = e.target.getAttribute('name');
     let type = e.target.getAttribute('type');
     if (type === 'checkbox') {
-      console.log('triggered');
 
       this.setValue(name, e.target.checked);
     } else {

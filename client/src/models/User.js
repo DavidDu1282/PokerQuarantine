@@ -1,4 +1,5 @@
 import moment from 'moment';
+import axios from 'axios';
 
 function fakeAuth(auth) {
   if (auth.username === "name" && auth.password === "pass") {
@@ -58,67 +59,97 @@ class User {
   
   constructor() {
     this.userdata = {};
-    this.userdata.type = 9;
+    this.userdata.role = 9;
   }
 
-  login(auth) {
+  async login(auth) {
     // @TODO: add real auth
 
-    let userdata = fakeAuth(auth);
-    if (userdata === 404) throw new Error("Incorrect username & password combination.");
-
-    const user_new = new User();
-    user_new.userdata = userdata;
-
-    return user_new;
-  }
-
-  create(data) {
-    // @TODO: add real create
-    let result = fakeCreate(data);
-
-    if (result === 1) {
-      throw new Error("email-duplicate");
-    } else if (result === 2) {
-      throw new Error("username-duplicate");
+    const authdata = {
+      email: auth.username,
+      password: auth.password
     }
 
-    const user_new = new User();
-    user_new.userdata = {
-      username: data.username,
-      id: result,
-      type: 0,
-      email: data.email,
-      dob: data.dob,
-      balance: 0,
-      games_played: 0,
-      wins: 0,
-      losses: 0
-    };
+    return axios.post('/api/login', authdata)
+      .then((res) => {
+        console.log(res.data);
 
-    return user_new;
+        const user_new = new User();
+        user_new.passport = res;
+        user_new.userdata = res.data;
+
+        return user_new;
+      }).catch((err) => {
+        throw new Error("Incorrect username & password combination.")
+      })
+
+    
   }
 
-  logout() {
+  async create(data) {
+    // @TODO: add real create
+    axios.post('/api/check_email', {email: data.email})
+      .then((res) => {
+        throw new Error('email-duplicate');
+      }).catch((err) => {});
+
+
+    //else if (result === 2) {
+      //throw new Error("username-duplicate");
+    //}
+
+    return axios.post('/api/signup', {
+      username: data.email,
+      password: data.password,
+      name: data.username,
+      dob: data.dob.toDate()
+    })
+      .then((res) => {
+        console.log(res);
+
+        const user_new = new User();
+        user_new.userdata = {
+          email: data.email,
+          name: data.username,
+          dob: data.dob.toDate(),
+          role: 0,
+          balance: 0,
+          games_played: 0,
+          wins: 0,
+          losses: 0,
+        };
+
+        return user_new;
+      }).catch((err) => {throw err;})
+
+  }
+
+  async logout() {
     // @TODO: add real logout
+
     return true;
+
+    /*return axios.get('/api/logout', this.passport)
+      .then((res) => {
+        return true;
+      });*/
   }
 
   // getters --------------------------
   // avatar link: https://postimg.cc/3yXpjKCC
 
   get avatar_url() { return 'https://i.postimg.cc/0N3fsjz3/IMGBIN-giant-panda-dog-cat-avatar-png-Gus-CAj6v.png'; }
-  get name() { return this.userdata.username; }
-  get id() { return this.userdata.id; }
-  get raw_type() { return this.userdata.type; }
-  get type() { return user_types[this.userdata.type]; }
+  get name() { return this.userdata.name; }
+  get id() { return '0'; }
+  get raw_type() { return this.userdata.role; }
+  get type() { return user_types[this.userdata.role]; }
   get email() { return this.userdata.email;}
-  get dob() { return this.userdata.dob; }
+  get dob() { return moment(this.userdata.dob); }
   get balance() { return this.userdata.balance }
   get games_played() { return this.userdata.games_played }
   get wins() { return this.userdata.wins }
   get losses() { return this.userdata.losses }
-  get display_setting() { return display_array[this.userdata.type]; }
+  get display_setting() { return display_array[this.userdata.role]; }
 
 }
 

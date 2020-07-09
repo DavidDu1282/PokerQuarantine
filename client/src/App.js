@@ -30,7 +30,7 @@ class App extends React.Component {
     return this.state.user;
   }
 
-  auth(data, create=false) {
+  async auth(data, create=false) {
     /**
      * try auth the user with the given data
      * throws error if auth failed
@@ -40,14 +40,16 @@ class App extends React.Component {
       var logged_user;
 
       if (create) {
-        logged_user = this.state.user.create(data);
+        logged_user = await this.state.user.create(data);
       } else {
-        logged_user = this.state.user.login(data);
+        logged_user = await this.state.user.login(data);
       }
 
       this.setState((state) => {
         return {user: logged_user};
       });
+
+      console.log(logged_user);
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     } catch (err) {
       throw err;
@@ -55,12 +57,12 @@ class App extends React.Component {
     
   }
 
-  logout() {
+  async logout() {
     /**
      * logs out the logged in user
      */
     
-    this.user.logout();
+    await this.user.logout();
     var empty_user = new User();
     this.setState((state) => {
       return {user: empty_user};
