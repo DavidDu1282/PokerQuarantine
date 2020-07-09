@@ -13,7 +13,7 @@ module.exports = (router) => {
 
   router.get("/api/logout", (req, res) => {
     req.logout();
-    res.redirect("/");
+    res.send(200);
   });
   /*POST Sign up */
   router.post("/api/signup", (req, res) => {
@@ -22,7 +22,7 @@ module.exports = (router) => {
     //encrypt password then redirect to "/"
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hash) => {
-        if (err) throw err;
+        if (err) res.send(400);
         //create new entry for User table
         var newUser = new User({
           email: email,
@@ -37,7 +37,7 @@ module.exports = (router) => {
         });
 
         newUser.save();
-        res.redirect("/");
+        res.send(200);
       });
     });
   });
@@ -45,8 +45,7 @@ module.exports = (router) => {
   /*POST Sign up email validation */
   router.post("/api/check_email", (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
-      console.log(user);
-      if (err) console.log(err);
+      if (err) return res.send(400);
       if (user) return res.send(200);
     });
   });
@@ -63,7 +62,7 @@ router.post(
 */
   router.post("/api/login", (req, res, next) => {
     passport.authenticate("local", (e, user, info) => {
-      if (e) return next(e);
+      if (e) return res.send(400);
       if (info) return res.send(info);
       req.logIn(user, (e) => {
         if (e) return next(e);
