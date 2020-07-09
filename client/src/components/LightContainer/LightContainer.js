@@ -6,6 +6,7 @@ const useStyles = makeStyles({
   root: {
     backgroundColor: '#FFFFFF',
     height: "100%"
+
   }
 });
 

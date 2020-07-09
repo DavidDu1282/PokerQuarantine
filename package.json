@@ -23,7 +23,9 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "node-sass": "^4.14.1",
+    "react-scripts": "^3.4.1"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
