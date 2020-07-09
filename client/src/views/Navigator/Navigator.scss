@@ -1,0 +1,38 @@
+@use "./../../config.scss" as config;
+
+.panelContainer {
+  margin: none;
+  display: block;
+  padding: none;
+  height: config.$app-height;
+
+  &.main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
+    width: config.$app-width;
+  }
+
+  &.left {
+    float: left;
+    width: config.$nav-width;
+  }
+
+  &.right {
+    float: right;
+    width: config.$content-width;
+  }
+}
+
+.nav-content {
+  margin: none;
+  display: flex;
+  padding: none;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-direction: column;
+  height: config.$app-height;
+  width: config.$nav-width;
+}
