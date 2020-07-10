@@ -1,5 +1,7 @@
 # Poker Quarantine
 
+![Imgur](https://i.imgur.com/hRe76zv.png)
+
 Poker Quarantine is a web app where users can choose to bet money in a variety of online poker games played against other players, one example includes Texas Hold’em. The betting system will be done with a dummy transaction system for this project, as there are legal complications for hosting a real gambling system.
 
 ### Members
@@ -26,12 +28,20 @@ Our project will feature a number of main features, mostly one for each potentia
 
 #### Login Page
 
-![img](https://lh5.googleusercontent.com/c4yeGk-neI9U0UBGAZ4SBB00BlqpfhF1ImZi47MtLWJElWbet7G_nB9jgeP14p7THBDex8YZzfzzJojldkLV05_9LesKLW_PdT3ft4ZKbDtqF6L2ZWT6KbOIhmpzfKym9AEq-he5)
+![imgur](https://i.imgur.com/YrdRwAg.png)
 
-#### Menu page
+#### Register page
 
-![img](https://lh4.googleusercontent.com/Qj_C6q_e8FU8TBimdnatEAWYfjebx85DtqllQTz08l--GFll_lFmpFxE0Tza5kgZpNURjhyS7R5HrXEqirBv2yMsCC5aGarXYY5zNImprfbY-6qtE7rNbQL_j_29tRJu3tVyKWKn)
+![imgur](https://i.imgur.com/XAW6DMm.png)
+
+#### Sample view after login
+
+![imgur](https://i.imgur.com/QPRtOXt.png)
+
+#### User Info Page
+
+![imgur](https://i.imgur.com/BOgcWbe.png)
 
 #### Game Page
 
-![img](https://lh3.googleusercontent.com/GxfNYN9wdCcIFsXCt7Os8cUsxA32Ug4WXEBUZ_XaLLlUrPAd0sdz0L808JH_pIMkb8tWXHC06ISUCcGbX1mfGyWthqoFA2Z-Abrv0yYAiekHiafmR6UQyQ9id4FZflDy-dPvyUOH)
+![imgur](https://i.imgur.com/x9shcau.png)
