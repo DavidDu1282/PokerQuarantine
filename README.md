@@ -4,6 +4,8 @@
 
 Poker Quarantine is a web app where users can choose to bet money in a variety of online poker games played against other players, one example includes Texas Hold’em. The betting system will be done with a dummy transaction system for this project, as there are legal complications for hosting a real gambling system.
 
+Group Project Requirements: https://docs.google.com/document/d/1aO1Xa6WVlj7JJ_nOFeydJNzuUWwqz-dn-ANjzCfIjL8/edit?usp=sharing
+
 ### Members
 
 - David Du 301393288 dddu@sfu.ca
