@@ -5,6 +5,7 @@ const User = mongoose.model("users");
 const express = require('express');
 var router = express.Router();
 
+// @TODO: cope with async/await 
 
 /* fetch data */
 router.get("/current_user", (req, res) => {
@@ -43,12 +44,14 @@ router.post("/signup", (req, res) => {
 });
 
 /*POST Sign up email validation */
-router.post("/check_email", (req, res) => {
-  User.findOne({ email: req.body.email }, (err, user) => {
-    // to @vincent: I reverted the 400 and 200 to make is easier on the frontend since 400 triggers an err
-    if (err) return res.sendStatus(200);
-    else if (user) return res.sendStatus(400);
+router.post("/check_email", async (req, res) => {
+
+  await User.findOne({ email: req.body.email }).exec((err, user) => {
+    // to @vincent: I reverted the 400 and 200 to make is easier on the frontend since 400 triggers an err, also modified ur mongo code to cope with async/await
+    if (user) return res.sendStatus(400);
+    else return res.sendStatus(200);
   });
+
 });
 
 /*POST Log in 

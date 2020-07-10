@@ -91,7 +91,7 @@ class Navigator extends React.Component {
 
     this.state.display.forEach((item, index) => {
       tabs.push(<GreyTextTab label={this.state.tabs[index]} key={index} disabled={!item}/>);
-      panes.push(<Fade in={this.state.selectedTab === index}><TabPanel value={this.state.selectedTab} index={index} key={index}>{this.state.panes[index]}</TabPanel></Fade>);
+      panes.push(<Fade in={this.state.selectedTab === index} key={index}><TabPanel value={this.state.selectedTab} index={index}>{this.state.panes[index]}</TabPanel></Fade>);
     })
 
     return (
@@ -131,7 +131,7 @@ class Navigator extends React.Component {
                   </ButtonBase>
                 </Grid>
                 <Grid item xs={2}>
-                  <IconButton size="small" onClick={e => this.props.client.logout()}>
+                  <IconButton size="small" onClick={async (e) => await this.props.client.logout()}>
                     <ExitToApp color="secondary"/>
                   </IconButton>
                 </Grid>

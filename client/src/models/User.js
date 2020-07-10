@@ -86,12 +86,7 @@ class User {
     
   }
 
-  async create(data) {
-    // @TODO: add real create
-    await axios.post('/api/check_email', {email: data.email})
-      .catch((err) => {
-        throw new Error('email-duplicate');
-      });
+  async handleCreate(data) {
 
     return axios.post('/api/signup', {
       email: data.email,
@@ -118,7 +113,19 @@ class User {
     //else if (result === 2) {
       //throw new Error("username-duplicate");
     //}
+  }
 
+  async create(data) {
+    // @TODO: add real create
+
+    return await axios.post('/api/check_email', {email: data.email})
+      .then((res) => {
+        return this.handleCreate(data);
+      })
+      .catch((err) => {
+        throw new Error('email-duplicate');
+      });
+    
   }
 
   async logout() {
