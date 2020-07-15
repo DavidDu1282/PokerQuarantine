@@ -7,7 +7,7 @@
     "start": "node ./bin/www",
     "server": "nodemon ./bin/www --ignore client/",
     "client": "cd client && npm start",
-    "test": "cd client && npm run test",
+    "test": "concurrently \"cd client && npm run test\" \"mocha test/**/*.js\"",
     "local": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
@@ -26,7 +26,10 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "concurrently": "^5.2.0",
+    "mocha": "^8.0.1",
+    "mockery": "^2.1.0",
     "nodemon": "^2.0.4"
   }
 }
