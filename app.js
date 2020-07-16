@@ -48,10 +48,12 @@ app.use(express.static(path.join(__dirname, "client/build")));
 var authRouter = require("./routes/authRoutes");
 var indexRouter = require("./routes/indexRoutes");
 var newsRouter = require("./routes/newsRoutes");
+var ccRouter = require("./routes/creditcardRoutes");
 const e = require("express");
 app.use("/", indexRouter);
 app.use("/api", authRouter);
 app.use("/api", newsRouter);
+app.use("/api", ccRouter);
 // require("./routes/newsRoutes")(app); (dont use this format, cant compile on heroku)
 
 // catch 404 and forward to error handler

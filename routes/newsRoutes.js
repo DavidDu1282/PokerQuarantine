@@ -3,6 +3,7 @@ const requireAdmin = require("./middleware/requireAdmin");
 
 const NewsPost = mongoose.model("newsposts");
 const express = require("express");
+
 var router = express.Router();
 
 // fetch newsposts
