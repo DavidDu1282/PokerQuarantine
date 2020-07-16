@@ -9,12 +9,22 @@ var keys = require("./config/keys");
 var passport = require("passport");
 var cookieSession = require("cookie-session");
 
-// connect to mongoDB
-mongoose.connect(keys.mongoURI);
+//mock db for testing
+if (process.env.NODE_ENV === "test") {
+  const Mockgoose = require("mockgoose").Mockgoose;
+  const mockgoose = new Mockgoose(mongoose);
+  mockgoose.prepareStorage().then(() => {
+    mongoose.connect(keys.mongoURI);
+  });
+} else {
+  // connect to mongoDB
+  mongoose.connect(keys.mongoURI);
+}
+
 // import models
+require("./models/NewsPosts");
 require("./models/User");
 require("./models/Creditcards");
-require("./models/NewsPosts");
 
 var app = express();
 
@@ -37,8 +47,11 @@ app.use(express.static(path.join(__dirname, "client/build")));
 //routes
 var authRouter = require("./routes/authRoutes");
 var indexRouter = require("./routes/indexRoutes");
-app.use('/', indexRouter);
-app.use('/api', authRouter);
+var newsRouter = require("./routes/newsRoutes");
+const e = require("express");
+app.use("/", indexRouter);
+app.use("/api", authRouter);
+app.use("/api", newsRouter);
 // require("./routes/newsRoutes")(app); (dont use this format, cant compile on heroku)
 
 // catch 404 and forward to error handler
