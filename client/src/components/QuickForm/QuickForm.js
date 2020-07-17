@@ -1,12 +1,16 @@
 import React from 'react';
 import {
   TextField,
+  InputLabel,
+  FormControl,
   FormControlLabel,
   FormHelperText,
   Grid,
   Button,
   Typography,
-  Checkbox
+  Checkbox,
+  Select,
+  MenuItem
 } from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
@@ -19,7 +23,9 @@ class QuickForm extends React.Component {
    * onSubmit = onSubmit(result)
    * fields = {'name': {
    *          label: 'label' ,
-   *          type: 'text' | 'password' | 'number' | 'date' | 'checkbox'
+   *          type: 'text' | 'password' | 'number' | 'date' | 'checkbox' | 'select'
+   *          *selectOptions*: {'label': value}
+   *          ...fieldSettings
    * }}
    */
 
@@ -30,19 +36,21 @@ class QuickForm extends React.Component {
     const error_states = {};
 
     for (const [field_name, options] of Object.entries(this.props.fields)) {
-      switch (options.type) {
-        case 'checkbox':
-          field_values[field_name] = false;
-          error_states[field_name] = '';
-          break;
-        case 'date':
-          error_states[field_name] = '';
-          let date = moment();
-          field_values[field_name] = date;
-          break;
-        default:
-          error_states[field_name] = '';
-          field_values[field_name] = '';
+      if (typeof(options.type) === typeof('')) {
+        switch (options.type) {
+          case 'checkbox':
+            field_values[field_name] = false;
+            error_states[field_name] = '';
+            break;
+          case 'date':
+            error_states[field_name] = '';
+            let date = moment();
+            field_values[field_name] = date;
+            break;
+          default:
+            error_states[field_name] = '';
+            field_values[field_name] = '';
+        }
       }
     }
 
@@ -145,69 +153,118 @@ class QuickForm extends React.Component {
 
     // construct form
     for (const [field_name, options] of Object.entries(fields)) {
+      const { label, type, selectOptions, ...fieldSettings } = options;
+      
+      if (typeof(type) === typeof('')) {
+        switch (type) {
+          case 'checkbox':
+            fields_display.push(
+              <Grid item xs key={field_name}>
+                <FormControlLabel 
+                  control={<Checkbox
+                    name={field_name}
+                    checked={this.state.field_values[field_name]}
+                    onChange={e => this.handleChange(e)}  
+                    color="primary"
+                    size="small"
+                    {...fieldSettings}
+                  />}
+                  label={<Typography variant="body2">{label}</Typography>}
+                /><br/>
+                <FormHelperText
+                  variant={tBoxVariant}
+                  error={(this.state.error_states[field_name] === '') ? false : true}
+                >
+                  {this.state.error_states[field_name]}
+                </FormHelperText>
+              </Grid>
+            );
+            break;
 
-      switch (options.type) {
-        case 'checkbox':
-          fields_display.push(
-            <Grid item xs key={field_name}>
-              <FormControlLabel 
-                control={<Checkbox
+          case 'date':
+            fields_display.push(
+              <Grid item xs key={field_name}>
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <DatePicker
+                  fullWidth
                   name={field_name}
-                  checked={this.state.field_values[field_name]}
-                  onChange={e => this.handleChange(e)}  
-                  color="primary"
-                  size="small"
-                />}
-                label={<Typography variant="body2">{options.label}</Typography>}
-              /><br/>
-              <FormHelperText
-                variant={tBoxVariant}
-                error={(this.state.error_states[field_name] === '') ? false : true}
-              >
-                {this.state.error_states[field_name]}
-              </FormHelperText>
-            </Grid>
-          );
-          break;
-        case 'date':
-          fields_display.push(
-            <Grid item xs key={field_name}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <DatePicker
-                disableFuture
-                fullWidth
-                name={field_name}
-                variant="inline"
-                inputVariant={tBoxVariant}
-                format="MMMM DD, yyyy"
-                margin="normal"
-                label={options.label}
-                value={this.state.field_values[field_name]}
-                onChange={(date) => this.handleDateChange(field_name, date)}
-                error={(this.state.error_states[field_name] === '') ? false : true}
-                helperText={this.state.error_states[field_name]}
-              />
-            </MuiPickersUtilsProvider>
-            </Grid>
-          )
-          break;
-        default:
-          fields_display.push(
-            <Grid item xs key={field_name}>
-              <TextField 
-                label={options.label}
-                name={field_name}
-                variant={tBoxVariant}
-                type={options.type}
-                value={this.state.field_values[field_name]}
-                error={(this.state.error_states[field_name] === '') ? false : true}
-                helperText={this.state.error_states[field_name]}
-                margin="normal"
-                onChange={(e) => this.handleChange(e)}
-                fullWidth
-              />
-            </Grid>
-          );
+                  variant="inline"
+                  inputVariant={tBoxVariant}
+                  format="MMMM DD, yyyy"
+                  margin="normal"
+                  label={label}
+                  value={this.state.field_values[field_name]}
+                  onChange={(date) => this.handleDateChange(field_name, date)}
+                  error={(this.state.error_states[field_name] === '') ? false : true}
+                  helperText={this.state.error_states[field_name]}
+                  {...fieldSettings}
+                />
+              </MuiPickersUtilsProvider>
+              </Grid>
+            )
+            break;
+
+          case 'select':
+            const selectOptions_display = [];
+
+            for (const [menu_label, value] of Object.entries(selectOptions)) {
+              selectOptions_display.push(
+                <MenuItem value={value} key={value} >{ menu_label }</MenuItem>
+              );
+            }
+
+            fields_display.push(
+              <Grid item xs key={field_name}>
+              <FormControl>
+                <InputLabel>{label}</InputLabel>
+                <Select
+                  name={field_name}
+                  variant={tBoxVariant}
+                  labelId={label}
+                  margin="normal"
+                  type={options.type}
+                  value={this.state.field_values[field_name]}
+                  onChange={(e) => this.handleChange(e)}
+                  error={(this.state.error_states[field_name] === '') ? false : true}
+                  helperText={this.state.error_states[field_name]}
+                  fullWidth
+                  {...fieldSettings}
+                >
+                  {selectOptions_display}
+                </Select>
+              </FormControl>
+              </Grid>
+            )
+            break;
+
+          default:
+            fields_display.push(
+              <Grid item xs key={field_name}>
+                <TextField 
+                  label={label}
+                  name={field_name}
+                  variant={tBoxVariant}
+                  type={options.type}
+                  value={this.state.field_values[field_name]}
+                  error={(this.state.error_states[field_name] === '') ? false : true}
+                  helperText={this.state.error_states[field_name]}
+                  margin="normal"
+                  onChange={(e) => this.handleChange(e)}
+                  fullWidth
+                  {...fieldSettings}
+                />
+              </Grid>
+            );
+        }
+      } else {
+        // custom *styling* component (no input return and no error handling)
+        const CustomField = options.type;
+        
+        fields_display.push(
+          <Grid item xs key={field_name}>
+            <CustomField />
+          </Grid>
+        );
       }
 
     }
