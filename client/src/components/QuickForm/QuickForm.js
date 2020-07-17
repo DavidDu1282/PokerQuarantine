@@ -153,6 +153,7 @@ class QuickForm extends React.Component {
 
     // construct form
     for (const [field_name, options] of Object.entries(fields)) {
+
       const { label, type, selectOptions, ...fieldSettings } = options;
       
       if (typeof(type) === typeof('')) {
