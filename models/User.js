@@ -15,7 +15,6 @@ const userSchema = new Schema({
   games_played: { type: Number },
   wins: { type: Number },
   losses: { type: Number },
-  credit_cards: [{ type: Schema.Types.ObjectId, ref: "creditcards" }],
 });
 
 mongoose.model("users", userSchema);

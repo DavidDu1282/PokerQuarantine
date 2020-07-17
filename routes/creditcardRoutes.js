@@ -31,7 +31,7 @@ router.post("/creditcard", async (req, res) => {
     ccv,
     postal_code,
     country,
-    owner: await req.user._id,
+    owner: req.user._id,
   });
 
   try {
