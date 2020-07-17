@@ -15,6 +15,14 @@
     "react-scripts": "3.4.1",
     "sass": "^1.26.10"
   },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.1",
+    "@testing-library/react": "^10.4.7",
+    "chai": "^4.2.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "sinon": "^9.0.2"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -36,13 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001",
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.1",
-    "@testing-library/react": "^10.4.7",
-    "chai": "^4.2.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "sinon": "^9.0.2"
-  }
+  "proxy": "http://localhost:3001"
 }
