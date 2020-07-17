@@ -84,24 +84,25 @@ describe("Creditcard Routes", () => {
       .then((res) => {
         done();
       })
-      /* the response takes forever which fails the test
-        agent
-          .get("/api/creditcard/" + res[0]._id)
+      //  the response takes forever which fails the test
+      // .then((res) => {
+      //   agent
+      //     .get("/api/creditcard/" + res[0]._id)
 
-          .then((res) => {
-            expect(res.status).to.equal(200);
-            expect(res.body[0].name_on_card).to.equal(mockData.name_on_card);
-            expect(res.body[0].card_number).to.equal(mockData.card_number);
-            expect(res.body[0].expiration_date).to.equal(
-              mockData.expiration_date
-            );
-            expect(res.body[0].ccv).to.equal(mockData.ccv);
-            expect(res.body[0].postal_code).to.equal(mockData.postal_code);
-            expect(res.body[0].country).to.equal(mockData.country);
-            done();
+      //     .then((res) => {
+      //       expect(res.status).to.equal(200);
+      //       expect(res.body[0].name_on_card).to.equal(mockData.name_on_card);
+      //       expect(res.body[0].card_number).to.equal(mockData.card_number);
+      //       expect(res.body[0].expiration_date).to.equal(
+      //         mockData.expiration_date
+      //       );
+      //       expect(res.body[0].ccv).to.equal(mockData.ccv);
+      //       expect(res.body[0].postal_code).to.equal(mockData.postal_code);
+      //       expect(res.body[0].country).to.equal(mockData.country);
+      //       done();
+      //     });
+      // })
 
-          })
-          */
       .catch((err) => done(err));
   });
 

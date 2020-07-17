@@ -26,9 +26,10 @@ router.post("/signup", (req, res) => {
       if (err) res.send(400);
       //create new entry for User table
       var newUser = new User({
+        name: name,
         email: email,
         password: hash,
-        name: name,
+
         dob: dob,
         role: 0,
         balance: 0,
@@ -38,6 +39,7 @@ router.post("/signup", (req, res) => {
       });
 
       newUser.save();
+
       res.sendStatus(200);
     });
   });
@@ -47,6 +49,14 @@ router.post("/signup", (req, res) => {
 router.post("/check_email", async (req, res) => {
   await User.findOne({ email: req.body.email }).exec((err, user) => {
     // to @vincent: I reverted the 400 and 200 to make is easier on the frontend since 400 triggers an err, also modified ur mongo code to cope with async/await
+    if (user) return res.sendStatus(400);
+    else return res.sendStatus(200);
+  });
+});
+
+//Sign up username validation
+router.post("/check_email", async (req, res) => {
+  await User.findOne({ username: req.body.username }).exec((err, user) => {
     if (user) return res.sendStatus(400);
     else return res.sendStatus(200);
   });

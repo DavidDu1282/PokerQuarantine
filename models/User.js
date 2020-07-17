@@ -6,7 +6,7 @@ const userSchema = new Schema({
   email: { type: String },
 
   password: { type: String },
-  username: { type: String },
+
   name: { type: String },
   dob: { type: Date },
 
@@ -15,6 +15,7 @@ const userSchema = new Schema({
   games_played: { type: Number },
   wins: { type: Number },
   losses: { type: Number },
+  flag: { type: Boolean, default: false },
 });
 
 mongoose.model("users", userSchema);
