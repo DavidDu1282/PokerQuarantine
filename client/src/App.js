@@ -7,13 +7,15 @@ import { LoginPanel,
   StorePanel,
   LeaderBoardPanel,
   NewsPanel,
-  ManagementPanel
+  ManagementPanel,
+  ReportPanel,
 } from './views';
 import { User } from './models';
 import { CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Theme } from './theme';
 import './global.scss'
+
 
 class App extends React.Component {
   constructor(props) {
@@ -77,9 +79,10 @@ class App extends React.Component {
       'match': <MatchPanel client={this} />,
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <NewsPanel client={this} />,
+      'report a player': <ReportPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'user info': <UserInfoPanel client={this} />,
+      
     };
 
     return (
