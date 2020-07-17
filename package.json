@@ -7,8 +7,9 @@
     "start": "node ./bin/www",
     "server": "nodemon ./bin/www --ignore client/",
     "client": "cd client && npm start",
-    "test": "cd client && npm run test",
-    "local": "concurrently \"npm run server\" \"npm run client\""
+    "test": "concurrently \"cd client && npm run test\" \"mocha --recursive --exit\"",
+    "local": "concurrently \"npm run server\" \"npm run client\"",
+    "test1": "mocha --timeout 10000"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -26,7 +27,11 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "concurrently": "^5.2.0",
-    "nodemon": "^2.0.4"
+    "mocha": "^7.1.1",
+    "mockgoose": "^8.0.4",
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2"
   }
 }
