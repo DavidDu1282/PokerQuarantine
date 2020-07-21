@@ -31,6 +31,50 @@ class App extends React.Component {
     return this.state.user;
   }
 
+  async updateUser(field, ...args) {
+    /**
+     * updates the given field of the user
+     * -------------------------------
+     * params:
+     *  field: str
+     *  ...args: args for corresponding field
+     * 
+     * return: void
+     * 
+     * err:
+     *  Error('invalid field name')
+     *  Error('no data')
+     *  Error('invalid data')
+     */
+
+    const update_functions = {
+      'avatar': this.user.updateAvatar
+    };
+
+    const update_function = update_functions[field];
+    
+    if (update_function == null) {
+      throw new Error('invalid field name');
+    } else if (args.length === 0) {
+      throw new Error('no data');
+    }
+
+    // apply update
+    try {
+      const new_user = await update_function(...args);
+      console.log(new_user);
+
+      // set for display
+      this.setState((state) => {
+        return {user: new_user};
+      });
+      this.forceUpdate();
+    } catch (err) {
+      throw new Error('invalid data');
+    }
+
+  }
+
   async auth(data, create=false) {
     /**
      * try auth the user with the given data

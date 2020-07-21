@@ -10,8 +10,9 @@ const { v4: uuidv4 } = require('uuid');
 
 
 describe('UserConfig Routes: avatar', function() {
-  var agent = request.agent(app);
-  const test_img = fs.readFileSync('client/public/logo.png');
+  const agent = request.agent(app);
+  const test_img = Buffer.from(fs.readFileSync('client/public/logo.png'));
+  this.timeout(10000);
 
   beforeEach(async function() {
     // setup a new account in db
@@ -91,4 +92,75 @@ describe('UserConfig Routes: avatar', function() {
         done();
       });
   });
+});
+
+describe('UserConfig Routes: delete', function() {
+  const agent = request.agent(app);
+
+  before(async function() {
+    this.userId = uuidv4();
+
+    var testUser = new User({
+      userId: this.userId,
+      name: 'userConfig.test',
+      email: 'test@userConfig.test.js',
+      password: '1',
+  
+      dob: Date.now(),
+      role: 0,
+      balance: 0,
+      games_played: 0,
+      wins: 0,
+      losses: 0,
+  
+      avatar_url: '',
+    });
+  
+    await testUser.save();
+  })
+
+  it('deletes the user', function(done) {
+    agent
+      .post('/api/config/delete')
+      .send({
+        id: this.userId,
+      })
+      .end(async (err, res) => {
+        expect(res.status).to.be.equal(201);
+
+        let user_in_db = await User.findOne({email: 'test@userConfig.test.js'}).exec();
+        expect(user_in_db).to.be.null;
+
+        done(); 
+      })
+  })
+
+  it('raises error for no id', function(done) {
+    agent
+      .post('/api/config/delete')
+      .send({})
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      })
+
+  })
+
+  it('raises error for invalid id', function(done) {
+    agent
+      .post('/api/config/delete')
+      .send({
+        id: 'invalidId'
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      })
+
+  })
+
+  after(async () => {
+    // delete in-case test failed
+    await User.deleteOne({email: 'test@userConfig.test.js'}).exec();
+  })
 });

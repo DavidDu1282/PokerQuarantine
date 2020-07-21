@@ -9,6 +9,11 @@ var keys = require("./config/keys");
 var passport = require("passport");
 var cookieSession = require("cookie-session");
 
+// set node env
+if (process.env.NODE_ENV == null) {
+  process.env.NODE_ENV = "development";
+}
+
 //mock db for testing
 if (process.env.NODE_ENV === "test") {
   const Mockgoose = require("mockgoose").Mockgoose;
@@ -50,7 +55,7 @@ app.use(passport.session());
 
 // view engine setup
 app.use(logger("dev"));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "client/build")));
 

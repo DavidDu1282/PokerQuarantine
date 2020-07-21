@@ -7,7 +7,7 @@
     "start": "node ./bin/www",
     "server": "nodemon ./bin/www --ignore client/",
     "client": "cd client && npm start",
-    "testClient": "cd client && npm run test",
+    "testClient": "concurrently \"npm run server\" \"sleep 5 && cd client && npm run test\"",
     "testServer": "mocha --recursive --exit",
     "local": "concurrently \"npm run server\" \"npm run client\"",
     "test1": "mocha --timeout 10000"
