@@ -63,6 +63,13 @@ class User {
     this.userdata.role = 9;
   }
 
+  async cookieLogin(data) {
+    const user_new = new User();
+    user_new.userdata = data;
+
+    return user_new;
+  }
+
   async login(auth) {
     // @TODO: add real auth
 
