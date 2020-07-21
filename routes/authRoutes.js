@@ -36,6 +36,8 @@ router.post("/signup", (req, res) => {
         games_played: 0,
         wins: 0,
         losses: 0,
+
+        avatar_url: '',
       });
 
       newUser.save();

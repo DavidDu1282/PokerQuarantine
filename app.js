@@ -21,6 +21,15 @@ if (process.env.NODE_ENV === "test") {
   mongoose.connect(keys.mongoURI);
 }
 
+// cloudinary config
+if (['test', 'development'].includes(process.env.NODE_ENV)) {
+  const fs = require('fs');
+
+  let testConfig = JSON.parse(fs.readFileSync('./config/localKeys.json'));
+  process.env.CLOUDINARY_URL = testConfig.cloudinary_url;
+}
+
+
 // import models
 require("./models/NewsPosts");
 require("./models/User");
@@ -51,12 +60,14 @@ var indexRouter = require("./routes/indexRoutes");
 var newsRouter = require("./routes/newsRoutes");
 var ccRouter = require("./routes/creditcardRoutes");
 var reportRouter = require("./routes/reportsRoutes");
+var userConfigRouter = require("./routes/userConfigRoutes");
 const e = require("express");
 app.use("/", indexRouter);
 app.use("/api", authRouter);
 app.use("/api", newsRouter);
 app.use("/api", ccRouter);
 app.use("/api", reportRouter);
+app.use("/api/config", userConfigRouter);
 // require("./routes/newsRoutes")(app); (dont use this format, cant compile on heroku)
 
 // catch 404 and forward to error handler
