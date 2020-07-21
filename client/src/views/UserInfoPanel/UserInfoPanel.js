@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Grid, Avatar, Link } from '@material-ui/core';
+import { Typography, Grid, Avatar, Link, Button } from '@material-ui/core';
 import { Spacing } from './../../components';
 import './UserInfoPanel.scss';
 
@@ -119,6 +119,10 @@ class UserInfoPanel extends React.Component {
           <Grid item>
             <Typography variant="h6">Wins / Losses / Total Games Played</Typography>
             <Typography>{`${user.wins} / ${user.losses} / ${user.games_played}`}</Typography>
+          </Grid>
+
+          <Grid item>
+            <Button color="secondary" onClick={() => this.props.client.deleteUser()}>delete user</Button>
           </Grid>
         </Grid>
       </div>

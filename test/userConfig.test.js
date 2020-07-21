@@ -3,10 +3,10 @@ const expect = require("chai").expect;
 const request = require("supertest");
 const app = require("../app");
 const mongoose = require("mongoose");
-const e = require("express");
 const User = mongoose.model("users");
 const fs = require("fs");
 const { v4: uuidv4 } = require('uuid');
+const cloudinary = require('cloudinary').v2;
 
 
 describe('UserConfig Routes: avatar', function() {
@@ -40,6 +40,7 @@ describe('UserConfig Routes: avatar', function() {
   afterEach(async function() {
     // delete the account
     await User.deleteOne({email: 'test@userConfig.test.js'}).exec();
+    await cloudinary.uploader.destroy('pokerQuarantine/avatars/' + this.userId);
   });
 
   it('uploads the avatar without error', function(done) {

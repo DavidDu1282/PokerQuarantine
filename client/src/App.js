@@ -62,7 +62,6 @@ class App extends React.Component {
     // apply update
     try {
       const new_user = await update_function(...args);
-      console.log(new_user);
 
       // set for display
       this.setState((state) => {
@@ -73,6 +72,20 @@ class App extends React.Component {
       throw new Error('invalid data');
     }
 
+  }
+
+  async deleteUser() {
+    /**
+     * deletes the user, set new display
+     * ---------------
+     * 
+     * returns: void
+     */
+    const empty_user = await this.user.delete();
+    this.setState((state) => {
+      return {user: empty_user};
+    });
+    this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
 
   async auth(data, create=false) {
