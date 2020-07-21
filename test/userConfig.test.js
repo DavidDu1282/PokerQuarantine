@@ -6,17 +6,19 @@ const mongoose = require("mongoose");
 const e = require("express");
 const User = mongoose.model("users");
 const fs = require("fs");
+const { v4: uuidv4 } = require('uuid');
 
-const test_img = fs.readFile('../client/public/logo.png', (err, data) => {
-  return;
-});
 
-describe('UserConfig Routes: avatar', () => {
+describe('UserConfig Routes: avatar', function() {
   var agent = request.agent(app);
+  const test_img = fs.readFileSync('client/public/logo.png');
 
-  beforeEach(async () => {
+  beforeEach(async function() {
     // setup a new account in db
+    this.userId = uuidv4();
+
     var testUser = new User({
+      userId: this.userId,
       name: 'userConfig.test',
       email: 'test@userConfig.test.js',
       password: '1',
@@ -34,18 +36,16 @@ describe('UserConfig Routes: avatar', () => {
     await testUser.save();
   });
   
-  afterEach(async () => {
+  afterEach(async function() {
     // delete the account
-    await User.deleteOne({email: 'test@userConfig.test.js'}, (err) => {
-      console.log(err);
-    })
+    await User.deleteOne({email: 'test@userConfig.test.js'}).exec();
   });
 
-  it('uploads the avatar without error', (done) => {
+  it('uploads the avatar without error', function(done) {
     agent
       .post('/api/config/avatar')
       .send({
-        email: 'test@userConfig.test.js',
+        id: this.userId,
         img: test_img,
       })
       .end((err, res) => {
@@ -54,33 +54,39 @@ describe('UserConfig Routes: avatar', () => {
       });
   });
 
-  it('uploads the avatar succesfully', (done) => {
+  it('uploads the avatar succesfully', function(done) {
     agent
       .post('/api/config/avatar')
       .send({
-        email: 'test@userConfig.test.js',
+        id: this.userId,
         img: test_img,
       })
       .end((err, res) => {
-        if (err) done(err);
+        if (err) {
+          console.log(err);
+          done(err);
+        }
 
-        expect(res.body.data).to.include('.png');
+        expect(res.text).to.include('.png');
         done();
       });
   });
 
-  it('replaces user avatar in the database', (done) => {
+  it('replaces user avatar in the database', function(done) {
     agent
       .post('/api/config/avatar')
       .send({
-        email: 'test@userConfig.test.js',
+        id: this.userId,
         img: test_img,
       })
       .end(async (err, res) => {
-        if (err) done(err);
+        if (err) {
+          console.log(err);
+          done(err);
+        }
 
         let user = await User.findOne({email: 'test@userConfig.test.js'}).exec();
-        expect(res.body.data).to.equal(user.avatar_url);
+        expect(res.text).to.equal(user.avatar_url);
 
         done();
       });
