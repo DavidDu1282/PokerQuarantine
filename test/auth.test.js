@@ -5,6 +5,7 @@ const app = require("../app");
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const bcrypt = require("bcryptjs");
+const { resource } = require("../app");
 
 describe("Auth Routes", () => {
   var agent = request.agent(app);
@@ -51,4 +52,24 @@ describe("Auth Routes", () => {
         done();
       });
   });
+
+  it("should successfully change email on /api/change_email POST", (done) => {
+    const oldEmail = "defaultUser1@test.com";
+    agent
+      .post("/api/change_email")
+      .send({ newEmail: "newEmail@live.ca" })
+      .end((err, res) => {
+        if (err) done(err);
+        User.findOne({ email: oldEmail }).then((user) =>
+          expect(user).to.equal(null)
+        );
+        User.findOne({ email: "newEmail@live.ca" }).then((user) => {
+          expect(user).to.not.be.equal(undefined);
+          expect(user.email).to.not.be.equal(oldEmail);
+        });
+        done();
+      });
+  });
+
+  ///
 });

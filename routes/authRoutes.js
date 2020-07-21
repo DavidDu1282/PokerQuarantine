@@ -89,6 +89,25 @@ router.post("/change_password", (req, res) => {
   });
 });
 
+//Change email
+router.post("/change_email", async (req, res) => {
+  const { newEmail } = req.body;
+  try {
+    await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      { email: newEmail },
+      (err, result) => {
+        if (err) return res.sendStatus(400);
+        else {
+          return res.sendStatus(200);
+        }
+      }
+    );
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+});
+
 /*POST Log in 
 router.post(
 "/api/login",
