@@ -69,6 +69,52 @@ router.post("/check_email", async (req, res) => {
   });
 });
 
+//Change password
+router.post("/change_password", (req, res) => {
+  const { currPassword, newPassword } = req.body;
+
+  User.findOne({ _id: req.user._id }).then((user) => {
+    if (!user) return res.sendStatus(400);
+    bcrypt.compare(currPassword, user.password, (err, isMatch) => {
+      if (err) return res.sendStatus(400);
+      if (isMatch) {
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newPassword, salt, (err, hash) => {
+            if (err) res.send(400);
+            User.findByIdAndUpdate(
+              { _id: req.user._id },
+              { password: hash },
+              (err, result) => {
+                if (err) return res.sendStatus(400);
+                else return res.sendStatus(200);
+              }
+            );
+          });
+        });
+      }
+    });
+  });
+});
+
+//Change email
+router.post("/change_email", async (req, res) => {
+  const { newEmail } = req.body;
+  try {
+    await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      { email: newEmail },
+      (err, result) => {
+        if (err) return res.sendStatus(400);
+        else {
+          return res.sendStatus(200);
+        }
+      }
+    );
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+});
+
 /*POST Log in 
 router.post(
 "/api/login",

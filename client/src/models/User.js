@@ -24,6 +24,13 @@ class User {
     this.updateAvatar = this.updateAvatar.bind(this);
   }
 
+  async cookieLogin(data) {
+    const user_new = new User();
+    user_new.userdata = data;
+
+    return user_new;
+  }
+
   async login(auth) {
     const authdata = {
       email: auth.username,
