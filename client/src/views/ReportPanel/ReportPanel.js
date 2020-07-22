@@ -5,56 +5,25 @@ import {
   Button
 } from '@material-ui/core';
 import { Spacing, QuickForm } from '../../components';
-
+import axios from 'axios';
 
 
 class ReportPanel extends React.Component {
-    constructor(props) {
+      constructor(props) {
         super(props)
 
-        this.state = {
-            UpdateTitle: "",
-            AboutUpdate: "",
-            DateofUpdate: "",
-        }
-        this.handleSubmit=this.handleSubmit.bind(this)
     }
 
-    firsthandler = (event) => {
-        this.setState({
-            UpdateTitle: event.target.value
-        })
-    }
-    lasthandler = (event) => {
-        this.setState({
-            AboutUpdate: event.target.value
-        })
-    }
-    DateofUpdatehandler = (event) => {
-        this.setState({
-            DateofUpdate: event.target.value
-        })
-    }
-
-  
-    handleSubmit = (event) => {
-      const { UpdateTitle, AboutUpdate, DateofUpdate} = event.body;
-        alert(`${this.state.UpdateTitle} ${this.state.AboutUpdate}  Registered Successfully !!!!`)
-        console.log(this.state);
-        this.setState({
-            UpdateTitle: "",
-            AboutUpdate: "",
-            DateofUpdate: "",
-         
-        })     
-    }
-
-
-
+      handleSubmit = (event) => {
+        const {abuse, info, defendant} = event.body;
+        alert(`${abuse} ${info} ${defendant} Report Successfully !!!!`);
+        axios.post('/reports', {abuse: abuse, info: info, defendant: defendant})
+      }
 
     render() {
         return (
           <div className="container-padded">
+            
           <Grid
             container
             direction="column"
@@ -66,23 +35,23 @@ class ReportPanel extends React.Component {
             <Grid item>
               <Typography variant="h4">Report</Typography>
             </Grid>
+
           <QuickForm 
             fields={{
-              "ReporterUN": {
-                label: "Your Username",
-                type: "text" },
-              "ReportedUN": {
+       
+              "defendant": {
                 label: "Username of Other Player",
                 type: "text" },
-                "TypeofAbuse": {
+                "abuse": {
                 label: "Type of Abuse",
-                type: "select" },
-              "ShortDesc": {
+                type: "select", selectOptions: {'Bullying': 'Bullying', 'Hacking': 'Hacking'}},
+                "info": {
                 label: "Short Description (Optional)",
                 type: "text"
              }
             }}
-            name="register"
+            
+            name="reports"
             tBoxVariant="filled"
             button={
               <React.Fragment key="spacing button">
@@ -106,8 +75,6 @@ class ReportPanel extends React.Component {
             }
             onSubmit={this.handleSubmit}
           />
-  
-    
           </Grid>
         </div>
   

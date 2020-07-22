@@ -79,7 +79,7 @@ class App extends React.Component {
     const list = {
       'login / register': <LoginPanel client={this} />,
       'match': <MatchPanel client={this} />,
-      'store': <StorePanel client={this} />,
+      'report': <ReportPanel client={this} />,
       'update': <UpdatesPanel client={this} />,
       'News': <NewsPanel client={this} />,
       'management': <ManagementPanel client={this} />,
