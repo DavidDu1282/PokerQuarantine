@@ -5,48 +5,19 @@ import {
   Button
 } from '@material-ui/core';
 import { Spacing, QuickForm } from '../../components';
-
+import axios from 'axios';
 
 
 class UpdatesPanel extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = {
-            UpdateTitle: "",
-            AboutUpdate: "",
-            DateofUpdate: "",
-        }
-        this.handleSubmit=this.handleSubmit.bind(this)
     }
 
-    firsthandler = (event) => {
-        this.setState({
-            UpdateTitle: event.target.value
-        })
-    }
-    lasthandler = (event) => {
-        this.setState({
-            AboutUpdate: event.target.value
-        })
-    }
-    DateofUpdatehandler = (event) => {
-        this.setState({
-            DateofUpdate: event.target.value
-        })
-    }
-
-  
     handleSubmit = (event) => {
-      const { UpdateTitle, AboutUpdate, DateofUpdate} = event.body;
-        alert(`${this.state.UpdateTitle} ${this.state.AboutUpdate}  Registered Successfully !!!!`)
-        console.log(this.state);
-        this.setState({
-            UpdateTitle: "",
-            AboutUpdate: "",
-            DateofUpdate: "",
-         
-        })     
+      const {title, body, date} = event.body;
+      alert(`${title} ${body} ${date}  Registered Successfully !!!!`);
+      axios.post('/api/newspost', {title: title, body: body, date: date})
     }
 
 
@@ -78,7 +49,7 @@ class UpdatesPanel extends React.Component {
                 label: "Date of Update",
                 type: "date" }
             }}
-            name="register"
+            name="updates"
             tBoxVariant="filled"
             button={
               <React.Fragment key="spacing button">

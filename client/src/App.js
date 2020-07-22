@@ -9,6 +9,8 @@ import { LoginPanel,
   NewsPanel,
   ManagementPanel,
   ReportPanel,
+  CreditPanel,
+  UpdatesPanel,
 } from './views';
 import { User } from './models';
 import { CssBaseline } from "@material-ui/core";
@@ -78,8 +80,8 @@ class App extends React.Component {
       'login / register': <LoginPanel client={this} />,
       'match': <MatchPanel client={this} />,
       'store': <StorePanel client={this} />,
-      'leaderboard': <LeaderBoardPanel client={this} />,
-      'report a player': <ReportPanel client={this} />,
+      'update': <UpdatesPanel client={this} />,
+      'News': <NewsPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'user info': <UserInfoPanel client={this} />,
       

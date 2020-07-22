@@ -7,19 +7,20 @@ import { Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import CardHeader from '@material-ui/core/CardHeader';
-
+import { useState, useEffect  } from 'react';
+import axios from 'axios';
 // import tileData from './tileData';
 
 export default function NewsPanel() {
-  const data = [
-      { update: 1, date: '07.07.2020', description: 'Insert short description here' },
-      { update: 2, date: '07.08.2020', description: 'Insert short description here'  },
-      { update: 3, date: '07.13.2020', description: 'Insert short description here' },
-      { update: 4, date: '07.24.2020', description: 'Insert short description here'  }
-  ]
+  
+  const [state, setState] = useState([])
+  useEffect(() => {
+      axios.get("/api/newspost").then(
+          res => console.log(res)
+      )
+  })
 
   return (
-      
       
     <div className="container-padded">
       <Grid
@@ -39,16 +40,20 @@ export default function NewsPanel() {
 
 
         <Grid item container spacing={2}>
-          {data.map(elem => (
-            <Grid item xs={12} key={data.indexOf(elem)}>
+         
+
+
+          {
+            state.map(elem => (
+            <Grid item xs={12} key={elem._id}>
               <Card width="100%">
                 <CardHeader
-                  title={`Update ${elem.update}`}
+                  title={`Update ${elem.title}`}
                   subheader={`${elem.date}`}    
                 />
                 <CardContent>
                   <Typography variant="body2" color="textSecondary" component="p">
-                    {`${elem.description}`}
+                    {`${elem.body}`}
                   </Typography>
                 </CardContent>
                 <CardActions>

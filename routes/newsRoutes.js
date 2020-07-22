@@ -9,6 +9,7 @@ var router = express.Router();
 // fetch newsposts
 router.get("/newspost", async (req, res) => {
   try {
+    res.status(200);
     const newsPosts = await NewsPost.find({});
     res.send(newsPosts);
   } catch (err) {

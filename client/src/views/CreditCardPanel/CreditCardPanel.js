@@ -8,7 +8,7 @@ import { Spacing, QuickForm } from '../../components';
 
 
 
-class ReportPanel extends React.Component {
+class CreditPanel extends React.Component {
     constructor(props) {
         super(props)
 
@@ -64,25 +64,31 @@ class ReportPanel extends React.Component {
             spacing={4}
           >
             <Grid item>
-              <Typography variant="h4">Report</Typography>
+              <Typography variant="h4">Add Credit Card</Typography>
             </Grid>
           <QuickForm 
             fields={{
-              "ReporterUN": {
-                label: "Your Username",
+              "name_on_card": {
+                label: "Name on Card",
                 type: "text" },
-              "ReportedUN": {
-                label: "Username of Other Player",
+              "card_number": {
+                label: "Card Number",
                 type: "text" },
-                "TypeofAbuse": {
-                label: "Type of Abuse",
-                type: "select" },
-              "ShortDesc": {
-                label: "Short Description (Optional)",
+              "expiration_date": {
+                label: "Expiration Date: 00/00",
+                type: "text" },
+              "ccv": {
+                label: "CCV: 000",
+                type: "text" },
+              "postal_code": {
+                label: "Postal Code",
+                type: "text" },
+              "country": {
+                label: "Country",
                 type: "text"
              }
             }}
-            name="register"
+            name="creditcard"
             tBoxVariant="filled"
             button={
               <React.Fragment key="spacing button">
@@ -98,7 +104,7 @@ class ReportPanel extends React.Component {
                       variant="contained"
                       fullWidth
                     >
-                      Submit
+                      Add Card
                     </Button>
                   </Grid>
                 </Grid>
@@ -116,4 +122,4 @@ class ReportPanel extends React.Component {
     }
 }
 
-export default ReportPanel
+export default CreditPanel
