@@ -16,10 +16,20 @@ var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create http server.
  */
 
 var server = http.createServer(app);
+
+/**
+ * Socket io setup
+ */
+
+const io = require('socket.io')(server, {
+  serveClient: false
+});
+require('../sockets/Global')(io);
+require('../sockets/UserEvents')(io);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -50,7 +60,7 @@ function normalizePort(val) {
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * Event listener for http server "error" event.
  */
 
 function onError(error) {
@@ -78,7 +88,7 @@ function onError(error) {
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * Event listener for http server "listening" event.
  */
 
 function onListening() {

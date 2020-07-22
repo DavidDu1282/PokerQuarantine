@@ -17,20 +17,34 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { Theme } from "./theme";
 import "./global.scss";
 
+import socketIOClient from "socket.io-client";
+import { setupUserSocket } from "./sockets";
+
 class App extends React.Component {
+
   constructor(props) {
     super(props);
 
     this.navigator = React.createRef();
 
     let user = new User();
+
     this.state = {
-      user: user,
+      user: user
     };
   }
 
   componentDidMount() {
     this.cookieAuth();
+
+    let socket_url = (process.env.NODE_ENV === "development") ? "http://localhost:3001" : undefined;
+
+    // setup websockets
+    this.socket = socketIOClient(socket_url);
+    this.socket.on('message', (msg) => {
+      if (process.env.NODE_ENV === 'development') console.log(msg);
+    })
+    setupUserSocket(this.socket);
   }
 
   async cookieAuth() {
@@ -43,6 +57,7 @@ class App extends React.Component {
       this.setState((state) => {
         return { user: logged_user };
       });
+      this.socket.emit('user-handshake', logged_user.id);
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     }
   }
@@ -126,6 +141,7 @@ class App extends React.Component {
         return { user: logged_user };
       });
 
+      this.socket.emit('user-handshake', logged_user.id);
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     } catch (err) {
       throw err;

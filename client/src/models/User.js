@@ -1,6 +1,7 @@
 import moment from "moment";
 import axios from "axios";
 import { Buffer } from "buffer";
+import socketIOClient from "socket.io-client";
 
 const user_types = {
   0: "Regular User",
@@ -46,6 +47,7 @@ class User {
         return user_new;
       })
       .catch((err) => {
+        console.log(err);
         throw new Error("Incorrect email & password combination.");
       });
   }
@@ -97,8 +99,6 @@ class User {
   }
 
   async logout() {
-    // @TODO: add real logout
-
     return axios.get("/api/logout").then((res) => {
       return new User();
     });
@@ -181,6 +181,23 @@ class User {
     } catch(err) {
       throw err;
     }
+  }
+
+  setupUserSocket() {
+    this.socket = socketIOClient('/sockets/user', {
+      autoConnect: false
+    });
+
+    let socket = this.socket;
+
+    this.socket.on('message', (msg) => {
+      if (process.env.NODE_ENV === 'development') console.log(msg);
+    });
+
+    this.socket.on('handshake', () => {
+      // send user id to server
+      socket.emit('handshake', this.userdata.userId);
+    });
   }
 
   // getters --------------------------
