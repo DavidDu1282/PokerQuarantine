@@ -3,7 +3,7 @@ import { Button } from "@material-ui/core";
 import { GoogleIcon } from "../../components";
 import { API_URL } from "../config";
 class GoogleOAuth extends React.Component {
-  //check if popup window to re-enable login button if user close prematurely before authentication
+  //check if popup window is closed then refresh main page
   checkPopup() {
     const check = setInterval(() => {
       const { popup } = this;
