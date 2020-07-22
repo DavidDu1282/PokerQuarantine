@@ -1,12 +1,16 @@
 import React from 'react';
 import {
   TextField,
+  InputLabel,
+  FormControl,
   FormControlLabel,
   FormHelperText,
   Grid,
   Button,
   Typography,
-  Checkbox
+  Checkbox,
+  Select,
+  MenuItem
 } from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
@@ -19,7 +23,9 @@ class QuickForm extends React.Component {
    * onSubmit = onSubmit(result)
    * fields = {'name': {
    *          label: 'label' ,
-   *          type: 'text' | 'password' | 'number' | 'date' | 'checkbox'
+   *          type: 'text' | 'password' | 'number' | 'date' | 'checkbox' | 'select'
+   *          *selectOptions*: {'label': value}
+   *          ...fieldSettings
    * }}
    */
 
@@ -147,7 +153,8 @@ class QuickForm extends React.Component {
 
     // construct form
     for (const [field_name, options] of Object.entries(fields)) {
-      const { label, type, ...fieldSettings } = options;
+
+      const { label, type, selectOptions, ...fieldSettings } = options;
       
       if (typeof(type) === typeof('')) {
         switch (type) {
@@ -174,6 +181,7 @@ class QuickForm extends React.Component {
               </Grid>
             );
             break;
+
           case 'date':
             fields_display.push(
               <Grid item xs key={field_name}>
@@ -196,6 +204,40 @@ class QuickForm extends React.Component {
               </Grid>
             )
             break;
+
+          case 'select':
+            const selectOptions_display = [];
+
+            for (const [menu_label, value] of Object.entries(selectOptions)) {
+              selectOptions_display.push(
+                <MenuItem value={value} key={value} >{ menu_label }</MenuItem>
+              );
+            }
+
+            fields_display.push(
+              <Grid item xs key={field_name}>
+              <FormControl>
+                <InputLabel>{label}</InputLabel>
+                <Select
+                  name={field_name}
+                  variant={tBoxVariant}
+                  labelId={label}
+                  margin="normal"
+                  type={options.type}
+                  value={this.state.field_values[field_name]}
+                  onChange={(e) => this.handleChange(e)}
+                  error={(this.state.error_states[field_name] === '') ? false : true}
+                  helperText={this.state.error_states[field_name]}
+                  fullWidth
+                  {...fieldSettings}
+                >
+                  {selectOptions_display}
+                </Select>
+              </FormControl>
+              </Grid>
+            )
+            break;
+
           default:
             fields_display.push(
               <Grid item xs key={field_name}>

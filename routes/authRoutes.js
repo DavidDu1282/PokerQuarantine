@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const express = require("express");
+const { v4: uuidv4 } = require('uuid');
 var router = express.Router();
 
 // @TODO: cope with async/await
@@ -25,7 +26,10 @@ router.post("/signup", (req, res) => {
     bcrypt.hash(password, salt, (err, hash) => {
       if (err) res.send(400);
       //create new entry for User table
+      var id = uuidv4();
+
       var newUser = new User({
+        userId: id,
         name: name,
         email: email,
         password: hash,
@@ -36,11 +40,14 @@ router.post("/signup", (req, res) => {
         games_played: 0,
         wins: 0,
         losses: 0,
+
+        avatar_url: '',
       });
 
       newUser.save();
 
-      res.sendStatus(200);
+      res.status(200);
+      res.send(id);
     });
   });
 });

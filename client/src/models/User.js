@@ -1,48 +1,6 @@
 import moment from "moment";
 import axios from "axios";
-
-/*
-function fakeAuth(auth) {
-  if (auth.username === "name" && auth.password === "pass") {
-    return {
-      id: "1",
-      username: "name",
-      type: 0,
-      email: "email@email.com",
-      dob: moment("August 1, 1980"),
-      balance: 10000,
-      games_played: 10,
-      wins: 3,
-      losses: 7,
-      credit_cards: [1, 2, 3]
-    };
-  } else if (auth.username === "admin" && auth.password === "pass") {
-    return {
-      id: "0",
-      username: "admin",
-      type: 1,
-      email: "email@email.com",
-      dob: moment("July 1, 1900"),
-      balance: 100,
-      games_played: 15,
-      wins: 10,
-      losses: 5,
-      credit_cards: []
-    };
-  } else{
-    return 404;
-  }
-}
-
-function fakeCreate(data) {
-  if (data.email === "this@email.com") {
-    return 1;
-  } else if (data.username === "user") {
-    return 2;
-  }
-  return 'userid-222222';
-}
-*/
+import { Buffer } from "buffer";
 
 const user_types = {
   0: "Regular User",
@@ -61,6 +19,9 @@ class User {
   constructor() {
     this.userdata = {};
     this.userdata.role = 9;
+
+    // bind async
+    this.updateAvatar = this.updateAvatar.bind(this);
   }
 
   async cookieLogin(data) {
@@ -71,8 +32,6 @@ class User {
   }
 
   async login(auth) {
-    // @TODO: add real auth
-
     const authdata = {
       email: auth.username,
       password: auth.password,
@@ -100,8 +59,10 @@ class User {
         dob: data.dob.toDate(),
       })
       .then((res) => {
+
         const user_new = new User();
         user_new.userdata = {
+          id: res.data,
           email: data.email,
           name: data.username,
           dob: data.dob.toDate(),
@@ -110,6 +71,7 @@ class User {
           games_played: 0,
           wins: 0,
           losses: 0,
+          avatar_url: ''
         };
 
         return user_new;
@@ -124,8 +86,6 @@ class User {
   }
 
   async create(data) {
-    // @TODO: add real create
-
     return await axios
       .post("/api/check_email", { email: data.email })
       .then((res) => {
@@ -143,18 +103,95 @@ class User {
       return new User();
     });
   }
+  
+  async updateAvatar(img) {
+    /**
+     * Updates the user avatar
+     * -----------------------------
+     * params: 
+     *  imgData: the img data chosen from browser
+     * 
+     * returns:
+     *  new User
+     * 
+     * errs:
+     *  Error('no input')
+     */
+
+    
+    // check if imgData is not null
+    if (img == null) throw new Error('no input');
+
+    var imgBuffer;
+    // make request
+    try {
+      imgBuffer = Buffer.from(await img.arrayBuffer());
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+
+    try {
+      var imgData = {
+        id: this.userdata.id,
+        img: imgBuffer
+      };
+
+      const new_avatar_url = await axios
+        ({
+          url: '/api/config/avatar',
+          method: 'POST',
+          data: imgData
+        });
+
+      // return new updated user
+      
+      const user_new = new User();
+      user_new.userdata = Object.assign({}, this.userdata);
+      user_new.userdata.avatar_url = new_avatar_url.data;
+
+      return user_new;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+    
+  }
+
+  async delete() {
+    /**
+     * deletes the user
+     * -----------------------------
+     * 
+     * returns:
+     *  new User if succesful
+     *  void if not
+     */
+
+    try {
+      await axios.post(
+        '/api/config/delete',
+        {
+          id: this.userdata.id
+        }
+      )
+
+      return new User();
+    } catch(err) {
+      throw err;
+    }
+  }
 
   // getters --------------------------
-  // avatar link: https://postimg.cc/3yXpjKCC
 
   get avatar_url() {
-    return "https://i.postimg.cc/0N3fsjz3/IMGBIN-giant-panda-dog-cat-avatar-png-Gus-CAj6v.png";
+    return this.userdata.avatar_url;
   }
   get name() {
     return this.userdata.name;
   }
   get id() {
-    return "0";
+    return this.userdata.userId;
   }
   get raw_type() {
     return this.userdata.role;
