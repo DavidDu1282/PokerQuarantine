@@ -109,13 +109,11 @@ router.post('/delete', async (req, res) => {
       res.sendStatus(400);
       return;
     }
-
-    res.sendStatus(201);
   });
 
   // delete user avatar
   await cloudinary.uploader.destroy('pokerQuarantine/avatars/' + id);
-
+  res.sendStatus(201);
 });
 
 // helper functions

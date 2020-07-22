@@ -52,9 +52,10 @@ class User {
         dob: data.dob.toDate(),
       })
       .then((res) => {
+
         const user_new = new User();
         user_new.userdata = {
-          id: res.text,
+          id: res.data,
           email: data.email,
           name: data.username,
           dob: data.dob.toDate(),
@@ -125,7 +126,7 @@ class User {
 
     try {
       var imgData = {
-        id: this.id,
+        id: this.userdata.id,
         img: imgBuffer
       };
 
@@ -164,7 +165,7 @@ class User {
       await axios.post(
         '/api/config/delete',
         {
-          id: this.id
+          id: this.userdata.id
         }
       )
 
