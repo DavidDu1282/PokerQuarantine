@@ -210,7 +210,7 @@ class QuickForm extends React.Component {
 
             for (const [menu_label, value] of Object.entries(selectOptions)) {
               selectOptions_display.push(
-                <MenuItem fullWidth value={value} key={value} >{ menu_label }</MenuItem>
+                <MenuItem value={value} key={value} >{ menu_label }</MenuItem>
               );
             }
 
@@ -218,7 +218,7 @@ class QuickForm extends React.Component {
               <Grid item xs key={field_name}>
               <FormControl>
                 <InputLabel>{label}</InputLabel>
-                <Select
+                <Select fullWidth
                   name={field_name}
                   variant={tBoxVariant}
                   labelId={label}
@@ -228,7 +228,7 @@ class QuickForm extends React.Component {
                   onChange={(e) => this.handleChange(e)}
                   error={(this.state.error_states[field_name] === '') ? false : true}
                   helperText={this.state.error_states[field_name]}
-                  fullWidth
+
                   {...fieldSettings}
                 >
                   {selectOptions_display}

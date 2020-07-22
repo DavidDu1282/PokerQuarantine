@@ -74,14 +74,17 @@ class App extends React.Component {
   }
 
   render() {
-    // pages: [login_register, match, store, leaderboard, news, management, user_info(always false)]
+    // pages: [login_register, match, store, addCard, leaderboard, news, report, update, management, user_info(always false)]
 
     const list = {
       'login / register': <LoginPanel client={this} />,
       'match': <MatchPanel client={this} />,
+      'store': <StorePanel client={this} />,
+      'add card': <CreditPanel client={this} />,
+      'leaderboard': <LeaderBoardPanel client={this} />,
+      'news': <NewsPanel client={this} />,
       'report': <ReportPanel client={this} />,
       'update': <UpdatesPanel client={this} />,
-      'News': <NewsPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'user info': <UserInfoPanel client={this} />,
       

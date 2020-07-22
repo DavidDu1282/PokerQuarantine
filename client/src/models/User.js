@@ -49,12 +49,12 @@ const user_types = {
   1: "Moderator",
 };
 
-// pages: [login_register, match, store, leaderboard, news, management, user_info(always false)]
+ // pages: [login_register, match, store, addCard, leaderboard, news, report, update, management, user_info(always false)]
 
 const display_array = {
-  9: [true, false, false, false, true, false, false],
-  0: [false, true, true, true, true, false, false],
-  1: [false, true, true, true, true, true, false],
+  9: [true, false, false, false, false, true, false, false, false, false],
+  0: [false, true, true, true, true, true, true, false, false, false],
+  1: [false, true, true, true, true, true, true, true, true, false],
 };
 
 class User {
