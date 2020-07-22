@@ -51,9 +51,6 @@ class App extends React.Component {
     return this.state.user;
   }
 
-
-  async auth(data, create = false) {
-
   async updateUser(field, ...args) {
     /**
      * updates the given field of the user
@@ -61,9 +58,9 @@ class App extends React.Component {
      * params:
      *  field: str
      *  ...args: args for corresponding field
-     * 
+     *
      * return: void
-     * 
+     *
      * err:
      *  Error('invalid field name')
      *  Error('no data')
@@ -71,15 +68,15 @@ class App extends React.Component {
      */
 
     const update_functions = {
-      'avatar': this.user.updateAvatar
+      avatar: this.user.updateAvatar,
     };
 
     const update_function = update_functions[field];
-    
+
     if (update_function == null) {
-      throw new Error('invalid field name');
+      throw new Error("invalid field name");
     } else if (args.length === 0) {
-      throw new Error('no data');
+      throw new Error("no data");
     }
 
     // apply update
@@ -88,30 +85,29 @@ class App extends React.Component {
 
       // set for display
       this.setState((state) => {
-        return {user: new_user};
+        return { user: new_user };
       });
       this.forceUpdate();
     } catch (err) {
-      throw new Error('invalid data');
+      throw new Error("invalid data");
     }
-
   }
 
   async deleteUser() {
     /**
      * deletes the user, set new display
      * ---------------
-     * 
+     *
      * returns: void
      */
     const empty_user = await this.user.delete();
     this.setState((state) => {
-      return {user: empty_user};
+      return { user: empty_user };
     });
     this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
 
-
+  async auth(data, create = false) {
     /**
      * try auth the user with the given data
      * throws error if auth failed
