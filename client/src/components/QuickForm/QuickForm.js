@@ -216,7 +216,7 @@ class QuickForm extends React.Component {
 
             for (const [menu_label, value] of Object.entries(selectOptions)) {
               selectOptions_display.push(
-                <MenuItem value={value} key={value} >{ menu_label }</MenuItem>
+                <MenuItem fullWidth value={value} key={value} >{ menu_label }</MenuItem>
               );
             }
 

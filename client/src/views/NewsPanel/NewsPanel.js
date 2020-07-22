@@ -11,18 +11,58 @@ import { useState, useEffect  } from 'react';
 import axios from 'axios';
 // import tileData from './tileData';
 
-export default function NewsPanel() {
-  
-  const [state, setState] = useState([])
-  useEffect(() => {
-      axios.get("/api/newspost").then(
-          res => console.log(res)
-      )
-  })
+class NewsPanel extends React.Component {
+  state = {
+    title: '',
+    body: '',
+    posts: []
+  }
+  componentDidMount = () => {
+    this.getNewsPost();
+  };
 
-  return (
-      
-    <div className="container-padded">
+  getNewsPost = () => {
+    axios.get('/api/newspost')
+    .then((response) => {
+      const data = response.data;
+      this.setState({ posts: data });
+      console.log('Data has been received!!');
+    })
+    .catch(() => {
+      alert('Error retrieving data!!!');
+    });
+}
+displayNewsPost = (posts) => {
+
+  if (!posts.length) return null;
+  return posts.map((post, _id) => (
+    
+    <Grid item container spacing={2}>
+    <Grid item xs={12} key={post._id}>
+    <Card width="100%">
+    <CardHeader title={post.title} subheader={post.date}/>
+    <CardContent>
+      <Typography variant="body2" color="textSecondary" component="p">
+        {post.body}  
+      </Typography>
+    </CardContent>
+    <CardActions>
+      {/* <Button size="small" color="primary">
+        Share
+      </Button>
+      <Button size="small" color="primary">
+        Learn More
+      </Button> */}
+    </CardActions>
+    </Card>
+    </Grid>
+    </Grid>
+  ));
+};
+  render(){
+    console.log('State: ', this.state);
+    return (
+      <div className="container-padded">
       <Grid
         container
         direction="column"
@@ -37,43 +77,12 @@ export default function NewsPanel() {
         <Grid item>
           <CardMedia src={'/Poker.jpg'} component="img" height="400" title="Some title" />
         </Grid>
-
-
-        <Grid item container spacing={2}>
-         
-
-
-          {
-            state.map(elem => (
-            <Grid item xs={12} key={elem._id}>
-              <Card width="100%">
-                <CardHeader
-                  title={`Update ${elem.title}`}
-                  subheader={`${elem.date}`}    
-                />
-                <CardContent>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    {`${elem.body}`}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small" color="primary">
-                    Share
-                  </Button>
-                  <Button size="small" color="primary">
-                    Learn More
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-
-
-      </Grid>
-    </div>
-    
-          
-    
-  );
+          {this.displayNewsPost(this.state.posts)}
+          </Grid>
+        </div>
+    );
+  }
 }
+
+export default NewsPanel
+
