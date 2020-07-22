@@ -8,7 +8,9 @@ var mongoose = require("mongoose");
 var keys = require("./config/keys");
 var passport = require("passport");
 var cookieSession = require("cookie-session");
-
+var cors = require("cors");
+var socketio = require("socket.io");
+var https = require("https");
 // set node env
 if (process.env.NODE_ENV == null) {
   process.env.NODE_ENV = "development";
@@ -27,13 +29,12 @@ if (process.env.NODE_ENV === "test") {
 }
 
 // cloudinary config
-if (['test', 'development'].includes(process.env.NODE_ENV)) {
-  const fs = require('fs');
+if (["test", "development"].includes(process.env.NODE_ENV)) {
+  const fs = require("fs");
 
-  let testConfig = JSON.parse(fs.readFileSync('./config/localKeys.json'));
+  let testConfig = JSON.parse(fs.readFileSync("./config/localKeys.json"));
   process.env.CLOUDINARY_URL = testConfig.cloudinary_url;
 }
-
 
 // import models
 require("./models/NewsPosts");
@@ -43,9 +44,24 @@ require("./models/Reports");
 
 var app = express();
 
+//socket io setup
+let server;
+server = https.createServer(app);
+
+const io = socketio(server);
+app.set("io", io);
+
 //use cookie session for user login, store cookie for 31 days
 app.use(
   cookieSession({ maxAge: 31 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] })
+);
+// allow client to make request
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  })
 );
 
 // passport setup
@@ -55,7 +71,7 @@ app.use(passport.session());
 
 // view engine setup
 app.use(logger("dev"));
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "client/build")));
 

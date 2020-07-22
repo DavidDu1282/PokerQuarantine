@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const express = require("express");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 var router = express.Router();
 
 // @TODO: cope with async/await
@@ -41,7 +41,7 @@ router.post("/signup", (req, res) => {
         wins: 0,
         losses: 0,
 
-        avatar_url: '',
+        avatar_url: "",
       });
 
       newUser.save();
@@ -139,6 +139,7 @@ router.post("/login", (req, res, next) => {
 
 router.get(
   "/auth/google",
+
   passport.authenticate("google", {
     scope: ["profile", "email"],
   })
@@ -146,10 +147,10 @@ router.get(
 
 router.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/",
-    failureRedirect: "/",
-  })
+  passport.authenticate("google"),
+  (req, res) => {
+    res.send("<script>window.close()</script>");
+  }
 );
 
 module.exports = router;
