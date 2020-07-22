@@ -8,7 +8,7 @@ class GoogleOAuth extends React.Component {
     const check = setInterval(() => {
       const { popup } = this;
       if (!popup || !popup.closed) return;
-
+      clearInterval(check);
       window.location.reload();
     }, 100);
   }
