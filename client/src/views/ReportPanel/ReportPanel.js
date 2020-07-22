@@ -74,9 +74,14 @@ class ReportPanel extends React.Component {
               "ReportedUN": {
                 label: "Username of Other Player",
                 type: "text" },
-                "TypeofAbuse": {
+              "TypeofAbuse": {
                 label: "Type of Abuse",
-                type: "select" },
+                type: "select",
+                selectOptions: {
+                  'Example1': 1,
+                  'Example2': 2
+                }  
+              },
               "ShortDesc": {
                 label: "Short Description (Optional)",
                 type: "text"

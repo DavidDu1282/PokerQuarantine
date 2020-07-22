@@ -12,9 +12,11 @@ import {
   Select,
   MenuItem
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import moment from 'moment';
+
 
 class QuickForm extends React.Component {
   /**
@@ -98,6 +100,10 @@ class QuickForm extends React.Component {
     return false;
   }
 
+  handleSelectChange(e) {
+    this.setValue(e.target.name, e.target.value);
+  }
+
   handleChange(e) {
     /**
      * Update field values, check for error
@@ -150,7 +156,7 @@ class QuickForm extends React.Component {
   render() {
     const { fields, tBoxVariant, button, onSubmit, name, ...others } = this.props;
     const fields_display = [];
-
+    
     // construct form
     for (const [field_name, options] of Object.entries(fields)) {
 
@@ -216,23 +222,26 @@ class QuickForm extends React.Component {
 
             fields_display.push(
               <Grid item xs key={field_name}>
-              <FormControl>
+              <FormControl
+                margin="normal"
+                variant={tBoxVariant}
+                error={(this.state.error_states[field_name] === '') ? false : true}
+                {...fieldSettings}
+                fullWidth
+              >
                 <InputLabel>{label}</InputLabel>
                 <Select
                   name={field_name}
-                  variant={tBoxVariant}
                   labelId={label}
-                  margin="normal"
                   type={options.type}
                   value={this.state.field_values[field_name]}
-                  onChange={(e) => this.handleChange(e)}
-                  error={(this.state.error_states[field_name] === '') ? false : true}
-                  helperText={this.state.error_states[field_name]}
-                  fullWidth
-                  {...fieldSettings}
+                  onChange={(e) => this.handleSelectChange(e)}
                 >
                   {selectOptions_display}
                 </Select>
+                <FormHelperText>
+                  {this.state.error_states[field_name]}
+                </FormHelperText>
               </FormControl>
               </Grid>
             )
