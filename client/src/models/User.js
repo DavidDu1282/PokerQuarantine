@@ -62,7 +62,7 @@ class User {
 
         const user_new = new User();
         user_new.userdata = {
-          id: res.data,
+          userId: res.data,
           email: data.email,
           name: data.username,
           dob: data.dob.toDate(),
@@ -133,9 +133,11 @@ class User {
 
     try {
       var imgData = {
-        id: this.userdata.id,
+        id: this.userdata.userId,
         img: imgBuffer
       };
+
+      console.log(imgData);
 
       const new_avatar_url = await axios
         ({
@@ -172,10 +174,9 @@ class User {
       await axios.post(
         '/api/config/delete',
         {
-          id: this.userdata.id
+          id: this.userdata.userId
         }
       )
-
       return new User();
     } catch(err) {
       throw err;

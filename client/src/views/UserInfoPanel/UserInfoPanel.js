@@ -17,6 +17,7 @@ class UserInfoPanel extends React.Component {
   
   async changeAvatar(e) {
     await this.props.client.updateUser('avatar', e.target.files[0]);
+    setTimeout(this.forceUpdate(), 3000);
   }
 
   triggerAvatarChange(e) {
