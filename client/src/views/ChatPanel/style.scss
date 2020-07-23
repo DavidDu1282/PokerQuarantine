@@ -1,0 +1,19 @@
+@use "./../../config.scss" as config;
+
+
+.container {
+  padding:  config.$content-width*0.05;
+  display: flex;
+  align-items: center;
+  margin: none;
+  width: config.$content-width;
+  height: config.$app-height;
+}
+.containerMessage{
+  width: 100%;
+  height: config.$app-height*0.70;
+  display: flex;
+  margin: none;
+  padding:  none;
+  overflow : auto;
+}
