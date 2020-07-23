@@ -10,12 +10,17 @@ import {
   LeaderBoardPanel,
   NewsPanel,
   ManagementPanel,
-} from "./views";
-import { User } from "./models";
+  ReportPanel,
+  CreditPanel,
+  UpdatesPanel,
+} from './views';
+import { User } from './models';
+
 import { CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Theme } from "./theme";
 import "./global.scss";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -145,16 +150,23 @@ class App extends React.Component {
   }
 
   render() {
-    // pages: [login_register, match, store, leaderboard, news, management, user_info(always false)]
+    // pages: [login_register, match, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
     const list = {
-      "login / register": <LoginPanel client={this} />,
-      match: <MatchPanel client={this} />,
-      store: <StorePanel client={this} />,
-      leaderboard: <LeaderBoardPanel client={this} />,
-      news: <NewsPanel client={this} />,
-      management: <ManagementPanel client={this} />,
-      "user info": <UserInfoPanel client={this} />,
+
+      'login / register': <LoginPanel client={this} />,
+      'match': <MatchPanel client={this} />,
+      'store': <StorePanel client={this} />,
+      'leaderboard': <LeaderBoardPanel client={this} />,
+      'news': <NewsPanel client={this} />,
+      'update': <UpdatesPanel client={this} />,
+      'management': <ManagementPanel client={this} />,
+      'billing': <CreditPanel client={this} />,
+      'report': <ReportPanel client={this} />,
+      'user info': <UserInfoPanel client={this} />,
+      
+
+
     };
 
     return (
