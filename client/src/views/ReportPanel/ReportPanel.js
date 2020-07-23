@@ -15,9 +15,9 @@ class ReportPanel extends React.Component {
     }
 
       handleSubmit = (event) => {
-        const {abuse, info, defendant} = event.body;
-        alert(`${abuse} ${info} ${defendant} Report Successfully !!!!`);
-        axios.post('/reports', {abuse: abuse, info: info, defendant: defendant})
+        const {type, info, defendant} = event.body;
+        alert(`${type} ${info} ${defendant} Report Successfully !!!!`);
+        axios.post('api/Reports', {type: type, info: info, defendant: defendant})
       }
 
     render() {
@@ -38,11 +38,11 @@ class ReportPanel extends React.Component {
 
           <QuickForm 
             fields={{
-       
+        
               "defendant": {
                 label: "Username of Other Player",
                 type: "text" },
-                "abuse": {
+                "type": {
                 label: "Type of Abuse",
                 type: "select", selectOptions: {'Bullying': 'Bullying', 'Hacking': 'Hacking'}},
                 "info": {
@@ -61,6 +61,7 @@ class ReportPanel extends React.Component {
                 <Grid container key="button" alignItems="center">
                 
                   <Grid item xs={2}>
+                    geelelge
                     <Button
                       type="submit"
                       color="primary"

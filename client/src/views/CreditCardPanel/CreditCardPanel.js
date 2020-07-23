@@ -15,9 +15,9 @@ class CreditPanel extends React.Component {
 }
 
 handleSubmit = (event) => {
-  const {title, body, date} = event.body;
-  alert(`${title} ${body} ${date}  Registered Successfully !!!!`);
-  axios.post('/api/newspost', {title: title, body: body, date: date})
+  const {name_on_card, card_number, expiration_date, ccv, postal_code, country} = event.body;
+  alert(`${name_on_card} ${card_number} ${expiration_date} ${ccv} ${postal_code} ${country} Registered Successfully !!!!`);
+  axios.post('api/creditcard', {name_on_card: name_on_card, card_number: card_number, expiration_date: expiration_date, ccv: ccv, postal_code: postal_code, country: country})
 }
 
     render() {
@@ -43,7 +43,7 @@ handleSubmit = (event) => {
                 label: "Card Number",
                 type: "text" },
               "expiration_date": {
-                label: "Expiration Date: 00/00",
+                label: "Expiration Date: MM/YY",
                 type: "text" },
               "ccv": {
                 label: "CCV: 000",
