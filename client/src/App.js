@@ -45,7 +45,7 @@ class App extends React.Component {
     this.socket.on('message', (msg) => {
       if (process.env.NODE_ENV === 'development') console.log(msg);
     })
-    setupUserSocket(this.socket);
+    setupUserSocket(this.socket, this);
   }
 
   async cookieAuth() {
@@ -158,7 +158,7 @@ class App extends React.Component {
      * logs out the logged in user
      */
 
-     this.socket.emit('user-logout', this.user.id);
+    this.socket.emit('user-logout', this.user.id);
 
     const empty_user = await this.user.logout();
     this.setState((state) => {

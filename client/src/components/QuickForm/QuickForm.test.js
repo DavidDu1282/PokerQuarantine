@@ -7,8 +7,7 @@ import {
   TextField,
   FormControlLabel,
   Select,
-  MenuItem,
-  jssPreset
+  MenuItem
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 

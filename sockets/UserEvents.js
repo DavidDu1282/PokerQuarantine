@@ -6,7 +6,7 @@ module.exports = function(io, client) {
 
   io.on('connect', function(socket) {
 
-    socket.on('user-handshake', async (userId) => {
+    socket.on('user-handshake', (userId) => {
       /**
        * Get user id from client
        * --------------------
@@ -15,22 +15,46 @@ module.exports = function(io, client) {
 
       io.emit('message', `${socket.id} is associated with userId: ${userId}`)
 
+      // check if duplicate login 
+
+      client.get(userId, (error, sessionId) => {
+        if (sessionId != null) {
+          // logs out the user
+          
+          socket.broadcast.to(sessionId).emit('duplicate-session');
+
+          client.del(sessionId);
+          client.del(userId);
+        }
+      });
+
       // cache user to redis
 
-      await client.set(socket.id, userId, 'EX', 3600); // cache for 1hr
-      await client.set(userId, socket.id, 'EX', 3600); // insufficient use of memory i know
+      client.set(socket.id, userId);
+      client.set(userId, socket.id); // insufficient use of memory i know
     });
 
-    socket.on('user-logout', async (userId) => {
+    socket.on('chat', (msg) => {
+      /**
+       * Get user id from client
+       * --------------------
+       * data: {chat} {user: user, msg, time}
+       */
+
+      socket.broadcast('chat', msg);
+    })
+
+
+    socket.on('user-logout', (userId) => {
       /**
        * Remove user from cache
        * --------------------
        * data: {string} userId
        */
 
-      await client.del(socket.id);
-      await client.del(userId);
-    })
+      client.del(socket.id);
+      client.del(userId);
+    });
   });
 
   
