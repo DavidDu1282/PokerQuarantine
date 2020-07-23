@@ -10,6 +10,7 @@ import {
   LeaderBoardPanel,
   NewsPanel,
   ManagementPanel,
+  ChatPanel
 } from "./views";
 import { User } from "./models";
 import { CssBaseline } from "@material-ui/core";
@@ -172,6 +173,7 @@ class App extends React.Component {
     const list = {
       "login / register": <LoginPanel client={this} />,
       match: <MatchPanel client={this} />,
+      chat: <ChatPanel client={this} />,
       store: <StorePanel client={this} />,
       leaderboard: <LeaderBoardPanel client={this} />,
       news: <NewsPanel client={this} />,
