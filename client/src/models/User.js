@@ -59,7 +59,6 @@ class User {
         dob: data.dob.toDate(),
       })
       .then((res) => {
-
         const user_new = new User();
         user_new.userdata = {
           id: res.data,
@@ -71,7 +70,7 @@ class User {
           games_played: 0,
           wins: 0,
           losses: 0,
-          avatar_url: ''
+          avatar_url: "",
         };
 
         return user_new;
@@ -103,24 +102,23 @@ class User {
       return new User();
     });
   }
-  
+
   async updateAvatar(img) {
     /**
      * Updates the user avatar
      * -----------------------------
-     * params: 
+     * params:
      *  imgData: the img data chosen from browser
-     * 
+     *
      * returns:
      *  new User
-     * 
+     *
      * errs:
      *  Error('no input')
      */
 
-    
     // check if imgData is not null
-    if (img == null) throw new Error('no input');
+    if (img == null) throw new Error("no input");
 
     var imgBuffer;
     // make request
@@ -133,19 +131,18 @@ class User {
 
     try {
       var imgData = {
-        id: this.userdata.id,
-        img: imgBuffer
+        id: this.userdata.userId,
+        img: imgBuffer,
       };
 
-      const new_avatar_url = await axios
-        ({
-          url: '/api/config/avatar',
-          method: 'POST',
-          data: imgData
-        });
+      const new_avatar_url = await axios({
+        url: "/api/config/avatar",
+        method: "POST",
+        data: imgData,
+      });
 
       // return new updated user
-      
+
       const user_new = new User();
       user_new.userdata = Object.assign({}, this.userdata);
       user_new.userdata.avatar_url = new_avatar_url.data;
@@ -155,29 +152,25 @@ class User {
       console.log(err);
       throw err;
     }
-    
   }
 
   async delete() {
     /**
      * deletes the user
      * -----------------------------
-     * 
+     *
      * returns:
      *  new User if succesful
      *  void if not
      */
 
     try {
-      await axios.post(
-        '/api/config/delete',
-        {
-          id: this.userdata.id
-        }
-      )
+      await axios.post("/api/config/delete", {
+        id: this.userdata.userId,
+      });
 
       return new User();
-    } catch(err) {
+    } catch (err) {
       throw err;
     }
   }

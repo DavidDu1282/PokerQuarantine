@@ -8,7 +8,7 @@ import {
   Paper,
   withStyles,
 } from "@material-ui/core";
-import { Spacing } from "../../components";
+
 import "./UserInfoPanel.scss";
 import UserInfo from "./TabPage/UserInfo";
 import ChangePassword from "./TabPage/ChangePassword";

@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Grid, Avatar, Link, Button } from "@material-ui/core";
-import { Spacing } from "../../../components";
+
 import "../UserInfoPanel.scss";
 
 class UserInfoPanel extends React.Component {
@@ -16,6 +16,7 @@ class UserInfoPanel extends React.Component {
 
   async changeAvatar(e) {
     await this.props.client.updateUser("avatar", e.target.files[0]);
+    setTimeout(this.forceUpdate(), 3000);
   }
 
   triggerAvatarChange(e) {

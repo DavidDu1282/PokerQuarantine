@@ -69,6 +69,7 @@ class App extends React.Component {
 
     const update_functions = {
       avatar: this.user.updateAvatar,
+      email: undefined,
     };
 
     const update_function = update_functions[field];
@@ -89,6 +90,7 @@ class App extends React.Component {
       });
       this.forceUpdate();
     } catch (err) {
+      console.log(err);
       throw new Error("invalid data");
     }
   }
