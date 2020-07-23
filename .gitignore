@@ -121,3 +121,6 @@ dist
 .yarn/install-state.gz
 /.pnp
 .pnp.*
+
+# local keys
+localKeys.json

@@ -8,6 +8,13 @@ var mongoose = require("mongoose");
 var keys = require("./config/keys");
 var passport = require("passport");
 var cookieSession = require("cookie-session");
+var cors = require("cors");
+var socketio = require("socket.io");
+var https = require("https");
+// set node env
+if (process.env.NODE_ENV == null) {
+  process.env.NODE_ENV = "development";
+}
 
 //mock db for testing
 if (process.env.NODE_ENV === "test") {
@@ -21,6 +28,14 @@ if (process.env.NODE_ENV === "test") {
   mongoose.connect(keys.mongoURI);
 }
 
+// cloudinary config
+if (["test", "development"].includes(process.env.NODE_ENV)) {
+  const fs = require("fs");
+
+  let testConfig = JSON.parse(fs.readFileSync("./config/localKeys.json"));
+  process.env.CLOUDINARY_URL = testConfig.cloudinary_url;
+}
+
 // import models
 require("./models/NewsPosts");
 require("./models/User");
@@ -29,9 +44,24 @@ require("./models/Reports");
 
 var app = express();
 
+//socket io setup
+let server;
+server = https.createServer(app);
+
+const io = socketio(server);
+app.set("io", io);
+
 //use cookie session for user login, store cookie for 31 days
 app.use(
   cookieSession({ maxAge: 31 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] })
+);
+// allow client to make request
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  })
 );
 
 // passport setup
@@ -41,7 +71,7 @@ app.use(passport.session());
 
 // view engine setup
 app.use(logger("dev"));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "client/build")));
 
@@ -51,12 +81,14 @@ var indexRouter = require("./routes/indexRoutes");
 var newsRouter = require("./routes/newsRoutes");
 var ccRouter = require("./routes/creditcardRoutes");
 var reportRouter = require("./routes/reportsRoutes");
+var userConfigRouter = require("./routes/userConfigRoutes");
 const e = require("express");
 app.use("/", indexRouter);
 app.use("/api", authRouter);
 app.use("/api", newsRouter);
 app.use("/api", ccRouter);
 app.use("/api", reportRouter);
+app.use("/api/config", userConfigRouter);
 // require("./routes/newsRoutes")(app); (dont use this format, cant compile on heroku)
 
 // catch 404 and forward to error handler

@@ -1,6 +1,8 @@
-import React from 'react';
+import React from "react";
+import axios from "axios";
 
-import { LoginPanel,
+import {
+  LoginPanel,
   Navigator,
   UserInfoPanel,
   MatchPanel,
@@ -13,10 +15,11 @@ import { LoginPanel,
   UpdatesPanel,
 } from './views';
 import { User } from './models';
+
 import { CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { Theme } from './theme';
-import './global.scss'
+import { Theme } from "./theme";
+import "./global.scss";
 
 
 class App extends React.Component {
@@ -27,15 +30,89 @@ class App extends React.Component {
 
     let user = new User();
     this.state = {
-      user: user
+      user: user,
     };
+  }
+
+  componentDidMount() {
+    this.cookieAuth();
+  }
+
+  async cookieAuth() {
+    //login with cookie session
+    var res = await axios.get("/api/current_user");
+
+    if (res.data !== "") {
+      var logged_user;
+      logged_user = await this.state.user.cookieLogin(res.data);
+      this.setState((state) => {
+        return { user: logged_user };
+      });
+      this.navigator.current.setDisplay(logged_user.display_setting, 1);
+    }
   }
 
   get user() {
     return this.state.user;
   }
 
-  async auth(data, create=false) {
+  async updateUser(field, ...args) {
+    /**
+     * updates the given field of the user
+     * -------------------------------
+     * params:
+     *  field: str
+     *  ...args: args for corresponding field
+     *
+     * return: void
+     *
+     * err:
+     *  Error('invalid field name')
+     *  Error('no data')
+     *  Error('invalid data')
+     */
+
+    const update_functions = {
+      avatar: this.user.updateAvatar,
+    };
+
+    const update_function = update_functions[field];
+
+    if (update_function == null) {
+      throw new Error("invalid field name");
+    } else if (args.length === 0) {
+      throw new Error("no data");
+    }
+
+    // apply update
+    try {
+      const new_user = await update_function(...args);
+
+      // set for display
+      this.setState((state) => {
+        return { user: new_user };
+      });
+      this.forceUpdate();
+    } catch (err) {
+      throw new Error("invalid data");
+    }
+  }
+
+  async deleteUser() {
+    /**
+     * deletes the user, set new display
+     * ---------------
+     *
+     * returns: void
+     */
+    const empty_user = await this.user.delete();
+    this.setState((state) => {
+      return { user: empty_user };
+    });
+    this.navigator.current.setDisplay(empty_user.display_setting, 0);
+  }
+
+  async auth(data, create = false) {
     /**
      * try auth the user with the given data
      * throws error if auth failed
@@ -51,24 +128,23 @@ class App extends React.Component {
       }
 
       this.setState((state) => {
-        return {user: logged_user};
+        return { user: logged_user };
       });
 
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     } catch (err) {
       throw err;
     }
-    
   }
 
   async logout() {
     /**
      * logs out the logged in user
      */
-    
+
     const empty_user = await this.user.logout();
     this.setState((state) => {
-      return {user: empty_user};
+      return { user: empty_user };
     });
     this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
@@ -77,6 +153,7 @@ class App extends React.Component {
     // pages: [login_register, match, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
     const list = {
+
       'login / register': <LoginPanel client={this} />,
       'match': <MatchPanel client={this} />,
       'store': <StorePanel client={this} />,
@@ -88,11 +165,13 @@ class App extends React.Component {
       'report': <ReportPanel client={this} />,
       'user info': <UserInfoPanel client={this} />,
       
+
+
     };
 
     return (
       <ThemeProvider theme={Theme}>
-      <CssBaseline />
+        <CssBaseline />
         <Navigator list={list} client={this} ref={this.navigator} />
       </ThemeProvider>
     );
