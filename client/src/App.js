@@ -115,10 +115,14 @@ class App extends React.Component {
      *
      * returns: void
      */
+
+    this.socket.emit('user-logout', this.user.id);
+
     const empty_user = await this.user.delete();
     this.setState((state) => {
       return { user: empty_user };
     });
+    
     this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
 
@@ -152,6 +156,8 @@ class App extends React.Component {
     /**
      * logs out the logged in user
      */
+
+     this.socket.emit('user-logout', this.user.id);
 
     const empty_user = await this.user.logout();
     this.setState((state) => {

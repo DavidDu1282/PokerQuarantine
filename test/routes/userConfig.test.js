@@ -9,7 +9,7 @@ const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary').v2;
 
 
-describe('UserConfig Routes: avatar', function() {
+describe.skip('UserConfig Routes: avatar', function() {
   const agent = request.agent(app);
   const test_img = Buffer.from(fs.readFileSync('client/public/logo.png'));
   this.timeout(10000);
