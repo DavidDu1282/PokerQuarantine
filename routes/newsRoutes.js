@@ -45,16 +45,20 @@ router.post("/newspost", async (req, res) => {
 });
 
 // delete newspost
-router.delete("/del/newspost/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    NewsPost.findByIdAndRemove(id, (err, newsPost) => {
-      if (err) return res.sendStatus(400);
-      return res.sendStatus(200);
-    });
-  } catch (err) {
+router.post('/newspost/delete', async (req, res) => {
+
+  const { id } = req.body;
+  if (id == null) {
     res.sendStatus(400);
+    return;
   }
+
+  await NewsPost.deleteOne({_id: id}).exec((err, deleteResult) => {
+    if (deleteResult.deletedCount === 0) {
+      res.sendStatus(400);
+      return;
+    }
+  });
 });
 
 module.exports = router;

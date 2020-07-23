@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 // import tileData from './tileData';
 
+
 class ManagementPanel extends React.Component {
   state = {
     title: '',
@@ -28,9 +29,12 @@ class ManagementPanel extends React.Component {
       this.setState({ posts: data });
       console.log('Data has been received!!');
     })
-    .catch(() => {
-      alert('Error retrieving data!!!');
-    });
+}
+
+deleteContact(_id) { // <-- declare id parameter
+  
+  axios.post('/api/Reports/delete', {id: _id})
+  alert("Resolved Case! Refresh to view updated list of reports")
 }
 
 
@@ -44,8 +48,8 @@ displayNewsPost = (posts) => {
                   <TableCell >{post.defendant}</TableCell>
                   <TableCell >{post.type}</TableCell>
                   <TableCell >{post.info}</TableCell>
-                  <TableCell >{post.date.day}</TableCell>
-                  
+                  <TableCell >{post.date}</TableCell>
+                  <TableCell><Button size = 'small' variant="outlined" color="primary" onClick={ () => this.deleteContact(post._id) } >Resolved</Button></TableCell>
                 </TableRow>
   ));
 };
