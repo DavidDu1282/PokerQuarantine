@@ -61,7 +61,6 @@ class ReportPanel extends React.Component {
                 <Grid container key="button" alignItems="center">
                 
                   <Grid item xs={2}>
-                    geelelge
                     <Button
                       type="submit"
                       color="primary"
