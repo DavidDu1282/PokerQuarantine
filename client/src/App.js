@@ -4,7 +4,7 @@ import axios from "axios";
 import {
   LoginPanel,
   Navigator,
-  UserInfoPanel,
+  UserPanel,
   MatchPanel,
   StorePanel,
   LeaderBoardPanel,
@@ -154,7 +154,7 @@ class App extends React.Component {
       leaderboard: <LeaderBoardPanel client={this} />,
       news: <NewsPanel client={this} />,
       management: <ManagementPanel client={this} />,
-      "user info": <UserInfoPanel client={this} />,
+      "user info": <UserPanel client={this} />,
     };
 
     return (

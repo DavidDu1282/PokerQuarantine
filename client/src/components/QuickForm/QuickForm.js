@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   TextField,
   InputLabel,
@@ -10,11 +10,11 @@ import {
   Typography,
   Checkbox,
   Select,
-  MenuItem
-} from '@material-ui/core';
-import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
-import moment from 'moment';
+  MenuItem,
+} from "@material-ui/core";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
+import moment from "moment";
 
 class QuickForm extends React.Component {
   /**
@@ -36,27 +36,27 @@ class QuickForm extends React.Component {
     const error_states = {};
 
     for (const [field_name, options] of Object.entries(this.props.fields)) {
-      if (typeof(options.type) === typeof('')) {
+      if (typeof options.type === typeof "") {
         switch (options.type) {
-          case 'checkbox':
+          case "checkbox":
             field_values[field_name] = false;
-            error_states[field_name] = '';
+            error_states[field_name] = "";
             break;
-          case 'date':
-            error_states[field_name] = '';
+          case "date":
+            error_states[field_name] = "";
             let date = moment();
             field_values[field_name] = date;
             break;
           default:
-            error_states[field_name] = '';
-            field_values[field_name] = '';
+            error_states[field_name] = "";
+            field_values[field_name] = "";
         }
       }
     }
 
     this.state = {
       field_values: field_values,
-      error_states: error_states
+      error_states: error_states,
     };
   }
 
@@ -65,10 +65,10 @@ class QuickForm extends React.Component {
     error_states_[name] = state;
 
     this.setState((state) => {
-      return { 
-        error_states: error_states_
+      return {
+        error_states: error_states_,
       };
-    })
+    });
   }
 
   setValue(name, value) {
@@ -76,10 +76,10 @@ class QuickForm extends React.Component {
     field_values_[name] = value;
 
     this.setState((state) => {
-      return { 
-        field_values: field_values_
+      return {
+        field_values: field_values_,
       };
-    })
+    });
   }
 
   checkEmpty(data) {
@@ -90,7 +90,7 @@ class QuickForm extends React.Component {
      */
 
     for (const [key, value] of Object.entries(data)) {
-      if (value === '') {
+      if (value === "") {
         this.setErrorState(key, `This field must not be empty.`);
         return true;
       }
@@ -103,20 +103,19 @@ class QuickForm extends React.Component {
      * Update field values, check for error
      */
 
-    let name = e.target.getAttribute('name');
-    let type = e.target.getAttribute('type');
-    if (type === 'checkbox') {
-
+    let name = e.target.getAttribute("name");
+    let type = e.target.getAttribute("type");
+    if (type === "checkbox") {
       this.setValue(name, e.target.checked);
     } else {
       this.setValue(name, e.target.value);
     }
 
     // errors
-    if ( type !== 'checkbox' && e.target.value === '') {
+    if (type !== "checkbox" && e.target.value === "") {
       this.setErrorState(name, `This field must not be empty.`);
     } else {
-      this.setErrorState(name, '');
+      this.setErrorState(name, "");
     }
   }
 
@@ -126,7 +125,7 @@ class QuickForm extends React.Component {
      */
 
     this.setValue(name, date);
-    this.setErrorState(name, '');
+    this.setErrorState(name, "");
   }
 
   handleSubmit(e) {
@@ -143,38 +142,55 @@ class QuickForm extends React.Component {
 
     return {
       form: this,
-      body: this.state.field_values
+      body: this.state.field_values,
     };
   }
 
   render() {
-    const { fields, tBoxVariant, button, onSubmit, name, ...others } = this.props;
+    const {
+      fields,
+      tBoxVariant,
+      button,
+      onSubmit,
+      name,
+      ...others
+    } = this.props;
     const fields_display = [];
 
     // construct form
     for (const [field_name, options] of Object.entries(fields)) {
+      const {
+        label,
+        type,
+        selectOptions,
 
-      const { label, type, selectOptions, ...fieldSettings } = options;
-      
-      if (typeof(type) === typeof('')) {
+        ...fieldSettings
+      } = options;
+
+      if (typeof type === typeof "") {
         switch (type) {
-          case 'checkbox':
+          case "checkbox":
             fields_display.push(
               <Grid item xs key={field_name}>
-                <FormControlLabel 
-                  control={<Checkbox
-                    name={field_name}
-                    checked={this.state.field_values[field_name]}
-                    onChange={e => this.handleChange(e)}  
-                    color="primary"
-                    size="small"
-                    {...fieldSettings}
-                  />}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name={field_name}
+                      checked={this.state.field_values[field_name]}
+                      onChange={(e) => this.handleChange(e)}
+                      color="primary"
+                      size="small"
+                      {...fieldSettings}
+                    />
+                  }
                   label={<Typography variant="body2">{label}</Typography>}
-                /><br/>
+                />
+                <br />
                 <FormHelperText
                   variant={tBoxVariant}
-                  error={(this.state.error_states[field_name] === '') ? false : true}
+                  error={
+                    this.state.error_states[field_name] === "" ? false : true
+                  }
                 >
                   {this.state.error_states[field_name]}
                 </FormHelperText>
@@ -182,72 +198,80 @@ class QuickForm extends React.Component {
             );
             break;
 
-          case 'date':
+          case "date":
             fields_display.push(
               <Grid item xs key={field_name}>
-              <MuiPickersUtilsProvider utils={MomentUtils}>
-                <DatePicker
-                  fullWidth
-                  name={field_name}
-                  variant="inline"
-                  inputVariant={tBoxVariant}
-                  format="MMMM DD, yyyy"
-                  margin="normal"
-                  label={label}
-                  value={this.state.field_values[field_name]}
-                  onChange={(date) => this.handleDateChange(field_name, date)}
-                  error={(this.state.error_states[field_name] === '') ? false : true}
-                  helperText={this.state.error_states[field_name]}
-                  {...fieldSettings}
-                />
-              </MuiPickersUtilsProvider>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                  <DatePicker
+                    fullWidth
+                    name={field_name}
+                    variant="inline"
+                    inputVariant={tBoxVariant}
+                    format="MMMM DD, yyyy"
+                    margin="normal"
+                    label={label}
+                    value={this.state.field_values[field_name]}
+                    onChange={(date) => this.handleDateChange(field_name, date)}
+                    error={
+                      this.state.error_states[field_name] === "" ? false : true
+                    }
+                    helperText={this.state.error_states[field_name]}
+                    {...fieldSettings}
+                  />
+                </MuiPickersUtilsProvider>
               </Grid>
-            )
+            );
             break;
 
-          case 'select':
+          case "select":
             const selectOptions_display = [];
 
             for (const [menu_label, value] of Object.entries(selectOptions)) {
               selectOptions_display.push(
-                <MenuItem value={value} key={value} >{ menu_label }</MenuItem>
+                <MenuItem value={value} key={value}>
+                  {menu_label}
+                </MenuItem>
               );
             }
 
             fields_display.push(
               <Grid item xs key={field_name}>
-              <FormControl>
-                <InputLabel>{label}</InputLabel>
-                <Select
-                  name={field_name}
-                  variant={tBoxVariant}
-                  labelId={label}
-                  margin="normal"
-                  type={options.type}
-                  value={this.state.field_values[field_name]}
-                  onChange={(e) => this.handleChange(e)}
-                  error={(this.state.error_states[field_name] === '') ? false : true}
-                  helperText={this.state.error_states[field_name]}
-                  fullWidth
-                  {...fieldSettings}
-                >
-                  {selectOptions_display}
-                </Select>
-              </FormControl>
+                <FormControl>
+                  <InputLabel>{label}</InputLabel>
+                  <Select
+                    name={field_name}
+                    variant={tBoxVariant}
+                    labelId={label}
+                    margin="normal"
+                    type={options.type}
+                    value={this.state.field_values[field_name]}
+                    onChange={(e) => this.handleChange(e)}
+                    error={
+                      this.state.error_states[field_name] === "" ? false : true
+                    }
+                    helperText={this.state.error_states[field_name]}
+                    fullWidth
+                    {...fieldSettings}
+                  >
+                    {selectOptions_display}
+                  </Select>
+                </FormControl>
               </Grid>
-            )
+            );
             break;
 
           default:
             fields_display.push(
               <Grid item xs key={field_name}>
-                <TextField 
+                <TextField
                   label={label}
                   name={field_name}
                   variant={tBoxVariant}
                   type={options.type}
                   value={this.state.field_values[field_name]}
-                  error={(this.state.error_states[field_name] === '') ? false : true}
+                  error={
+                    this.state.error_states[field_name] === "" ? false : true
+                  }
                   helperText={this.state.error_states[field_name]}
                   margin="normal"
                   onChange={(e) => this.handleChange(e)}
@@ -260,38 +284,34 @@ class QuickForm extends React.Component {
       } else {
         // custom *styling* component (no input return and no error handling)
         const CustomField = options.type;
-        
+
         fields_display.push(
           <Grid item xs key={field_name}>
             <CustomField />
           </Grid>
         );
       }
-
     }
 
     // button row
 
-    if (typeof(button) === typeof('')) {
+    if (typeof button === typeof "") {
       // string button
       fields_display.push(
         <Grid item xs key="button">
-          <Button type="submit" fullWidth>{button}</Button>
+          <Button type="submit" fullWidth>
+            {button}
+          </Button>
         </Grid>
       );
     } else {
       // node button(row)
       fields_display.push(button);
-    };
+    }
 
     return (
-      <Grid
-        container
-        direction="column"
-        spacing={0}
-        {...others}
-      >
-        <form noValidate onSubmit={e => onSubmit(this.handleSubmit(e))}>
+      <Grid container direction="column" spacing={0} {...others}>
+        <form noValidate onSubmit={(e) => onSubmit(this.handleSubmit(e))}>
           {fields_display}
         </form>
       </Grid>
