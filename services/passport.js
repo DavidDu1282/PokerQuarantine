@@ -3,6 +3,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcrypt = require("bcryptjs");
+const { v4: uuidv4 } = require("uuid");
 
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
@@ -57,7 +58,9 @@ passport.use(
       if (existingUser) {
         done(null, existingUser);
       } else {
+        var id = uuidv4();
         const user = await new User({
+          userId: id,
           googleId: profile.id,
           email: profile.emails[0].value,
           name: profile.displayName,

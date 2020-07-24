@@ -2,12 +2,19 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { QuickForm } from "../../../components";
 import axios from "axios";
+import { withSnackbar } from "notistack";
 
 class ChangeEmail extends React.Component {
   constructor(props) {
     super(props);
     this.change_form = React.createRef();
   }
+
+  async changeEmail(newEmail) {
+    await this.props.client.updateUser("email", newEmail);
+    setTimeout(this.forceUpdate(), 3000);
+  }
+
   handleSubmit = async (result) => {
     // if error
     if (!result) return;
@@ -25,10 +32,12 @@ class ChangeEmail extends React.Component {
 
     try {
       await axios.post("/api/check_email", { email: email });
-      await axios.post("/api/change_email", { newEmail: email });
-      // await this.props.userData.data.updataEmail();
+      await axios.post("/api/config/change_email", { newEmail: email });
+      this.props.enqueueSnackbar("Successfuly changed email!", {
+        variant: "success",
+      });
+      this.changeEmail(email);
     } catch (err) {
-      console.log(err);
       this.change_form.current.setErrorState(
         "email",
         "Email has been registered with an existing account."
@@ -37,7 +46,7 @@ class ChangeEmail extends React.Component {
   };
 
   render() {
-    const { userData } = this.props;
+    const user = this.props.client.user;
     return (
       <div className="container-padded">
         <Grid
@@ -82,4 +91,4 @@ class ChangeEmail extends React.Component {
   }
 }
 
-export default ChangeEmail;
+export default withSnackbar(ChangeEmail);

@@ -69,7 +69,7 @@ class App extends React.Component {
 
     const update_functions = {
       avatar: this.user.updateAvatar,
-      email: undefined,
+      email: this.user.updateEmail,
     };
 
     const update_function = update_functions[field];

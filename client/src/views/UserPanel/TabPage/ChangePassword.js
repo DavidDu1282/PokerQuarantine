@@ -1,7 +1,8 @@
 import React from "react";
-import { Grid, Typography, Button } from "@material-ui/core";
-import { Spacing, QuickForm } from "../../../components";
+import { Grid, Button } from "@material-ui/core";
+import { QuickForm } from "../../../components";
 import axios from "axios";
+import { withSnackbar } from "notistack";
 
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -36,15 +37,23 @@ class ChangePassword extends React.Component {
         "NewPassword",
         `Passwords do not match.`
       );
+
       return;
     }
 
     try {
-      const res = await axios.post("/api/change_password", {
+      await axios.post("/api/config/change_password", {
         currPassword: OldPassword,
         newPassword: NewPassword,
       });
-    } catch (err) {}
+      this.props.enqueueSnackbar("Successfuly changed password!", {
+        variant: "success",
+      });
+    } catch (err) {
+      this.props.enqueueSnackbar("Error Incorrect Password", {
+        variant: "error",
+      });
+    }
   };
 
   render() {
@@ -101,4 +110,4 @@ class ChangePassword extends React.Component {
   }
 }
 
-export default ChangePassword;
+export default withSnackbar(ChangePassword);

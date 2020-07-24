@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Button } from "@material-ui/core";
 import { GoogleIcon } from "../../components";
 import { API_URL } from "../config";

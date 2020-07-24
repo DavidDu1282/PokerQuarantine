@@ -22,6 +22,7 @@ class User {
 
     // bind async
     this.updateAvatar = this.updateAvatar.bind(this);
+    this.updateEmail = this.updateEmail.bind(this);
   }
 
   async cookieLogin(data) {
@@ -149,9 +150,28 @@ class User {
 
       return user_new;
     } catch (err) {
-      console.log(err);
       throw err;
     }
+  }
+  updateEmail(newEmail) {
+    /**
+     * Updates the user email
+     * -----------------------------
+     * params:
+     *  newEmail: updated email
+     *
+     * returns:
+     *  new User
+     *
+     * errs:
+     *  Error('no input')
+     */
+    let user_new = new User();
+
+    user_new.userdata = Object.assign({}, this.userdata);
+    user_new.userdata.email = newEmail;
+
+    return user_new;
   }
 
   async delete() {
