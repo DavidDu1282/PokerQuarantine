@@ -1,11 +1,11 @@
 import React  from 'react';
-
-import NavigatorPanel from './NavigatorPanel '
+import App from '../../App'
+import Navigator from './Navigator'
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-describe('<NavigatorPanel />', () => {
+describe('<Navigator />', () => {
   it('renders without errors', () => {
-    const wrapper = shallow(<NavigatorPanel fields={{}} button='' />);
+    const app = shallow(<App/>);
   });
 });
