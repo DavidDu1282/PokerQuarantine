@@ -1,8 +1,7 @@
-import React from 'react';
-import { Typography, Grid, Avatar, Link, Button } from '@material-ui/core';
-import { Spacing } from './../../components';
-import './UserInfoPanel.scss';
+import React from "react";
+import { Typography, Grid, Avatar, Link, Button } from "@material-ui/core";
 
+import "../UserInfoPanel.scss";
 
 class UserInfoPanel extends React.Component {
   /**
@@ -14,9 +13,9 @@ class UserInfoPanel extends React.Component {
 
     this.fileInput = React.createRef();
   }
-  
+
   async changeAvatar(e) {
-    await this.props.client.updateUser('avatar', e.target.files[0]);
+    await this.props.client.updateUser("avatar", e.target.files[0]);
     setTimeout(this.forceUpdate(), 3000);
   }
 
@@ -27,18 +26,19 @@ class UserInfoPanel extends React.Component {
 
   render() {
     const user = this.props.client.user;
+
     const handleAvatarChange = async (e) => {
       this.changeAvatar(e);
     };
 
     return (
       <div className="container-padded">
-        <input 
+        <input
           type="file"
           ref={this.fileInput}
           onChange={handleAvatarChange}
           accept="image/*"
-          style={{display: 'none'}}
+          style={{ display: "none" }}
         />
 
         <Grid
@@ -47,12 +47,8 @@ class UserInfoPanel extends React.Component {
           justify="flex-start"
           alignItems="flex-start"
           alignContent="flex-start"
-          spacing={2}
         >
-          <Grid item>
-            <Typography variant="h4">User Info</Typography>
-            <Spacing height={2} />
-          </Grid>
+          <Grid item></Grid>
 
           <Grid
             container
@@ -63,7 +59,8 @@ class UserInfoPanel extends React.Component {
           >
             <Grid
               container
-              item xs={10}
+              item
+              xs={10}
               direction="column"
               justify="flex-start"
               alignItems="flex-start"
@@ -83,33 +80,35 @@ class UserInfoPanel extends React.Component {
                 <Typography variant="h6">Email</Typography>
                 <Typography>{user.email}</Typography>
               </Grid>
-
             </Grid>
-            
 
             <Grid
               container
-              item xs={2}
+              item
+              xs={2}
               direction="column"
               justify="center"
               alignItems="center"
               spacing={1}
             >
               <Grid item>
-                <Avatar src={user.avatar_url} alt={user.name} style={{height: "5em", width: "5em"}} />
+                <Avatar
+                  src={user.avatar_url}
+                  alt={user.name}
+                  style={{ height: "5em", width: "5em" }}
+                />
               </Grid>
               <Grid item>
-                <Link href="#" onClick={e => this.triggerAvatarChange(e)}>
+                <Link href="#" onClick={(e) => this.triggerAvatarChange(e)}>
                   Edit
                 </Link>
               </Grid>
             </Grid>
-
           </Grid>
 
           <Grid item>
             <Typography variant="h6">Birthday</Typography>
-            <Typography>{user.dob.format('MMMM Do, YYYY')}</Typography>
+            <Typography>{user.dob.format("MMMM Do, YYYY")}</Typography>
           </Grid>
 
           <Grid item>
@@ -118,12 +117,19 @@ class UserInfoPanel extends React.Component {
           </Grid>
 
           <Grid item>
-            <Typography variant="h6">Wins / Losses / Total Games Played</Typography>
+            <Typography variant="h6">
+              Wins / Losses / Total Games Played
+            </Typography>
             <Typography>{`${user.wins} / ${user.losses} / ${user.games_played}`}</Typography>
           </Grid>
 
           <Grid item>
-            <Button color="secondary" onClick={() => this.props.client.deleteUser()}>delete user</Button>
+            <Button
+              color="secondary"
+              onClick={() => this.props.client.deleteUser()}
+            >
+              delete user
+            </Button>
           </Grid>
         </Grid>
       </div>

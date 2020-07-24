@@ -1,20 +1,21 @@
 @use "./config.scss" as config;
 
-
 .container-padded {
-  padding: config.$app-height*0.07 config.$content-width*0.07;
+  padding: config.$app-height * 0.07 config.$content-width * 0.07;
   overflow: visible;
   display: flex;
   margin: none;
   width: config.$content-width;
 }
 
+.container-userpanel {
+  padding: config.$app-height * 0.05 config.$content-width * 0.01;
+}
 
 .scroll-container {
-
   overflow-y: scroll;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 
   &::-webkit-scrollbar {
     display: none;

@@ -9,6 +9,7 @@ var keys = require("./config/keys");
 var passport = require("passport");
 var cookieSession = require("cookie-session");
 var cors = require("cors");
+
 // set node env
 if (process.env.NODE_ENV == null) {
   process.env.NODE_ENV = "development";
@@ -41,7 +42,6 @@ require("./models/Creditcards");
 require("./models/Reports");
 
 var app = express();
-
 
 //use cookie session for user login, store cookie for 31 days
 app.use(

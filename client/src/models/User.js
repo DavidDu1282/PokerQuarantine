@@ -8,12 +8,12 @@ const user_types = {
   1: "Moderator",
 };
 
-// pages: [login_register, match, chat, store, leaderboard, news, management, user_info(always false)]
+// pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
 const display_array = {
-  9: [true, false, false, false, false, true, false, false],
-  0: [false, true, true, true, true, true, false, false],
-  1: [false, true, true, true, true, true, true, false],
+  9: [true, false, false, false, false, true, false, false, false, false, false],
+  0: [false, true, true, true, true, true, false, false, true, true, false],
+  1: [false, true, true, true, true, true, true, true, true, true, false],
 };
 
 class User {
@@ -23,6 +23,7 @@ class User {
 
     // bind async
     this.updateAvatar = this.updateAvatar.bind(this);
+    this.updateEmail = this.updateEmail.bind(this);
   }
 
   async cookieLogin(data) {
@@ -61,7 +62,6 @@ class User {
         dob: data.dob.toDate(),
       })
       .then((res) => {
-
         const user_new = new User();
         user_new.userdata = {
           userId: res.data,
@@ -73,7 +73,7 @@ class User {
           games_played: 0,
           wins: 0,
           losses: 0,
-          avatar_url: ''
+          avatar_url: "",
         };
 
         return user_new;
@@ -103,24 +103,23 @@ class User {
       return new User();
     });
   }
-  
+
   async updateAvatar(img) {
     /**
      * Updates the user avatar
      * -----------------------------
-     * params: 
+     * params:
      *  imgData: the img data chosen from browser
-     * 
+     *
      * returns:
      *  new User
-     * 
+     *
      * errs:
      *  Error('no input')
      */
 
-    
     // check if imgData is not null
-    if (img == null) throw new Error('no input');
+    if (img == null) throw new Error("no input");
 
     var imgBuffer;
     // make request
@@ -134,51 +133,64 @@ class User {
     try {
       var imgData = {
         id: this.userdata.userId,
-        img: imgBuffer
+        img: imgBuffer,
       };
 
-      console.log(imgData);
-
-      const new_avatar_url = await axios
-        ({
-          url: '/api/config/avatar',
-          method: 'POST',
-          data: imgData
-        });
+      const new_avatar_url = await axios({
+        url: "/api/config/avatar",
+        method: "POST",
+        data: imgData,
+      });
 
       // return new updated user
-      
+
       const user_new = new User();
       user_new.userdata = Object.assign({}, this.userdata);
       user_new.userdata.avatar_url = new_avatar_url.data;
 
       return user_new;
     } catch (err) {
-      console.log(err);
       throw err;
     }
-    
+  }
+  updateEmail(newEmail) {
+    /**
+     * Updates the user email
+     * -----------------------------
+     * params:
+     *  newEmail: updated email
+     *
+     * returns:
+     *  new User
+     *
+     * errs:
+     *  Error('no input')
+     */
+    let user_new = new User();
+
+    user_new.userdata = Object.assign({}, this.userdata);
+    user_new.userdata.email = newEmail;
+
+    return user_new;
   }
 
   async delete() {
     /**
      * deletes the user
      * -----------------------------
-     * 
+     *
      * returns:
      *  new User if succesful
      *  void if not
      */
 
     try {
-      await axios.post(
-        '/api/config/delete',
-        {
-          id: this.userdata.userId
-        }
-      )
+      await axios.post("/api/config/delete", {
+        id: this.userdata.userId,
+      });
+
       return new User();
-    } catch(err) {
+    } catch (err) {
       throw err;
     }
   }

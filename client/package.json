@@ -10,6 +10,7 @@
     "axios": "^0.19.2",
     "buffer": "^5.6.0",
     "moment": "^2.27.0",
+    "notistack": "^0.9.17",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.0.1",

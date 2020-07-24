@@ -4,15 +4,19 @@ import axios from "axios";
 import {
   LoginPanel,
   Navigator,
-  UserInfoPanel,
+  UserPanel,
   MatchPanel,
   StorePanel,
   LeaderBoardPanel,
   NewsPanel,
   ManagementPanel,
-  ChatPanel
-} from "./views";
-import { User } from "./models";
+  ChatPanel,
+  ReportPanel,
+  CreditPanel,
+  UpdatesPanel,
+} from './views';
+import { User } from './models';
+
 import { CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Theme } from "./theme";
@@ -86,6 +90,7 @@ class App extends React.Component {
 
     const update_functions = {
       avatar: this.user.updateAvatar,
+      email: this.user.updateEmail,
     };
 
     const update_function = update_functions[field];
@@ -106,6 +111,7 @@ class App extends React.Component {
       });
       this.forceUpdate();
     } catch (err) {
+      console.log(err);
       throw new Error("invalid data");
     }
   }
@@ -169,17 +175,22 @@ class App extends React.Component {
   }
 
   render() {
-    // pages: [login_register, match, store, leaderboard, news, management, user_info(always false)]
+    // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
     const list = {
-      "login / register": <LoginPanel client={this} />,
-      match: <MatchPanel client={this} />,
-      chat: <ChatPanel ref={this.chatPanel} client={this} />,
-      store: <StorePanel client={this} />,
-      leaderboard: <LeaderBoardPanel client={this} />,
-      news: <NewsPanel client={this} />,
-      management: <ManagementPanel client={this} />,
-      "user info": <UserInfoPanel client={this} />,
+
+      'login / register': <LoginPanel client={this} />,
+      'match': <MatchPanel client={this} />,
+      'chat': <ChatPanel ref={this.chatPanel} client={this} />,
+      'store': <StorePanel client={this} />,
+      'leaderboard': <LeaderBoardPanel client={this} />,
+      'news': <NewsPanel client={this} />,
+      'update': <UpdatesPanel client={this} />,
+      'management': <ManagementPanel client={this} />,
+      'billing': <CreditPanel client={this} />,
+      'report': <ReportPanel client={this} />,
+      'user info': <UserPanel client={this} />,
+
     };
 
     return (
