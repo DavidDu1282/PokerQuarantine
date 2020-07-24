@@ -1,6 +1,6 @@
 import React  from 'react';
 
-import NewsPanel from './NewsPanel '
+import NewsPanel from './NewsPanel'
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
