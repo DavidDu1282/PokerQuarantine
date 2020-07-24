@@ -69,16 +69,44 @@ router.post("/update/report/:id", async (req, res) => {
   }
 });
 
-router.delete("/del/reports/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    Reports.findByIdAndRemove(id, (err, cc) => {
-      if (err) return res.sendStatus(400);
-      return res.sendStatus(200);
-    });
-  } catch (err) {
+// router.delete("/del/reports/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     Reports.findByIdAndRemove(id, (err, cc) => {
+//       if (err) return res.sendStatus(400);
+//       return res.sendStatus(200);
+//     });
+//   } catch (err) {
+//     res.sendStatus(400);
+//   }
+// });
+
+router.post('/Reports/delete', async (req, res) => {
+  /**
+   * updates the avatar for the selected user
+   * ----------
+   * params: 
+   *  id: str
+   * 
+   * resCode:
+   *  201 OK
+   *  400 Invalid user id
+   * 
+   */
+
+  const { id } = req.body;
+  if (id == null) {
     res.sendStatus(400);
+    return;
   }
+
+  await Reports.deleteOne({_id: id}).exec((err, deleteResult) => {
+    if (deleteResult.deletedCount === 0) {
+      res.sendStatus(400);
+      return;
+    }
+  });
+
 });
 
 module.exports = router;

@@ -10,11 +10,12 @@ import {
   Typography,
   Checkbox,
   Select,
-  MenuItem,
-} from "@material-ui/core";
-import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
-import moment from "moment";
+  MenuItem
+} from '@material-ui/core';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
+import moment from 'moment';
+
 
 class QuickForm extends React.Component {
   /**
@@ -98,6 +99,10 @@ class QuickForm extends React.Component {
     return false;
   }
 
+  handleSelectChange(e) {
+    this.setValue(e.target.name, e.target.value);
+  }
+
   handleChange(e) {
     /**
      * Update field values, check for error
@@ -156,7 +161,7 @@ class QuickForm extends React.Component {
       ...others
     } = this.props;
     const fields_display = [];
-
+    
     // construct form
     for (const [field_name, options] of Object.entries(fields)) {
       const {
@@ -228,34 +233,33 @@ class QuickForm extends React.Component {
 
             for (const [menu_label, value] of Object.entries(selectOptions)) {
               selectOptions_display.push(
-                <MenuItem value={value} key={value}>
-                  {menu_label}
-                </MenuItem>
+                <MenuItem fullWidth value={value} key={value} >{ menu_label }</MenuItem>
               );
             }
 
             fields_display.push(
               <Grid item xs key={field_name}>
-                <FormControl>
-                  <InputLabel>{label}</InputLabel>
-                  <Select
-                    name={field_name}
-                    variant={tBoxVariant}
-                    labelId={label}
-                    margin="normal"
-                    type={options.type}
-                    value={this.state.field_values[field_name]}
-                    onChange={(e) => this.handleChange(e)}
-                    error={
-                      this.state.error_states[field_name] === "" ? false : true
-                    }
-                    helperText={this.state.error_states[field_name]}
-                    fullWidth
-                    {...fieldSettings}
-                  >
-                    {selectOptions_display}
-                  </Select>
-                </FormControl>
+              <FormControl
+                margin="normal"
+                variant={tBoxVariant}
+                error={(this.state.error_states[field_name] === '') ? false : true}
+                {...fieldSettings}
+                fullWidth
+              >
+                <InputLabel>{label}</InputLabel>
+                <Select
+                  name={field_name}
+                  labelId={label}
+                  type={options.type}
+                  value={this.state.field_values[field_name]}
+                  onChange={(e) => this.handleSelectChange(e)}
+                >
+                  {selectOptions_display}
+                </Select>
+                <FormHelperText>
+                  {this.state.error_states[field_name]}
+                </FormHelperText>
+              </FormControl>
               </Grid>
             );
             break;
