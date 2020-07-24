@@ -23,19 +23,31 @@ class ChatPanel extends React.Component {
   }
 
   insertChat(msg, user,date){
-    var arr = JSON.parse(JSON.stringify(this.state.msgArr));
+    var arr = this.state.msgArr;
     arr.push({
-      user:user,
-      text:msg,
-      date :date,
+      user: user,
+      text: msg,
+      date: moment(date),
     },)
     this.setState(((state) => {return {msgArr: arr}}));
   }
+
   sendMessage(e){
     var message = this.state.textMessage;
+
+    if (message === '') return;
+
+    var now = new Date();
     //console.log(this.chatText.current.value);
-    this.insertChat(message, 'John',  '07/23');
+    this.insertChat(message, this.props.client.user, now);
     this.setState(((state) => {return {textMessage:''}}));
+
+    // send msg
+    this.socket.emit('chat', {
+      user: {name: this.props.client.user.name, avatar_url: this.props.client.user.avatar_url},
+      text: message,
+      time: now
+    });
   }
   handleChange(e){
     let message = e.target.value;
@@ -45,10 +57,9 @@ class ChatPanel extends React.Component {
   }
   render(){
     return(
-      <div className="container">
+      <div className="containerMessage">
         <Grid
           container
-          wrap = 'nowrap'
           direction="column"
           spacing={2}
         >
@@ -56,13 +67,16 @@ class ChatPanel extends React.Component {
             <Typography variant="h4">Chat</Typography>
             <Spacing height={2} />
           </Grid>
-          <Grid item container xs>
-          <div id='wrapper' className = "containerMessage" style = {{minWidth : '100%', minHeight: '100%'}}>
-          <Grid item container spacing={2} direction="column" justify="flex-start" alignItems="flex-start" alignContent = "flex-start" wrap = 'nowrap'>
+          <Grid item xs>
+          <div className = "containerMessageContext">
+          <Grid item container spacing={2} direction="column" justify="flex-start" alignItems="flex-start" alignContent = "flex-end" wrap = 'nowrap'>
+          <Grid item>
+            <Typography variant="body2" color="textSecondary">Welcome to the #global chat</Typography>
+          </Grid>
           {this.state.msgArr.map((elem, index )=> (
             <Grid item key={index}>
-              <Typography variant="body1">{`${elem.user.name} said: ${elem.text}, at time:${elem.date}` }
-              </Typography>
+              <Typography variant="body2" color="textSecondary">{`${elem.user.name}, on ${elem.date.format("H:m MMM Do, YYYY")}` }</Typography><br/>
+              <Typography variant="body1">{`${elem.text}`}</Typography>
             </Grid>
           ))}
           </Grid>
@@ -70,9 +84,9 @@ class ChatPanel extends React.Component {
           <br></br>
           </Grid>
           {/* Chat dialouge */}
-          <Grid item container direction="row" xs>
+          <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
             <Grid item xs={10}><TextField variant="outlined" ref = {this.chatText} fullWidth value= {this.state.textMessage} onChange ={(e)=>{this.handleChange(e)}}/></Grid>
-            <Grid item xs={2}><Button variant="contained" color="primary" endIcon={<SendIcon/>} onClick={(e) => { this.sendMessage(e)}}>
+            <Grid item xs={2}><Button variant="contained" color="primary" fullWidth endIcon={<SendIcon/>} onClick={(e) => { this.sendMessage(e)}}>
               Send
             </Button></Grid>
           </Grid>

@@ -1,19 +1,27 @@
 @use "./../../config.scss" as config;
 
 
-.container {
-  padding:  config.$content-width*0.05;
+.containerMessage {
+  padding:  config.$content-width*0.07;
   display: flex;
   align-items: center;
   margin: none;
   width: config.$content-width;
   height: config.$app-height;
 }
-.containerMessage{
+.containerMessageContext {
   width: 100%;
-  height: config.$app-height*0.70;
+  height: config.$app-height*0.55;
   display: flex;
   margin: none;
   padding:  none;
-  overflow : auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

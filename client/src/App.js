@@ -27,6 +27,7 @@ class App extends React.Component {
     super(props);
 
     this.navigator = React.createRef();
+    this.chatPanel = React.createRef();
 
     let user = new User();
 
@@ -173,7 +174,7 @@ class App extends React.Component {
     const list = {
       "login / register": <LoginPanel client={this} />,
       match: <MatchPanel client={this} />,
-      chat: <ChatPanel client={this} />,
+      chat: <ChatPanel ref={this.chatPanel} client={this} />,
       store: <StorePanel client={this} />,
       leaderboard: <LeaderBoardPanel client={this} />,
       news: <NewsPanel client={this} />,
