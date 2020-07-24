@@ -62,7 +62,7 @@ class User {
       .then((res) => {
         const user_new = new User();
         user_new.userdata = {
-          id: res.data,
+          userId: res.data,
           email: data.email,
           name: data.username,
           dob: data.dob.toDate(),
