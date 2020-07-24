@@ -27,9 +27,6 @@ class NewsPanel extends React.Component {
       const data = response.data;
       this.setState({ posts: data });
       console.log('Data has been received!!');
-    })
-    .catch(() => {
-      alert('Error retrieving data!!!');
     });
 }
 displayNewsPost = (posts) => {
