@@ -9,8 +9,7 @@ var keys = require("./config/keys");
 var passport = require("passport");
 var cookieSession = require("cookie-session");
 var cors = require("cors");
-var socketio = require("socket.io");
-var https = require("https");
+
 // set node env
 if (process.env.NODE_ENV == null) {
   process.env.NODE_ENV = "development";
@@ -43,13 +42,6 @@ require("./models/Creditcards");
 require("./models/Reports");
 
 var app = express();
-
-//socket io setup
-let server;
-server = https.createServer(app);
-
-const io = socketio(server);
-app.set("io", io);
 
 //use cookie session for user login, store cookie for 31 days
 app.use(

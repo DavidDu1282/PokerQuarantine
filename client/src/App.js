@@ -4,7 +4,7 @@ import axios from "axios";
 import {
   LoginPanel,
   Navigator,
-  UserInfoPanel,
+  UserPanel,
   MatchPanel,
   StorePanel,
   LeaderBoardPanel,
@@ -74,6 +74,7 @@ class App extends React.Component {
 
     const update_functions = {
       avatar: this.user.updateAvatar,
+      email: this.user.updateEmail,
     };
 
     const update_function = update_functions[field];
@@ -94,6 +95,7 @@ class App extends React.Component {
       });
       this.forceUpdate();
     } catch (err) {
+      console.log(err);
       throw new Error("invalid data");
     }
   }
@@ -163,9 +165,7 @@ class App extends React.Component {
       'management': <ManagementPanel client={this} />,
       'billing': <CreditPanel client={this} />,
       'report': <ReportPanel client={this} />,
-      'user info': <UserInfoPanel client={this} />,
-      
-
+      'user info': <UserPanel client={this} />,
 
     };
 
