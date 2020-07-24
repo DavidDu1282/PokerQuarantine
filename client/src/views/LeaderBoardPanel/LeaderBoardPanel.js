@@ -42,9 +42,9 @@ displayNewsPost = (posts) => {
     <TableRow key={post._id}>
                   <TableCell align = "left">{post.name}</TableCell>
                   <TableCell align = "center" >{post.games_played}</TableCell>
-                  <TableCell align = "center" >{post.wins}</TableCell>
+                  <TableCell align = "center" >{post.balance}</TableCell>
                   <TableCell align = "center">{post.losses}</TableCell>
-                  <TableCell align = "center">{post.balance}</TableCell>
+                  <TableCell align = "center">{post.wins}</TableCell>
                   
                 </TableRow>
   ));
@@ -69,9 +69,9 @@ displayNewsPost = (posts) => {
               <TableRow>
                 <TableCell align = "left"><b>Username</b></TableCell>
                 <TableCell align = "center"><b>Games played</b></TableCell>
-                <TableCell align = "center"><b>Wins</b></TableCell>
-                <TableCell align = "center"><b>Losses</b></TableCell>
                 <TableCell align = "center"><b>Number of Chips</b></TableCell>
+                <TableCell align = "center"><b>Losses</b></TableCell>
+                <TableCell align = "center"><b>Wins</b></TableCell>
 
               </TableRow>
             </TableHead>
