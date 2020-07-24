@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('pokerquarantine-master:server');
 var http = require('http');
+const redis = require("redis");
 
 /**
  * Get port from environment and store in Express.
@@ -16,10 +17,23 @@ var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create http server.
  */
 
 var server = http.createServer(app);
+
+/**
+ * Socket io / redis setup
+ */
+
+const client = redis.createClient(process.env.REDIS_URL);
+client.flushall(); // start server with empty cache
+
+const io = require('socket.io')(server, {
+  serveClient: false
+});
+require('../sockets/Global')(io, client);
+require('../sockets/UserEvents')(io, client);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -50,7 +64,7 @@ function normalizePort(val) {
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * Event listener for http server "error" event.
  */
 
 function onError(error) {
@@ -78,7 +92,7 @@ function onError(error) {
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * Event listener for http server "listening" event.
  */
 
 function onListening() {

@@ -10,6 +10,7 @@ import {
   LeaderBoardPanel,
   NewsPanel,
   ManagementPanel,
+  ChatPanel,
   ReportPanel,
   CreditPanel,
   UpdatesPanel,
@@ -21,21 +22,35 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { Theme } from "./theme";
 import "./global.scss";
 
+import socketIOClient from "socket.io-client";
+import { setupUserSocket } from "./sockets";
 
 class App extends React.Component {
+
   constructor(props) {
     super(props);
 
     this.navigator = React.createRef();
+    this.chatPanel = React.createRef();
 
     let user = new User();
+
     this.state = {
-      user: user,
+      user: user
     };
   }
 
   componentDidMount() {
     this.cookieAuth();
+
+    let socket_url = (process.env.NODE_ENV === "development") ? "http://localhost:3001" : undefined;
+
+    // setup websockets
+    this.socket = socketIOClient(socket_url);
+    this.socket.on('message', (msg) => {
+      if (process.env.NODE_ENV === 'development') console.log(msg);
+    })
+    setupUserSocket(this.socket, this);
   }
 
   async cookieAuth() {
@@ -48,6 +63,7 @@ class App extends React.Component {
       this.setState((state) => {
         return { user: logged_user };
       });
+      this.socket.emit('user-handshake', logged_user.id);
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     }
   }
@@ -107,10 +123,14 @@ class App extends React.Component {
      *
      * returns: void
      */
+
+    this.socket.emit('user-logout', this.user.id);
+
     const empty_user = await this.user.delete();
     this.setState((state) => {
       return { user: empty_user };
     });
+    
     this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
 
@@ -133,6 +153,7 @@ class App extends React.Component {
         return { user: logged_user };
       });
 
+      this.socket.emit('user-handshake', logged_user.id);
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     } catch (err) {
       throw err;
@@ -144,6 +165,8 @@ class App extends React.Component {
      * logs out the logged in user
      */
 
+    this.socket.emit('user-logout', this.user.id);
+
     const empty_user = await this.user.logout();
     this.setState((state) => {
       return { user: empty_user };
@@ -152,12 +175,13 @@ class App extends React.Component {
   }
 
   render() {
-    // pages: [login_register, match, store, leaderboard, news, update, management, billing, report, user_info(always false)]
+    // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
     const list = {
 
       'login / register': <LoginPanel client={this} />,
       'match': <MatchPanel client={this} />,
+      'chat': <ChatPanel ref={this.chatPanel} client={this} />,
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
       'news': <NewsPanel client={this} />,

@@ -8,7 +8,7 @@ import {
   FormControlLabel,
   Select,
   MenuItem,
-  jssPreset
+  FormControl
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 
@@ -83,7 +83,7 @@ describe('<QuickForm />', () => {
     }} button='' />);
 
     expect(wrapper.find(Select)).to.have.lengthOf(1);
-    expect(wrapper.find(Select).first().props().test_field).to.equal('foo');
+    expect(wrapper.find(FormControl).first().props().test_field).to.equal('foo');
   });
 
 

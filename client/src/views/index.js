@@ -6,6 +6,7 @@ export { default as UserPanel } from './UserPanel';
 export { default as MatchPanel } from './MatchPanel';
 export { default as StorePanel } from './StorePanel';
 export { default as ManagementPanel } from './ManagementPanel';
+export { default as ChatPanel } from './ChatPanel';
 export { default as UpdatesPanel } from './UpdatesPanel';
 export { default as ReportPanel } from './ReportPanel';
 export { default as CreditPanel } from './CreditCardPanel';

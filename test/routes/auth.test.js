@@ -1,11 +1,11 @@
 process.env.NODE_ENV = "test";
 const expect = require("chai").expect;
 const request = require("supertest");
-const app = require("../app");
+const app = require("../../app");
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const bcrypt = require("bcryptjs");
-const { resource } = require("../app");
+const { resource } = require("../../app");
 
 describe("Auth Routes", () => {
   var agent = request.agent(app);

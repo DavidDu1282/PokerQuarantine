@@ -99,8 +99,8 @@ class QuickForm extends React.Component {
     return false;
   }
 
-  handleSelectChange(e) {
-    this.setValue(e.target.name, e.target.value);
+  handleSelectChange(name, e) {
+    this.setValue(name, e.target.value);
   }
 
   handleChange(e) {
@@ -138,9 +138,7 @@ class QuickForm extends React.Component {
      * returns the data of this form
      * return null if error
      */
-
     e.preventDefault();
-
     if (this.checkEmpty(this.state.field_values)) {
       return null;
     }
@@ -233,7 +231,7 @@ class QuickForm extends React.Component {
 
             for (const [menu_label, value] of Object.entries(selectOptions)) {
               selectOptions_display.push(
-                <MenuItem fullWidth value={value} key={value} >{ menu_label }</MenuItem>
+                <MenuItem value={value} key={value} >{ menu_label }</MenuItem>
               );
             }
 
@@ -252,7 +250,7 @@ class QuickForm extends React.Component {
                   labelId={label}
                   type={options.type}
                   value={this.state.field_values[field_name]}
-                  onChange={(e) => this.handleSelectChange(e)}
+                  onChange={(e) => this.handleSelectChange(field_name, e)}
                 >
                   {selectOptions_display}
                 </Select>

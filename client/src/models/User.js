@@ -1,18 +1,19 @@
 import moment from "moment";
 import axios from "axios";
 import { Buffer } from "buffer";
+import socketIOClient from "socket.io-client";
 
 const user_types = {
   0: "Regular User",
   1: "Moderator",
 };
 
-// pages: [login_register, match, store, leaderboard, news, update, management, billing, report, user_info(always false)]
+// pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
 const display_array = {
-  9: [true, false, false, false, true, false, false, false, false, false],
-  0: [false, true, true, true, true, false, false, true, true, false],
-  1: [false, true, true, true, true, true, true, true, true, false],
+  9: [true, false, false, false, false, true, false, false, false, false, false],
+  0: [false, true, true, true, true, true, false, false, true, true, false],
+  1: [false, true, true, true, true, true, true, true, true, true, false],
 };
 
 class User {
@@ -47,6 +48,7 @@ class User {
         return user_new;
       })
       .catch((err) => {
+        console.log(err);
         throw new Error("Incorrect email & password combination.");
       });
   }
@@ -97,8 +99,6 @@ class User {
   }
 
   async logout() {
-    // @TODO: add real logout
-
     return axios.get("/api/logout").then((res) => {
       return new User();
     });
@@ -193,6 +193,23 @@ class User {
     } catch (err) {
       throw err;
     }
+  }
+
+  setupUserSocket() {
+    this.socket = socketIOClient('/sockets/user', {
+      autoConnect: false
+    });
+
+    let socket = this.socket;
+
+    this.socket.on('message', (msg) => {
+      if (process.env.NODE_ENV === 'development') console.log(msg);
+    });
+
+    this.socket.on('handshake', () => {
+      // send user id to server
+      socket.emit('handshake', this.userdata.userId);
+    });
   }
 
   // getters --------------------------
