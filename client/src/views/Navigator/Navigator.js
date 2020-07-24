@@ -124,7 +124,7 @@ class Navigator extends React.Component {
                   <ButtonBase
                     disableRipple
                     disableTouchRipple
-                    onClick={e => this.setSelectedTab(9)}
+                    onClick={e => this.setSelectedTab(10)}
                   >
                     <Avatar src={this.props.client.user.avatar_url} alt={this.props.client.user.name}/>
                     <Typography style={{color: "white", marginLeft: "0.8em"}} variant="body2">{this.props.client.user.name}</Typography>
