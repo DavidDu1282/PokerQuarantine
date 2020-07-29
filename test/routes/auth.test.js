@@ -30,7 +30,7 @@ describe("Auth Routes", () => {
     const currPassword = "1234";
     const newPassword = "4321";
     agent
-      .post("/api/change_password")
+      .post("/api/config/change_password")
       .send({ currPassword: currPassword, newPassword: newPassword })
       .end((err, res) => {
         if (err) done(err);
@@ -56,7 +56,7 @@ describe("Auth Routes", () => {
   it("should successfully change email on /api/change_email POST", (done) => {
     const oldEmail = "defaultUser1@test.com";
     agent
-      .post("/api/change_email")
+      .post("/api/config/change_email")
       .send({ newEmail: "newEmail@live.ca" })
       .end((err, res) => {
         if (err) done(err);
