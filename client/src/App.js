@@ -15,9 +15,14 @@ import {
   CreditPanel,
   UpdatesPanel,
 } from './views';
+
+import {
+  FloatWindowController
+} from './components';
+
 import { User } from './models';
 
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline, Typography } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Theme } from "./theme";
 import "./global.scss";
@@ -33,6 +38,8 @@ class App extends React.Component {
     this.navigator = React.createRef();
     this.chatPanel = React.createRef();
 
+    this.windowController = React.createRef();
+
     let user = new User();
 
     this.state = {
@@ -41,6 +48,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.windowController.current.show('navigator');
+    this.windowController.current.show('vsavfsavas');
     this.cookieAuth();
 
     let socket_url = (process.env.NODE_ENV === "development") ? "http://localhost:3001" : undefined;
@@ -51,6 +60,8 @@ class App extends React.Component {
       if (process.env.NODE_ENV === 'development') console.log(msg);
     })
     setupUserSocket(this.socket, this);
+
+    // displat main panel
   }
 
   async cookieAuth() {
@@ -196,7 +207,10 @@ class App extends React.Component {
     return (
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <Navigator list={list} client={this} ref={this.navigator} />
+        <FloatWindowController ref={this.windowController} client={this} windows={{
+          'navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
+          'vsavfsavas': { content: <p>fsafsafsafsa</p>, width: 200, height: 600, variant: 'full'},
+        }}/>
       </ThemeProvider>
     );
   }
