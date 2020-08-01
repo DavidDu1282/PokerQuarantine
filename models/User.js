@@ -12,10 +12,10 @@ const userSchema = new Schema({
   dob: { type: Date },
 
   role: { type: Number },
-  balance: { type: Number },
-  games_played: { type: Number },
-  wins: { type: Number },
-  losses: { type: Number },
+  balance: { type: Number, default: 0 },
+  games_played: { type: Number, default: 0 },
+  wins: { type: Number, default: 0 },
+  losses: { type: Number, default: 0 },
   flag: { type: Boolean, default: false },
 
   avatar_url: { type: String },

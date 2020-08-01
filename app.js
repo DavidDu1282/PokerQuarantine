@@ -75,6 +75,7 @@ var ccRouter = require("./routes/creditcardRoutes");
 var reportRouter = require("./routes/reportsRoutes");
 var userConfigRouter = require("./routes/userConfigRoutes");
 var leaderboardRouter = require("./routes/leaderboardRoutes");
+var usersRouter = require("./routes/usersRoute");
 const e = require("express");
 app.use("/", indexRouter);
 app.use("/api", authRouter);
@@ -83,6 +84,7 @@ app.use("/api", ccRouter);
 app.use("/api", reportRouter);
 app.use("/api/", leaderboardRouter);
 app.use("/api/config", userConfigRouter);
+app.use("/api", usersRouter);
 // require("./routes/newsRoutes")(app); (dont use this format, cant compile on heroku)
 
 // catch 404 and forward to error handler
