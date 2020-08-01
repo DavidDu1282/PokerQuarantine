@@ -59,25 +59,4 @@ describe("NewsPost Routes", () => {
           .catch((err) => done(err));
       });
   });
-
-  it("should delete a SINGLE newposts on /del/newspost/:id DELETE", (done) => {
-    var mockData = { title: "TEST DELETE1", body: "TEST DELETE BODY" };
-    //insert new record to delete later
-    request(app)
-      .post("/api/newspost")
-      .send(mockData)
-      .then(() => {
-        return NewsPost.find({ title: "TEST DELETE1" });
-      })
-      //delete recent inserted record
-      .then((res) => {
-        request(app)
-          .delete("/api/del/newspost/" + res[0]._id)
-          .expect(200)
-          .end((err, res) => {
-            if (err) done(err);
-            done();
-          });
-      });
-  });
 });
