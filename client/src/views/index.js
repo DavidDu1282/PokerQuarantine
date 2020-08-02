@@ -10,3 +10,5 @@ export { default as ChatPanel } from './ChatPanel';
 export { default as UpdatesPanel } from './UpdatesPanel';
 export { default as ReportPanel } from './ReportPanel';
 export { default as CreditPanel } from './CreditCardPanel';
+export { default as Matcher } from './Matcher';
+export { default as Lobby } from './Lobby';

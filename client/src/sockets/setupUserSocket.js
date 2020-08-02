@@ -24,8 +24,7 @@ export default function setupUserSocket(socket, client) {
      * Server detects a duplicate login and request this client to logout
      */
 
-    console.log(client);
-    await client.logout();
+    await client.logout(false);
     alert('You have been logged out due to another login to your account at a different machine (Or browser tab).')
   });
 }

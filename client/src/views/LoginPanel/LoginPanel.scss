@@ -2,10 +2,10 @@
 
 
 .container {
-  padding: 0 config.$content-width*0.20;
+  padding: 10em;
   display: flex;
   align-items: center;
-  margin: none;
-  width: config.$content-width;
-  height: config.$app-height;
+  margin: auto;
+  width: 100%;
+  height: 100%;
 }

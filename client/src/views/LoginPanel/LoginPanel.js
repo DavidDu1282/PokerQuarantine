@@ -231,6 +231,7 @@ class LoginPanel extends React.Component {
             dob: {
               label: "Date of Birth",
               type: "date",
+              disableFuture: true
             },
             password: {
               label: "Password",

@@ -20,18 +20,16 @@ module.exports = function(io, client) {
       client.get(userId, (error, sessionId) => {
         if (sessionId != null) {
           // logs out the user
-          
-          socket.broadcast.to(sessionId).emit('duplicate-session');
+          io.to(sessionId).emit('duplicate-session');
+          io.emit('message', `${userId} with session ${sessionId} has been bumped due to duplicate login`)
 
           client.del(sessionId);
-          client.del(userId);
-        }
+        } 
+        // cache user to redis
+
+        client.set(socket.id, userId);
+        client.set(userId, socket.id); // insufficient use of memory i know
       });
-
-      // cache user to redis
-
-      client.set(socket.id, userId);
-      client.set(userId, socket.id); // insufficient use of memory i know
     });
 
     socket.on('chat', (msg) => {
@@ -55,6 +53,7 @@ module.exports = function(io, client) {
       client.del(socket.id);
       client.del(userId);
     });
+
   });
 
   

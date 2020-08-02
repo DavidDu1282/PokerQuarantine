@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('pokerquarantine-master:server');
 var http = require('http');
+const GamePool = require('../game/GamePool');
 const redis = require("redis");
 
 /**
@@ -32,12 +33,16 @@ client.flushall(); // start server with empty cache
 const io = require('socket.io')(server, {
   serveClient: false
 });
+const pool = new GamePool(io, client); // game pool
+
 require('../sockets/Global')(io, client);
 require('../sockets/UserEvents')(io, client);
+require('../sockets/GameEvents')(io, client, pool);
+
 
 /**
  * Listen on provided port, on all network interfaces.
- */
+ */ 
 
 server.listen(port);
 server.on('error', onError);
