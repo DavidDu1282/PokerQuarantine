@@ -39,7 +39,6 @@ class App extends React.Component {
 
     this.navigator = React.createRef();
     this.chatPanel = React.createRef();
-    this.matcher = React.createRef();
     this.lobby = React.createRef();
 
     this.windowController = React.createRef();
@@ -249,8 +248,8 @@ class App extends React.Component {
         <CssBaseline />
         <FloatWindowController ref={this.windowController} client={this} windows={{
           'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
-          'Match': { content: <Matcher client={this} ref={this.matcher} />, width: 300, height: 200, variant: 'full', nonClosable: true},
-          'Lobby': { content: <Lobby client={this} ref={this.lobby} />, width: 300, height: 500, variant: 'full', nonClosable: true},
+          'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
+          'Lobby': { content: <Lobby client={this} ref={this.lobby} />, width: 300, height: 600, variant: 'full', nonClosable: true},
         }}/>
       </ThemeProvider>
     );

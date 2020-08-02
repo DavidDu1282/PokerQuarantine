@@ -35,6 +35,7 @@ class FloatWindowController extends React.Component {
     }
 
     this.setState((state) => { return {
+      focus_z: 0,
       window_options: window_options
     }});
 
@@ -63,6 +64,7 @@ class FloatWindowController extends React.Component {
   }
 
   focus(name) {
+    if (this.state.focus === name) return;
     this.set_options(name, {z: this.state.focus_z+1});
   }
 
@@ -71,7 +73,7 @@ class FloatWindowController extends React.Component {
     if (window == null) throw new Error('Panel with name do not exist');
 
     let new_options = Object.assign({}, this.state.window_options);
-    new_options[name].z = option.z | window.z;
+    new_options[name].z = option.z ? option.z : window.z;
     if (option.display != null) {
       new_options[name].display = option.display;
     } else {
@@ -80,7 +82,7 @@ class FloatWindowController extends React.Component {
     
     this.setState((state) => { return {
       focus: name,
-      focus_z: option.z | state.focus_z,
+      focus_z: option.z ? option.z : state.focus_z,
       window_options: new_options
     }});
   }

@@ -208,7 +208,6 @@ class QuickForm extends React.Component {
                   <DatePicker
                     fullWidth
                     name={field_name}
-                    variant="inline"
                     inputVariant={tBoxVariant}
                     format="MMMM DD, yyyy"
                     margin="normal"

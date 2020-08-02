@@ -60,7 +60,7 @@ class Lobby extends React.Component {
         {user_display.length > 0 ? user_display : (<CircularProgress color="primary"/>)}
         {user_display.length > 0 ? (<Button color="secondary" onClick={() => this.client.game_leave()}>leave lobby</Button>) : (<React.Fragment />)}
       </div>
-    )
+    );
   }
 }
 

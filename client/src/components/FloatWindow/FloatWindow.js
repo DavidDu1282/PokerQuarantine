@@ -23,7 +23,7 @@ export default function FloatWindow(props) {
     <Box
       boxShadow={props.elevation}
       className="float-window"
-      style={{top: props.y, left: props.x, width: props.width, height: props.height, zIndex: props.z, borderRadius: "4px"}}
+      style={{top: props.y, left: props.x, width: `${props.width}px`, height: `${props.height}px`, zIndex: props.z, borderRadius: "4px"}}
       onMouseDown={props.onClick}
     >
       {props.variant === 'full' && (
@@ -46,7 +46,7 @@ export default function FloatWindow(props) {
             </Grid>
           </DarkContainer>
           <LightContainer style={{borderRadius: "0 0 4px 4px"}} elevation={0}>
-            <div className="scroll-container"><div className="container-padded" style={{minHeight: props.height-30, padding: '2em'}}>{props.children}</div></div>
+            <div className="scroll-container"><div className="container-padded" style={{height: `${props.height-30}px`, padding: '2em'}}>{props.children}</div></div>
           </LightContainer>
         </div>
       )}
