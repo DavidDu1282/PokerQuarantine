@@ -2,6 +2,8 @@ const _ = require("lodash");
 class Deck {
   constructor() {
     this.deck = [];
+    this.generateDeck();
+    this.shuffle();
   }
   generateDeck() {
     var tmpDeck = [];
@@ -15,7 +17,7 @@ class Deck {
       "7",
       "8",
       "9",
-      "10",
+      "T",
       "J",
       "Q",
       "K",
@@ -37,10 +39,15 @@ class Deck {
     let card = this.deck.shift();
     return card;
   }
+  reset() {
+    this.deck = [];
+    this.generateDeck();
+    this.shuffle();
+  }
 }
 
 // deck = new Deck();
-// deck.generateDeck();
+
 // console.log(deck);
 // var draw = deck.drawCard();
 // console.log(draw);
