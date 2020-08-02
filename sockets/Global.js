@@ -15,16 +15,7 @@ module.exports = function(io, client) {
     });
 
     socket.on('disconnect', () => {
-      io.emit('message', `${socket.id} disconnected.`)
-
-      client.get(socket.id, (error, userId) => {
-        if (userId != null) {
-          // clear cache
-
-          client.del(socket.id);
-          client.del(userId);
-        }
-      });
+      io.emit('message', `${socket.id} disconnected.`);
     })
     
   });

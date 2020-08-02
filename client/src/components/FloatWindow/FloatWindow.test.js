@@ -6,16 +6,16 @@ import sinon from 'sinon';
 
 describe('<FloatWindow />', () => {
   it('renders without error', () => {
-    shallow(<FloatWindow movable></FloatWindow>);
-    shallow(<FloatWindow movable closable></FloatWindow>);
+    shallow(<FloatWindow variant="full"></FloatWindow>);
+    shallow(<FloatWindow variant="transparent"></FloatWindow>);
   });
 
   it('displays content correctly', () => {
-    const window = shallow(<FloatWindow label='testWindow' movable>test</FloatWindow>);
-    const closable = shallow(<FloatWindow label='testWindowClosable' movable closable>test closable</FloatWindow>);
+    const window = shallow(<FloatWindow label='testWindow' variant="full">test</FloatWindow>);
+    const transparent = shallow(<FloatWindow label='testTransparent' variant="full">test transparent</FloatWindow>);
 
     expect(window.html()).to.include('test');
-    expect(closable.html()).to.include('testWindowClosable');
-    expect(closable.html()).to.include('test closable');
+    expect(window.html()).to.include('testWindow');
+    expect(transparent.html()).to.include('testTransparent');
   });
 });

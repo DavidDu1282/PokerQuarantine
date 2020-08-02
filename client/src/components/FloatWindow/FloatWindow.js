@@ -14,6 +14,7 @@ export default function FloatWindow(props) {
    *    x: int
    *    y: int
    *    z: int
+   *    nonClosable: bool
    */
 
   if (!props.display) return (<React.Fragment />);
@@ -40,12 +41,12 @@ export default function FloatWindow(props) {
                 <Typography style={{color: 'grey'}} variant='overline'>{props.name}</Typography>
               </div></Grid>
               <Grid item xs={2}>
-                <IconButton size='small' style={{color: 'grey'}} onClick={() => props.controller.hide(props.name)}><MinimizeIcon /></IconButton>
+                {props.nonClosable ? (<React.Fragment />) : (<IconButton size='small' style={{color: 'grey'}} onClick={() => props.controller.hide(props.name)}><MinimizeIcon /></IconButton>)}
               </Grid>
             </Grid>
           </DarkContainer>
           <LightContainer style={{borderRadius: "0 0 4px 4px"}} elevation={0}>
-            <div className="container-padded" style={{minHeight: props.height-30, padding: '2em'}}><div className="scroll-container">{props.children}</div></div>
+            <div className="scroll-container"><div className="container-padded" style={{minHeight: props.height-30, padding: '2em'}}>{props.children}</div></div>
           </LightContainer>
         </div>
       )}

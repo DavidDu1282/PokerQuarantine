@@ -43,7 +43,6 @@ describe("Leaderboard Routes", function () {
       .get("/api/top10")
 
       .end((err, res) => {
-        console.log(res);
         if (err) done(err);
         done();
       });

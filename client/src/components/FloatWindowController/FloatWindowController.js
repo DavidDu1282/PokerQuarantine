@@ -6,7 +6,7 @@ class FloatWindowController extends React.Component {
    * Float window container providing window with drag & move capability
    * ------------------ 
    * props:
-   *    windows: {'label': { content, display, ...FloatWindowSettings }
+   *    windows: {'label': { content, display, width, height, ...FloatWindowSettings }
    */
 
   constructor(props) {
@@ -27,6 +27,20 @@ class FloatWindowController extends React.Component {
     this.dragging = '';
   }
 
+  init(center, starting_window) {
+    // relocate all windows to center and only show the starting_window
+    let window_options = {};
+    for (const [label, options] of Object.entries(this.props.windows)) {
+      window_options[label] = { x: center.x - options.width/2, y: center.y - options.height/2, z: 0, display: false };
+    }
+
+    this.setState((state) => { return {
+      window_options: window_options
+    }});
+
+    this.show(starting_window);
+  }
+
   /* Hide and show windows */
 
   move(name, pos) {
@@ -45,6 +59,7 @@ class FloatWindowController extends React.Component {
   
   show(name) {
     this.set_options(name, {display: true});
+    this.focus(name);
   }
 
   focus(name) {
