@@ -12,8 +12,8 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`${index}`}
+      style={{margin: 'auto', padding: 'auto'}}
       {...other}
     >
       {value === index && (<React.Fragment>{children}</React.Fragment>)}
@@ -98,7 +98,7 @@ class Navigator extends React.Component {
       <div className="panelContainer main">
 
         <div className="panelContainer left">
-        <DarkContainer style={{borderRadius: "4px 0 0 4px"}}>
+        <DarkContainer style={{borderRadius: "4px 0 0 4px"}} elevation={0}>
           <div className="nav-content">
             <img src={'/Logo-withText-dark.png'} style={{width: "90%", margin: "1em auto"}} alt="logo" />
 
@@ -143,7 +143,7 @@ class Navigator extends React.Component {
         </div>
 
         <div className="panelContainer right">
-        <LightContainer style={{borderRadius: "0 4px 4px 0"}}>
+        <LightContainer style={{borderRadius: "0 4px 4px 0"}} elevation={0}>
           {panes}
         </LightContainer>
         </div>
