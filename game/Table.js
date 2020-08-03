@@ -4,7 +4,6 @@ var PokerEvaluator = require("poker-evaluator");
 
 class Table {
   constructor(smallBlind = 10) {
-    this.bet = 0; // for current round
     this.pot = 0;
 
     this.players = [];
@@ -32,7 +31,7 @@ class Table {
     this.communityCards = [];
     this.deck = new Deck();
 
-    this.dealerPos = 0; //"dealer button" indicates which player is dealer for current game
+    this.dealerPos = this.dealerPos; //"dealer button" indicates which player is dealer for current game
     this.smallBlind = this.smallBlind; //the player clockwise next to dealer is "small blind" and is force make first bet
     this.bigBlind = this.smallBlind * 2; //player clockwise next to small blind is big blind, typically twice the size of small blinds
 
@@ -47,16 +46,8 @@ class Table {
    * flow control for table's round
    */
 
-  checkForNextRound() {
-    if (this.isEndRound()) {
-      this.nextRound();
-    }
-  }
-
   nextRound() {
-    if (this.roundState === "idle") {
-      this.start();
-    } else if (this.roundState === "deal") {
+    if (this.roundState === "deal") {
       this.gatherBets();
       this.flop();
     } else if (this.roundState === "flop") {
@@ -68,8 +59,16 @@ class Table {
     } else if (this.roundState === "river") {
       this.gatherBets();
       this.showdown();
-    } else {
-      this.start();
+    } else if (this.roundState === "showdown") {
+      this.endRound();
+    }
+  }
+  /**
+   * Players check for next round after each action they perform (ie callOrCheck, Raise, Fold)
+   */
+  checkForNextRound() {
+    if (this.isEndRound()) {
+      this.nextRound();
     }
   }
 
@@ -181,6 +180,7 @@ class Table {
     );
     this.requestPlayerActions();
   }
+
   showdown() {
     console.log("************** Round Showdown  **************");
     this.roundState = "showdown";
@@ -226,6 +226,22 @@ class Table {
         " wins with " +
         evalHands[highestIndex].handName
     );
+    //Distribute the pot to winner
+    this.players[highestIndex].getWinnings(this.pot);
+    this.pot = 0;
+
+    this.nextRound();
+  }
+
+  /**
+   * prepare for next game
+   * update dealer's position
+   *
+   */
+  endRound() {
+    console.log("************** Game Ended  **************");
+    this.roundState = "endround";
+    this.dealerPos = (this.dealerPos + 1) % this.players.length;
   }
 
   incrementPlayerTurn() {
