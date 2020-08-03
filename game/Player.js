@@ -64,5 +64,13 @@ class Player {
     this.chips -= amount;
     this.bet += amount;
   }
+
+  /**
+   * Transfer pot to player's chip
+   */
+  getWinnings(pot) {
+    this.chips += pot;
+  }
+  
 }
 module.exports = Player;
