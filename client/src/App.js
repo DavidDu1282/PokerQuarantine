@@ -188,7 +188,7 @@ class App extends React.Component {
      */
 
     if (emit) this.socket.emit('user-logout', this.user.id);
-    this.unmatch(this.user.id);
+    this.unmatch();
 
     const empty_user = await this.user.logout();
     this.setState((state) => {
@@ -206,10 +206,9 @@ class App extends React.Component {
     this.socket.emit('match', this.user.id);
   }
 
-  unmatch(explicit_id) {
+  unmatch() {
     if (!this.matching) return;
 
-    let id = explicit_id | this.user.id;
     this.matching = false;
     this.socket.emit('unmatch', this.user.id);
     this.windowController.current.hide('Match');

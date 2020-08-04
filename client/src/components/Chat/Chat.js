@@ -1,25 +1,31 @@
 import React  from 'react';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Avatar } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
-import { Spacing } from '../../components';
+import { Spacing } from '..';
 import moment from 'moment';
 import './style.scss';
 
-class ChatPanel extends React.Component {
+class Chat extends React.Component {
 
   constructor(props) {
     super(props);
-    this.socket = this.props.client.socket;
+    this.socket = props.client.socket;
     this.chatText = React.createRef();
+    this.msgEnd = React.createRef();
+    this.pool = props.pool;
     this.state = {
       msgArr:[
       ],
       textMessage:''
     }
     //
+  }
+
+  componentDidMount() {
+    this.msgEnd.current.scrollIntoView({ behavior: "smooth" });
   }
 
   insertChat(msg, user,date){
@@ -30,6 +36,12 @@ class ChatPanel extends React.Component {
       date: moment(date),
     },)
     this.setState(((state) => {return {msgArr: arr}}));
+
+    this.msgEnd.current.scrollIntoView({ behavior: "smooth" });
+  }
+
+  handleKeyDown(e) {
+    if (e.keyCode === 13) this.sendMessage(e);
   }
 
   sendMessage(e){
@@ -49,41 +61,45 @@ class ChatPanel extends React.Component {
       time: now
     });
   }
+
   handleChange(e){
     let message = e.target.value;
     //console.log(e.target.value);
     this.setState(((state) => {return {textMessage:message}}));
 
   }
+
   render(){
     return(
-      <div className="containerMessage">
+      <div onKeyDown={e => this.handleKeyDown(e)} className="containerMessage">
         <Grid
           container
           direction="column"
           spacing={2}
         >
           <Grid item xs>
-            <Typography variant="h4">Chat</Typography>
-            <Spacing height={2} />
-          </Grid>
-          <Grid item xs>
-          <div className = "containerMessageContext">
-          <Grid item container spacing={2} direction="column" justify="flex-start" alignItems="flex-start" alignContent = "flex-end" wrap = 'nowrap'>
-          <Grid item>
-            <Typography variant="body2" color="textSecondary">Welcome to the #global chat</Typography>
-          </Grid>
-          {this.state.msgArr.map((elem, index )=> (
-            <Grid item key={index}>
-              <Typography variant="body2" color="textSecondary">{`${elem.user.name}, on ${elem.date.format("H:m MMM Do, YYYY")}` }</Typography><br/>
-              <Typography variant="body1">{`${elem.text}`}</Typography>
+
+            <div className="containerMessageContext">
+            <Grid item container spacing={2} direction="column" justify="flex-start" alignItems="flex-start" alignContent = "flex-end" wrap = 'nowrap'>
+              <Grid item>
+                <Typography variant="body2" color="textSecondary">Welcome to the {this.props.channelName} chat</Typography>
+              </Grid>
+              {this.state.msgArr.map((elem, index )=> (
+                <Grid item container spacing={2} direction="row" justify="flex-start" alignContent="flex-start" alignItems="flex-start" key={index}>
+                  <Grid item><Avatar alt={elem.user.name} src={elem.user.avatar_url} /></Grid>
+                  <Grid item>
+                    <Typography variant="subtitle2" color="primary" display="inline">{`${elem.user.name}`} </Typography>
+                    <Typography variant="body2" color="textSecondary" display="inline">{`on ${elem.date.format("H:m MMM Do, YYYY")}`}<br/></Typography>
+                    <Typography variant="body1">{`${elem.text}`}</Typography>
+                  </Grid>
+                </Grid>
+              ))}
+              <Grid item ref={this.msgEnd}></Grid>
             </Grid>
-          ))}
+            </div>
+
           </Grid>
-          </div>
-          <br></br>
-          </Grid>
-          {/* Chat dialouge */}
+
           <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
             <Grid item xs={10}><TextField variant="outlined" ref = {this.chatText} fullWidth value= {this.state.textMessage} onChange ={(e)=>{this.handleChange(e)}}/></Grid>
             <Grid item xs={2}><Button variant="contained" color="primary" fullWidth endIcon={<SendIcon/>} onClick={(e) => { this.sendMessage(e)}}>
@@ -95,4 +111,4 @@ class ChatPanel extends React.Component {
   );
 }
 }
-export default ChatPanel;
+export default Chat;

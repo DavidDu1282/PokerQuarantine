@@ -10,7 +10,7 @@
     "testClient": "concurrently \"npm run server\" \"sleep 5 && cd client && npm run test\"",
     "testServer": "mocha --recursive --exit",
     "local": "concurrently \"npm run server\" \"npm run client\"",
-    "test1": "mocha --timeout 10000"
+    "test1": "mocha --timeout 10000 -recursive --exit"
   },
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",
