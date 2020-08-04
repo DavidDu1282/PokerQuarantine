@@ -16,6 +16,7 @@ import {
   UpdatesPanel,
   Matcher,
   Lobby,
+  TexasHoldemGamePage,
 } from './views';
 
 import {
@@ -40,7 +41,7 @@ class App extends React.Component {
     this.navigator = React.createRef();
     this.chatPanel = React.createRef();
     this.lobby = React.createRef();
-
+    this.game = React.createRef();
     this.windowController = React.createRef();
     this.windowInit = this.windowInit.bind(this);
 
@@ -69,9 +70,10 @@ class App extends React.Component {
     const center = {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2
+      
     };
 
-    this.windowController.current.init(center, 'Navigator');
+    // this.windowController.current.init(center, 'Navigator');
     this.cookieAuth();
   }
 
@@ -224,6 +226,7 @@ class App extends React.Component {
     this.socket.emit('game_leave', this.user.id);
   }
 
+  
   render() {
     // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
@@ -246,6 +249,7 @@ class App extends React.Component {
     return (
       <ThemeProvider theme={Theme}>
         <CssBaseline />
+        <TexasHoldemGamePage client={this} />,
         <FloatWindowController ref={this.windowController} client={this} windows={{
           'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
           'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},

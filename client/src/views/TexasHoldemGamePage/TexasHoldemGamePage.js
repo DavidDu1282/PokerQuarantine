@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core/'
 import Button from '@material-ui/core/Button';
 import { Spacing } from '../../components';
+
 class TexasHoldemGamePage extends React.Component{
   constructor(props) {
     super(props);
@@ -148,13 +149,13 @@ class TexasHoldemGamePage extends React.Component{
   render() {
     return (
       <>
-      <div className = "empty-spacing"></div>
-      <div className = "empty-spacing">
+      
+      <div className = "container-padded">
       <Grid item xs>
-        <Typography variant="h4">Texas Holdem</Typography>
+        {/* <Typography variant="h4">Texas Holdem</Typography> */}
         <Spacing height={1} />
       </Grid>
-      </div>
+      
         <div className="TopTable" >
           <Grid
             container
@@ -222,16 +223,21 @@ class TexasHoldemGamePage extends React.Component{
             spacing={2}>
             <Grid item xs>
               <Grid item container spacing={2} direction="column" justify="flex-end" alignItems="flex-start" >
+
+                <div className = "Dealer">
                 {this.state.dealer.map(elem => (
                   <Grid item xs={12} m={4} md={4} >
                     <Hand hand = {elem} flex-grow = {4}> </Hand>
                   </Grid>
                 ))}
+                </div>
+                <div className = "Self">
                 {this.state.self.map(elem => (
                   <Grid item xs={12} m={4} md={4} >
                     <Hand hand = {elem} flex-grow = {4}> </Hand>
                   </Grid>
                 ))}
+                </div>
 
               </Grid>
 
@@ -253,6 +259,7 @@ class TexasHoldemGamePage extends React.Component{
           <Button size="medium" color="primary" onClick={() => this.reveal(1)}>
             Reveal Right
           </Button>
+        </div>
         </div>
       </>
     );

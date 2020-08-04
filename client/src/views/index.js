@@ -12,3 +12,4 @@ export { default as ReportPanel } from './ReportPanel';
 export { default as CreditPanel } from './CreditCardPanel';
 export { default as Matcher } from './Matcher';
 export { default as Lobby } from './Lobby';
+export { default as TexasHoldemGamePage } from './TexasHoldemGamePage';
