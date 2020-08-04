@@ -7,10 +7,18 @@ import {
 } from '@material-ui/core/'
 import Button from '@material-ui/core/Button';
 import { Spacing } from '../../components';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 class TexasHoldemGamePage extends React.Component{
+
   constructor(props) {
     super(props);
+
+
     this.state = {
       leftTablePlayers:
       [
@@ -123,10 +131,24 @@ class TexasHoldemGamePage extends React.Component{
           betAmount: 0,
           folded: false,
         },
-      ]
+      ],
+      lastPlayerBetAmount:0,
+      potTotal:0,
+      open:false,
+      setOpen:false,
     }
   }
+  handleOpen(){
+    this.setState(((state) => {return {open: true}}));
 
+  };
+
+  handleClose(){
+    this.setState(((state) => {return {open: false}}));
+  };
+  matchBet(){
+    var arr = this.state.self;
+  }
   addBet(num){
     var arr = this.state.self;
     arr[0].betAmount = arr[0].betAmount+num;
@@ -137,6 +159,7 @@ class TexasHoldemGamePage extends React.Component{
     //arr
     var arr = this.state.self;
     arr[0].folded = true;
+    document.getElementsByName("AddBet").disabled = true;
     this.setState(((state) => {return {self: arr}}));
   }
   reveal(num){
@@ -149,13 +172,13 @@ class TexasHoldemGamePage extends React.Component{
   render() {
     return (
       <>
-      
+
       <div className = "container-padded">
       <Grid item xs>
         {/* <Typography variant="h4">Texas Holdem</Typography> */}
         <Spacing height={1} />
       </Grid>
-      
+
         <div className="TopTable" >
           <Grid
             container
@@ -246,20 +269,38 @@ class TexasHoldemGamePage extends React.Component{
           </Grid>
         </div>
         <div className = "controls">
-          <Button size="medium" color="primary" onClick={() => { this.addBet(10) }}>
-            Add 10 chips to pot
+          <Button size="medium" className = "AddBet" color="primary" onClick={() => { this.addBet(10) }}>
+            Add/Raise
+          </Button>
+          <Button size="medium" color="primary" onClick={() => this.reveal(0)}>
+            Call/Check
           </Button>
           <Button size="medium" color="primary" onClick={() => { this.fold() }}>
             Fold
           </Button>
-          <br></br>
-          <Button size="medium" color="primary" onClick={() => this.reveal(0)}>
-            Reveal Left
-          </Button>
-          <Button size="medium" color="primary" onClick={() => this.reveal(1)}>
+
+          <Button size="medium" color="primary" onClick={() => this.handleOpen()}>
             Reveal Right
           </Button>
-        </div>
+          <Dialog
+            open={this.state.open}
+            onClose={() => { this.handleClose() }}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"It is your turn to play!"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {"The last player betted " + this.state.lastPlayerBetAmount + " and the pot total is " + this.state.potTotal}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => { this.handleClose() }} color="primary">
+                Okay
+              </Button>
+            </DialogActions>
+          </Dialog>
+          </div>
         </div>
       </>
     );

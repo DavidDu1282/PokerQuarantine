@@ -2,7 +2,7 @@
   //padding:  config.$content-width*0.01;
   align-items: center;
   margin: none;
-  position: absolute;
+  position: fixed;
   background-image: url('https://img.freepik.com/free-vector/poker-table-background-green-color_47243-1068.jpg?size=626&ext=jpg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   margin: none;
-  position:absolute;
+  position:fixed;
   // width: config.$content-width*0.3;
   left:40%;
   top: 90%;
@@ -54,7 +54,7 @@
   position: fixed;
   left: 32%;
   top: 10%;
-  
+
 }
 
 .LeftTable{
@@ -69,14 +69,14 @@
 }
 
 .Dealer {
-  position:absolute;
+  position:fixed;
   left:50%;
   top: 40%;
   align-items: center;
 }
 
 .Self {
-  position:absolute;
+  position:fixed;
   left:50%;
   top: 70%;
   align-items: center;

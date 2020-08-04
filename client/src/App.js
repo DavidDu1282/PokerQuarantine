@@ -63,14 +63,14 @@ class App extends React.Component {
     setupUserSocket(this.socket, this);
     setupGameSocket(this.socket, this);
 
-    window.addEventListener('pageshow', this.windowInit);    
+    window.addEventListener('pageshow', this.windowInit);
   }
 
   windowInit() {
     const center = {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2
-      
+
     };
 
     // this.windowController.current.init(center, 'Navigator');
@@ -154,7 +154,7 @@ class App extends React.Component {
     this.setState((state) => {
       return { user: empty_user };
     });
-    
+
     this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
 
@@ -226,7 +226,7 @@ class App extends React.Component {
     this.socket.emit('game_leave', this.user.id);
   }
 
-  
+
   render() {
     // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
@@ -237,7 +237,7 @@ class App extends React.Component {
       'chat': <ChatPanel ref={this.chatPanel} client={this} />,
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <NewsPanel client={this} />,
+      'news': <TexasHoldemGamePage client={this} />,
       'update': <UpdatesPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'billing': <CreditPanel client={this} />,
@@ -249,15 +249,18 @@ class App extends React.Component {
     return (
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <TexasHoldemGamePage client={this} />,
-        <FloatWindowController ref={this.windowController} client={this} windows={{
-          'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
-          'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
-          'Lobby': { content: <Lobby client={this} ref={this.lobby} />, width: 300, height: 600, variant: 'full', nonClosable: true},
-        }}/>
+
+        <Navigator list={list} client={this} ref={this.navigator} display = "none"/>
+
       </ThemeProvider>
     );
   }
 }
-
+/*
+<FloatWindowController ref={this.windowController} client={this} windows={{
+  'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
+  'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
+  'Lobby': { content: <Lobby client={this} ref={this.lobby} />, width: 300, height: 600, variant: 'full', nonClosable: true},
+}}/>
+*/
 export default App;
