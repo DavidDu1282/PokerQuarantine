@@ -237,7 +237,7 @@ class App extends React.Component {
       'chat': <ChatPanel ref={this.chatPanel} client={this} />,
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <TexasHoldemGamePage client={this} />,
+      'news': <NewsPanel client={this} />,
       'update': <UpdatesPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'billing': <CreditPanel client={this} />,
@@ -250,17 +250,17 @@ class App extends React.Component {
       <ThemeProvider theme={Theme}>
         <CssBaseline />
 
-        <Navigator list={list} client={this} ref={this.navigator} display = "none"/>
-
+        <TexasHoldemGamePage client={this} />,
+        <FloatWindowController ref={this.windowController} client={this} windows={{
+          'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
+          'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
+          'Lobby': { content: <Lobby client={this} ref={this.lobby} />, width: 300, height: 600, variant: 'full', nonClosable: true},
+        }}/>
       </ThemeProvider>
     );
   }
 }
 /*
-<FloatWindowController ref={this.windowController} client={this} windows={{
-  'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
-  'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
-  'Lobby': { content: <Lobby client={this} ref={this.lobby} />, width: 300, height: 600, variant: 'full', nonClosable: true},
-}}/>
+<Navigator list={list} client={this} ref={this.navigator} display = "none"/>
 */
 export default App;
