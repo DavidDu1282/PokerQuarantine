@@ -36,12 +36,12 @@ export default function Hand(props) {
       alignContent="flex"
       spacing={0}>
 
-      {props.hand.cardIDs.map(elem => (
+      {props.hand.cardArray.map(elem => (
         <Grid item xs={3} spacing sm={1} md={1}>
           <img src= {(() => {
-            switch (props.hand.cardHidden[props.hand.cardIDs.indexOf(elem)]) {
+            switch (elem.cardHidden) {
               case true:   return "/cards_jpeg_zip/JPEG/Red_back.jpg";
-              default:      return "/cards_jpeg_zip/JPEG/" + elem + ".jpg";
+              default:      return "/cards_jpeg_zip/JPEG/" + elem.cardID + ".jpg";
             }
 
           })()} className = "card" ></img>

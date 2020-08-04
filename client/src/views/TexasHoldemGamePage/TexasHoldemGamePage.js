@@ -25,8 +25,17 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Left",
           playerID:2,
-          cardIDs:[1,2],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:1,
+              cardHidden:true,
+            },
+            {
+              cardID:2,
+              cardHidden:true,
+            }
+          ],
+
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -34,8 +43,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"John",
           playerID:1,
-          cardIDs:[4,5],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:1,
+              cardHidden:true,
+            },
+            {
+              cardID:2,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -43,8 +60,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Alex",
           playerID:4,
-          cardIDs:[35,45],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:1,
+              cardHidden:true,
+            },
+            {
+              cardID:2,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -55,8 +80,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Right",
           playerID:2,
-          cardIDs:[1,2],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:1,
+              cardHidden:true,
+            },
+            {
+              cardID:2,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -64,8 +97,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"John",
           playerID:1,
-          cardIDs:[4,5],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:12,
+              cardHidden:true,
+            },
+            {
+              cardID:28,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -73,8 +114,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Alex",
           playerID:4,
-          cardIDs:[35,45],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:19,
+              cardHidden:true,
+            },
+            {
+              cardID:15,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -85,8 +134,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Top",
           playerID:2,
-          cardIDs:[1,2],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:43,
+              cardHidden:true,
+            },
+            {
+              cardID:34,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -94,8 +151,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"John",
           playerID:1,
-          cardIDs:[4,5],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:36,
+              cardHidden:true,
+            },
+            {
+              cardID:24,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -103,8 +168,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Alex",
           playerID:4,
-          cardIDs:[35,45],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:46,
+              cardHidden:true,
+            },
+            {
+              cardID:48,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -114,8 +187,16 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Bob",
           playerID:3,
-          cardIDs:[1,2],
-          cardHidden:[true,true],
+          cardArray:[
+            {
+              cardID:23,
+              cardHidden:true,
+            },
+            {
+              cardID:45,
+              cardHidden:true,
+            }
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
@@ -125,8 +206,28 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Dealer",
           playerID:0,
-          cardIDs:[1,2,3,4,5],
-          cardHidden:[true,true,true,true,true],
+          cardArray:[
+            {
+              cardID:1,
+              cardHidden:false,
+            },
+            {
+              cardID:2,
+              cardHidden:false,
+            },
+            {
+              cardID:4,
+              cardHidden:false,
+            },
+            {
+              cardID:5,
+              cardHidden:false,
+            },
+            {
+              cardID:3,
+              cardHidden:false,
+            },
+          ],
           cardSum: 0,
           betAmount: 0,
           folded: false,
