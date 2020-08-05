@@ -10,7 +10,7 @@ const Message = mongoose.model("messages");
 describe("Message Routes", function () {
   var agent = request.agent(app);
   before(function (done) {
-    this.userId = '1';
+    this.userId = 'testId';
     this.channelId = '2';
 
     agent
@@ -82,7 +82,7 @@ describe("Message Routes", function () {
       .end((err, res) => {
         expect(res.status).to.equal(200);
         expect(res.body).to.have.lengthOf(1);
-        expect(res.body[0].context).to.equal('test message');
+        expect(res.body[0].messages[0].context).to.equal('test message');
         done();        
       });
   });

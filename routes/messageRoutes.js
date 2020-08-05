@@ -22,24 +22,23 @@ router.get('/all', async (req, res) => {
    *  404 void
    */
   
-  const channels = await Channel.find({ accessUsers: { $in: [req.user.userId, 'all'] } }).exec();
+  if (!req.user) { res.sendStatus(403); return; }
+  const channels = await Channel.find({ accessUsers: { $in: [req.user.userId, req.user.role.toString(), 'all'] } }).exec();
 
   if (channels.length === 0) {
     res.sendStatus(404);
     return;
   }
 
-
-  let allMessages = [];
-  channels.map((channel) => {
-    allMessages = allMessages.concat(channel.messages);
-  })
-  const messages = await Message.find({ messageId: { $in: allMessages } }).exec();
-
+  var data = await Promise.all(channels.map(async (channel) => {
+    let messages = await Message.find({ messageId: { $in: channel.messages} }).exec();
+    let channel_ = Object.assign({}, channel._doc);
+    channel_.messages = messages;
+    return channel_;
+  }));
 
   res.status(200);
-  res.send(messages);
-
+  res.send(data);
 });
 
 router.post('/post', async (req, res) => {
@@ -99,7 +98,6 @@ router.post('/createChannel', async (req, res) => {
    *  400 invalid format
    *
    */
-
 
   try {
     const { channelName, accessUsers } = req.body;

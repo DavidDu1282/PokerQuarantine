@@ -1,26 +1,76 @@
 import axios from 'axios';
+import passport from 'passport';
 
 class ChatPool {
-  constructor() {
-    this.cache = []; // stores cached messages
+  constructor(client) {
+    this.client = client;
+    this.cache = {}; // store cached channels
     this.cache_users = {}; // stores cached users
+    this.ready = false;
+  }
+
+  getUser(userId) {
+    if (!this.cache_users[userId]) {
+      return this.cacheUser(userId).then(() => {return this.cache_users[userId]});
+    } else {
+      return this.cache_users[userId];
+    }
+  }
+
+  async cacheUser(userId) {
+    if (this.cache_users[userId]) return;
+    axios
+      .get(`/users/${userId}`)
+      .then((res) => {
+        this.cache_users[userId] = res.data;
+      });
   }
 
   async init(user, chat) {
     // initiallize the full chatpool after login
     
     this.user = user;
-    this.chat = chat.current;
+    this.chat = chat;
+    this.cache_users[user.id] = user.userdata;
 
     if (process.env.NODE_ENV !== 'test') {
-      axios.get('/messages/all')
+      axios.get('/api/message/all')
         .then((res) => {
-          this.cache = res.data;
+          this.splitChannel(res.data)
+            .then(() => {
+              this.ready = true;
+              if (process.env.NODE_ENV === 'development') console.log('cache loaded');
+              try {
+                this.chat.current.updateReady(true);
+              } catch (e) { /* msg board not in foucus */ }
+            });
         });
     }
   }
 
-  addMessage(msg) {
+  recieveMessage(msg) {
+    if (!this.cache[msg.channelId]) return;
+
+    if (!this.cache_users[msg.userId] && process.env.NODE_ENV !== 'test') {
+      this.cacheUser(msg.userId)
+        .then(() => {
+          this.cache[msg.channelId].messages.push(msg);
+          try {
+            this.chat.current.update();
+          } catch (e) { /* msg board not in foucus */ }
+        });
+    } else {
+      this.cache[msg.channelId].messages.push(msg);
+      if (process.env.NODE_ENV !== 'test') {
+        try {
+          this.chat.current.update();
+        } catch (e) { /* msg board not in foucus */ }
+      }
+    }
+    
+  }
+
+  async addMessage(msg) {
     // msg: { channelId, context }
     // msg_: { messageId, userId, channelId, context, timestamp, }
 
@@ -30,14 +80,16 @@ class ChatPool {
       context: msg.context,
       timestamp: Date.now()      
     }
-    this.postMessage(msg_)
+    await this.postMessage(msg_)
       .then((id) => {
-        msg_.id = id;
-        this.cache.push(msg_);
+        msg_.messageId = id;
+        this.cache[msg.channelId].messages.push(msg_);
+
+        this.client.socket.emit('chat', msg_);
 
         if (process.env.NODE_ENV !== 'test') {
           try {
-            this.chat.push(msg_);
+            this.chat.current.update();
           } catch (e) { /* msg board not in foucus */ }
         }
       });
@@ -49,37 +101,23 @@ class ChatPool {
 
     if (process.env.NODE_ENV === 'test') return Object.keys(this.cache).length + 1;
   
-    return await axios.post('/messages/add', msg)
+    return await axios.post('/api/message/post', msg)
       .then((res) => {
         return res.data;
       })
   }
 
-  async findMessage(messageId) {
-    // find message by id
+  async splitChannel(channels) {
+    // split cached messages to channels
 
-    let result = this.cache.filter((msg) => {
-      return msg.messageId === messageId;
+    channels.map((channel) => {
+      this.cache[channel.channelId] = channel;
+      if (process.env.NODE_ENV !== 'test') {
+        channel.messages.map(async (message) => {
+          if (!this.cache_users[message.userId]) await this.cacheUser(message.userId);
+        });
+      }
     });
-
-    if (result.length === 1) return result[0];
-    return null;
-  }
-
-  async findMessages(filter) {
-    // filter message and sort them by time
-
-    return this.cache
-      .filter((msg) => {
-        return (
-          (filter.messageId ? msg.messageId === filter.messageId : true)
-          && (filter.userId ? msg.userId === filter.userId : true)
-          && (filter.channelId ? msg.channelId === filter.channelId : true)
-        );
-      })
-      .sort((a, b) => {
-        (+a >= +b) ? 1 : -1
-      });
   }
 
   async reset() {
@@ -87,6 +125,7 @@ class ChatPool {
     this.cache_users = {};
     this.user = null;
     this.chat = null;
+    this.ready = false;
   }
 }
 

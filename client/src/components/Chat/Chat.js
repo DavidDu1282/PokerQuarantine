@@ -12,31 +12,20 @@ class Chat extends React.Component {
 
   constructor(props) {
     super(props);
-    this.socket = props.client.socket;
     this.chatText = React.createRef();
     this.msgEnd = React.createRef();
     this.pool = props.pool;
     this.state = {
-      msgArr:[
-      ],
       textMessage:''
     }
     //
   }
 
   componentDidMount() {
-    this.msgEnd.current.scrollIntoView({ behavior: "smooth" });
+    if (process.env.NODE_ENV !== 'test') this.msgEnd.current.scrollIntoView({ behavior: "auto" });
   }
 
-  insertChat(msg, user,date){
-    var arr = this.state.msgArr;
-    arr.push({
-      user: user,
-      text: msg,
-      date: moment(date),
-    },)
-    this.setState(((state) => {return {msgArr: arr}}));
-
+  scrollToBottom() {
     this.msgEnd.current.scrollIntoView({ behavior: "smooth" });
   }
 
@@ -49,17 +38,10 @@ class Chat extends React.Component {
 
     if (message === '') return;
 
-    var now = new Date();
     //console.log(this.chatText.current.value);
-    this.insertChat(message, this.props.client.user, now);
     this.setState(((state) => {return {textMessage:''}}));
-
-    // send msg
-    this.socket.emit('chat', {
-      user: {name: this.props.client.user.name, avatar_url: this.props.client.user.avatar_url},
-      text: message,
-      time: now
-    });
+    this.props.sendMessage(message);
+    
   }
 
   handleChange(e){
@@ -70,43 +52,38 @@ class Chat extends React.Component {
   }
 
   render(){
-    return(
-      <div onKeyDown={e => this.handleKeyDown(e)} className="containerMessage">
-        <Grid
-          container
-          direction="column"
-          spacing={2}
-        >
-          <Grid item xs>
+    const messages_display = [];
 
-            <div className="containerMessageContext">
-            <Grid item container spacing={2} direction="column" justify="flex-start" alignItems="flex-start" alignContent = "flex-end" wrap = 'nowrap'>
-              <Grid item>
-                <Typography variant="body2" color="textSecondary">Welcome to the {this.props.channelName} chat</Typography>
-              </Grid>
-              {this.state.msgArr.map((elem, index )=> (
-                <Grid item container spacing={2} direction="row" justify="flex-start" alignContent="flex-start" alignItems="flex-start" key={index}>
-                  <Grid item><Avatar alt={elem.user.name} src={elem.user.avatar_url} /></Grid>
-                  <Grid item>
-                    <Typography variant="subtitle2" color="primary" display="inline">{`${elem.user.name}`} </Typography>
-                    <Typography variant="body2" color="textSecondary" display="inline">{`on ${elem.date.format("H:m MMM Do, YYYY")}`}<br/></Typography>
-                    <Typography variant="body1">{`${elem.text}`}</Typography>
-                  </Grid>
-                </Grid>
-              ))}
-              <Grid item ref={this.msgEnd}></Grid>
-            </Grid>
-            </div>
-
-          </Grid>
-
-          <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
-            <Grid item xs={10}><TextField variant="outlined" ref = {this.chatText} fullWidth value= {this.state.textMessage} onChange ={(e)=>{this.handleChange(e)}}/></Grid>
-            <Grid item xs={2}><Button variant="contained" color="primary" fullWidth endIcon={<SendIcon/>} onClick={(e) => { this.sendMessage(e)}}>
-              Send
-            </Button></Grid>
+    this.props.messages.map((message) => {
+      const current_user = this.props.pool.getUser(message.userId);
+      messages_display.push(
+        <Grid item container style={{width: '95%'}} spacing={2} direction="row" justify="flex-start" alignContent="flex-start" alignItems="flex-start" key={message.messageId}>
+          <Grid item><Avatar alt={current_user.name} src={current_user.avatar_url} /></Grid>
+          <Grid item style={{maxWidth: '85%', wordWrap: 'break-word'}}>
+            <Typography variant="subtitle2" color={current_user.role === 0 ? "primary" : "secondary"} display="inline">{`${current_user.name}`} </Typography>
+            <Typography variant="body2" color="textSecondary" display="inline">{`on ${moment(message.timestamp).format("H:m MMM Do, YYYY")}`}<br/></Typography>
+            <Typography display="inline" variant="body1">{`${message.context}`}</Typography>
           </Grid>
         </Grid>
+      );
+    });
+
+    return(
+      <div className="containerMessage" onKeyDown={e => this.handleKeyDown(e)}>
+        <div className="containerMessageContext" >
+          <Grid container style={{paddingTop: '1em'}} spacing={2} direction="column" justify="flex-end" alignItems="center" wrap='nowrap'>
+            {messages_display}
+            <Grid item ref={this.msgEnd}></Grid>
+          </Grid>
+        </div>
+
+        <div className="textEntry">
+          <TextField ref={this.chatText} fullWidth style={{width: '85%', display: 'inline-block', margin: 'none'}} value= {this.state.textMessage} onChange ={(e)=>{this.handleChange(e)}}/>
+          <Button color="primary" fullWidth style={{width: '15%', float: 'right', margin: 'none', marginLeft: '8px'}} endIcon={<SendIcon/>} onClick={(e) => { this.sendMessage(e)}}>
+            Send
+          </Button>
+        </div>
+
       </div>
   );
 }
