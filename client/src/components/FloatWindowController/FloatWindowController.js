@@ -64,8 +64,8 @@ class FloatWindowController extends React.Component {
   }
 
   focus(name) {
-    if (this.state.focus === name) return;
-    this.set_options(name, {z: this.state.focus_z+1});
+    // if (this.state.focus === name) return;
+    this.set_options(name, {z: this.state.focus_z+2});
   }
 
   set_options(name, option) {
