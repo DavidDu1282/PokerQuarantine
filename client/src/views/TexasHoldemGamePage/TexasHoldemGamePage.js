@@ -12,7 +12,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+//client.user
 class TexasHoldemGamePage extends React.Component{
 
   constructor(props) {
@@ -199,11 +199,11 @@ class TexasHoldemGamePage extends React.Component{
           chipAmount:0,
           cardArray:[
             {
-              cardID:23,
+              cardID:'2c',
               cardHidden:true,
             },
             {
-              cardID:45,
+              cardID:'Kd',
               cardHidden:true,
             }
           ],
@@ -267,7 +267,7 @@ class TexasHoldemGamePage extends React.Component{
     var arr = this.state.self;
     arr[0].betAmount = arr[0].betAmount+num;
     this.setState(((state) => {return {self: arr}}));
-    this.socket.emit('addBet', {
+    this.socket.emit('raise', {
       player: {name: this.state.self[0].name, id: this.state.self[0].playerID},
       amount: num,
     });
@@ -327,7 +327,7 @@ class TexasHoldemGamePage extends React.Component{
               <Grid item xs>
                 <Grid item container spacing={1} direction="column" justify="flex-end" alignItems="flex-start" >
                   {this.state.leftTablePlayers.map(elem => (
-                    <Grid item xs={12} m={4} md={4} key={this.state.rightTablePlayers.indexOf(elem)}>
+                    <Grid item xs={12} m={4} md={4} key={this.state.leftTablePlayers.indexOf(elem)}>
                       <Hand hand = {elem} flex-grow = {4}> </Hand>
                     </Grid>
                   ))}
@@ -335,8 +335,6 @@ class TexasHoldemGamePage extends React.Component{
               </Grid>
           </Grid>
         </div>
-
-
         <div className="RightTable" >
           <Grid
               container
