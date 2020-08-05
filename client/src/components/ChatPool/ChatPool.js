@@ -11,18 +11,18 @@ class ChatPool {
 
   getUser(userId) {
     if (!this.cache_users[userId]) {
-      return this.cacheUser(userId).then(() => {return this.cache_users[userId]});
+      return this.cacheUser(userId).then((res) => {return res});
     } else {
       return this.cache_users[userId];
     }
   }
 
   async cacheUser(userId) {
-    if (this.cache_users[userId]) return;
-    axios
+    return await axios
       .get(`/users/${userId}`)
       .then((res) => {
         this.cache_users[userId] = res.data;
+        return res.data;
       });
   }
 
@@ -113,8 +113,11 @@ class ChatPool {
     channels.map((channel) => {
       this.cache[channel.channelId] = channel;
       if (process.env.NODE_ENV !== 'test') {
-        channel.messages.map(async (message) => {
-          if (!this.cache_users[message.userId]) await this.cacheUser(message.userId);
+        channel.messages.map((message) => {
+          if (!this.cache_users[message.userId]) {
+            this.cache_users[message.userId] = true; // set temp so future loops wont re-cache
+            this.cacheUser(message.userId);
+          }
         });
       }
     });

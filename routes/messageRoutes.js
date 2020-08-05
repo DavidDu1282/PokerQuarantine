@@ -59,7 +59,7 @@ router.post('/post', async (req, res) => {
     const { userId, channelId, context, timestamp } = req.body;
 
     let id = uuidv4();
-
+    
     const message = new Message({
       messageId: id,
       userId: userId,
@@ -73,7 +73,7 @@ router.post('/post', async (req, res) => {
       { channelId: channelId },
       { $push: { messages: id } },
     ).exec();
-
+    
     res.status(201);
     res.send(id);
   } catch (e) {

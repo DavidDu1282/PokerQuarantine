@@ -19,7 +19,6 @@ class MultiChat extends React.Component {
   update() {
     // update rendering and scroll to chat bottom
     this.chat.current.forceUpdate();
-    this.chat.current.scrollToBottom();
   }
 
   updateReady(ready) {
@@ -47,7 +46,9 @@ class MultiChat extends React.Component {
                     button
                     key={channel.channelId}
                     selected={this.state.selected === channel.channelId}
-                    onClick={() => this.setState(state => {return { selected: channel.channelId }})}
+                    onClick={() => {
+                      this.setState(state => {return { selected: channel.channelId }});
+                    }}
                   >
                     <ListItemText primary={channel.channelName} />
                   </ListItem>

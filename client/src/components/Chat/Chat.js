@@ -25,8 +25,12 @@ class Chat extends React.Component {
     if (process.env.NODE_ENV !== 'test') this.msgEnd.current.scrollIntoView({ behavior: "auto" });
   }
 
-  scrollToBottom() {
-    this.msgEnd.current.scrollIntoView({ behavior: "smooth" });
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(behavior="smooth") {
+    this.msgEnd.current.scrollIntoView({ behavior: behavior });
   }
 
   handleKeyDown(e) {
@@ -61,7 +65,7 @@ class Chat extends React.Component {
           <Grid item><Avatar alt={current_user.name} src={current_user.avatar_url} /></Grid>
           <Grid item style={{maxWidth: '85%', wordWrap: 'break-word'}}>
             <Typography variant="subtitle2" color={current_user.role === 0 ? "primary" : "secondary"} display="inline">{`${current_user.name}`} </Typography>
-            <Typography variant="body2" color="textSecondary" display="inline">{`on ${moment(message.timestamp).format("H:m MMM Do, YYYY")}`}<br/></Typography>
+            <Typography variant="body2" color="textSecondary" display="inline">{`on ${moment(message.timestamp).format("h:mm A MMM Do, YYYY")}`}<br/></Typography>
             <Typography display="inline" variant="body1">{`${message.context}`}</Typography>
           </Grid>
         </Grid>
