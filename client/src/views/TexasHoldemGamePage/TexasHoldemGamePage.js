@@ -267,7 +267,7 @@ class TexasHoldemGamePage extends React.Component{
     var arr = this.state.self;
     arr[0].betAmount = arr[0].betAmount+num;
     this.setState(((state) => {return {self: arr}}));
-    this.socket.emit('fold', {
+    this.socket.emit('addBet', {
       player: {name: this.state.self[0].name, id: this.state.self[0].playerID},
       amount: num,
     });

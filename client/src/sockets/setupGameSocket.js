@@ -26,10 +26,13 @@ export default function setupGameSocket(socket, client) {
 
     if (reason && client.in_game) alert(reason);
   })
-  socket.on('endOfTurn',(playerInfo, PlayingPlayer)=>{
+  socket.on('endOfTurn',(playerInfo, playingPlayer)=>{
 
-  })
+  }),
   socket.on('endOfRound',(playerInfo)=>{
+
+  }),
+  socket.on('endOfGame',(playerInfo, winningPlayer)=>{
 
   })
 }
