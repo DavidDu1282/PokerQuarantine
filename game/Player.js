@@ -43,6 +43,7 @@ class Player {
   raise(amount) {
     this.actionTaken = true;
     var diff = this.table.getHighestBet() - this.bet;
+    this.table.bet = diff + amount;
     this.addBet(diff + amount);
     console.log("Player " + this.username + " RAISE : " + (diff + amount));
 

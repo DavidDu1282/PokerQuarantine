@@ -60,14 +60,15 @@ module.exports = function (io, client, pool) {
 
       client.get(`${userId}_game`, (error, gameId) => {
         pool.start(gameId);
-        console.log(pool.processes[gameId]);
+
         var playerPos = pool.processes[gameId].userIds.indexOf(userId);
+
         pool.emit("get_table", [userId], {
           playerIds: pool.processes[gameId].userIds,
-          turnPosition: pool.processes[gameId].dealerPos,
+          turnPosition: pool.processes[gameId].turnPos,
           dealersPosition: pool.processes[gameId].dealerPos,
           playerPosition: pool.processes[gameId].userIds.indexOf(userId),
-          playersHand: pool.processes[gameId].playersHands[userId],
+          playersHand: pool.processes[gameId].playersHands,
           pot: pool.processes[gameId].pot,
           bet: pool.processes[gameId].bet,
           communityCards: pool.processes[gameId].communityCards,
@@ -80,16 +81,26 @@ module.exports = function (io, client, pool) {
     socket.on("fold", (userId) => {
       client.get(`${userId}_game`, (error, gameId) => {
         pool.recieve("fold", gameId);
+        pool.emit("get_currrent_status", pool.processes[gameId].userIds, {
+          turnPosition: pool.processes[gameId].turnPos,
+        });
       });
     });
     socket.on("raise", (userId, amount) => {
       client.get(`${userId}_game`, (error, gameId) => {
         pool.recieve("raise", gameId, amount);
+        pool.emit("get_currrent_status", pool.processes[gameId].userIds, {
+          turnPosition: pool.processes[gameId].turnPos,
+          currentBet: pool.processes[gameId].bet,
+        });
       });
     });
     socket.on("checkOrCall", (userId) => {
       client.get(`${userId}_game`, (error, gameId) => {
         pool.recieve("checkOrCall", gameId);
+        pool.emit("get_currrent_status", pool.processes[gameId].userIds, {
+          turnPosition: pool.processes[gameId].turnPos,
+        });
       });
     });
 

@@ -22,8 +22,9 @@ class Table {
     this.bigBlind = this.smallBlind * 2; //player clockwise next to small blind is big blind, typically twice the size of small blinds
 
     this.turnPos = 0;
-
+    this.winner = undefined;
     this.addPlayers();
+    console.log(this.pool);
   }
 
   async addPlayers() {
@@ -50,6 +51,7 @@ class Table {
     this.bigBlind = this.smallBlind * 2; //player clockwise next to small blind is big blind, typically twice the size of small blinds
 
     this.turnPos = 0;
+    this.winner = undefined;
 
     for (var i = 0; i < this.players.length; i++) {
       this.players[i].reset();
@@ -63,17 +65,45 @@ class Table {
   nextRound() {
     if (this.roundState === "deal") {
       this.gatherBets();
+
       this.flop();
+      this.pool.emit("get_game_status", this.userIds, {
+        round: this.roundState,
+        communityCards: this.communityCards,
+        pot: this.pot,
+      });
     } else if (this.roundState === "flop") {
       this.gatherBets();
       this.turn();
+      this.pool.emit("get_game_status", this.userIds, {
+        round: this.roundState,
+        communityCards: this.communityCards,
+        pot: this.pot,
+        turnPosition: this.turnPos,
+      });
     } else if (this.roundState === "turn") {
       this.gatherBets();
       this.river();
+      this.pool.emit("get_game_status", this.userIds, {
+        round: this.roundState,
+        communityCards: this.communityCards,
+        pot: this.pot,
+        turnPosition: this.turnPos,
+      });
     } else if (this.roundState === "river") {
       this.gatherBets();
+
       this.showdown();
+      this.pool.emit("get_game_status", this.userIds, {
+        round: this.roundState,
+        communityCards: this.communityCards,
+        pot: this.pot,
+        turnPosition: this.turnPos,
+      });
     } else if (this.roundState === "showdown") {
+      this.pool.emit("endOfGame", this.userIds, {
+        winner: this.winner,
+      });
       this.endRound();
     }
   }
@@ -114,6 +144,7 @@ class Table {
     //small and big pay blind
     this.players[smallBlindPos].addBet(this.smallBlind);
     this.players[bigBlindPos].addBet(this.bigBlind);
+    this.bet = this.bigBlind;
 
     //deal cards to players
     for (var i = 0; i < this.players.length; i++) {
@@ -133,6 +164,13 @@ class Table {
       "Now it is player " + this.players[this.turnPos].username + "turn"
     );
     this.roundState = "deal";
+    this.pool.emit("get_game_status", this.userIds, {
+      round: this.roundState,
+      communityCards: this.communityCards,
+      pot: this.pot,
+      bet: this.bet,
+      turnPosition: this.turnPos,
+    });
     console.log("************** Round Deal **************");
   }
 
@@ -194,6 +232,7 @@ class Table {
         ", " +
         this.communityCards[4]
     );
+
     this.requestPlayerActions();
   }
 
@@ -243,6 +282,7 @@ class Table {
         evalHands[highestIndex].handName
     );
     //Distribute the pot to winner
+    this.winner = this.players[highestIndex].userId;
     this.players[highestIndex].getWinnings(this.pot);
     this.pot = 0;
 
@@ -273,6 +313,7 @@ class Table {
       this.pot += this.players[i].bet;
       this.players[i].bet = 0;
     }
+    this.bet = 0;
     console.log("total pot: " + this.pot);
   }
 
