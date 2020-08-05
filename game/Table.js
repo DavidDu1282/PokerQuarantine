@@ -1,12 +1,18 @@
 var Deck = require("./Deck.js");
 var Player = require("./Player.js");
 var PokerEvaluator = require("poker-evaluator");
+const mongoose = require("mongoose");
+const User = mongoose.model("users");
 
 class Table {
-  constructor(smallBlind = 10) {
+  constructor(id, userIds, pool, smallBlind = 100) {
+    this.id = id;
+    this.pool = pool;
+    this.userIds = userIds;
     this.pot = 0;
-
+    this.bet = 0;
     this.players = [];
+    this.playersHands = {};
     this.roundState = "idle";
     this.communityCards = [];
     this.deck = new Deck();
@@ -16,16 +22,24 @@ class Table {
     this.bigBlind = this.smallBlind * 2; //player clockwise next to small blind is big blind, typically twice the size of small blinds
 
     this.turnPos = 0;
+
+    this.addPlayers();
   }
 
-  addPlayer(Player) {
-    Player.table = this;
-    this.players.push(Player);
+  async addPlayers() {
+    for (var i = 0; i < this.userIds.length; i++) {
+      var data = await User.findOne({ userId: this.userIds[i] }).exec();
+      var newPlayer = new Player(data);
+
+      newPlayer.table = this;
+      this.players.push(newPlayer);
+    }
   }
 
   reset() {
     this.bet = 0;
     this.pot = 0;
+    this.playersHands = {};
 
     this.roundState = "idle";
     this.communityCards = [];
@@ -109,6 +123,8 @@ class Table {
       console.log(
         "Player " + this.players[i].username + " get cards " + c1 + " & " + c2
       );
+
+      this.playersHands[this.players[i].userId] = [c1, c2];
     }
 
     //determine whose turn it is now
@@ -284,38 +300,40 @@ class Table {
         highestBet = this.players[i].bet;
       }
     }
+    this.bet = highestBet;
     return highestBet;
   }
 }
 
 module.exports = Table;
 
-var game = new Table();
-var player1 = new Player({ username: "DayTime", balance: 40000 });
-var player2 = new Player({ username: "Luna", balance: 50000 });
-var player3 = new Player({ username: "MidNight", balance: 50000 });
+// var game = new Table();
+// var player1 = new Player({ username: "DayTime", balance: 40000 });
+// var player2 = new Player({ username: "Luna", balance: 50000 });
+// var player3 = new Player({ username: "MidNight", balance: 50000 });
 
-game.addPlayer(player1);
-game.addPlayer(player2);
-game.addPlayer(player3);
+// game.addPlayer(player1);
+// game.addPlayer(player2);
+// game.addPlayer(player3);
 
-game.start();
-game.getCurrentPlayer().callOrCheck(); //1
-game.getCurrentPlayer().callOrCheck(); //2
-game.getCurrentPlayer().raise(2000); //3
-game.getCurrentPlayer().raise(2000); //1
-game.getCurrentPlayer().fold(); //2
-game.getCurrentPlayer().callOrCheck(); //3
-game.getCurrentPlayer().callOrCheck(); //1
-game.getCurrentPlayer().raise(1000); //3
-game.getCurrentPlayer().callOrCheck(); //1
-game.getCurrentPlayer().callOrCheck(); //3
-game.getCurrentPlayer().raise(3000); //1
-game.getCurrentPlayer().callOrCheck(); //3
-game.getCurrentPlayer().callOrCheck(); //1
-game.getCurrentPlayer().callOrCheck(); //3
-game.getCurrentPlayer().callOrCheck(); //1
+// game.start();
+// game.getCurrentPlayer().callOrCheck(); //1
+// game.getCurrentPlayer().callOrCheck(); //2
+// game.getCurrentPlayer().raise(2000); //3
+// game.getCurrentPlayer().raise(2000); //1
+// game.getCurrentPlayer().fold(); //2
+// game.getCurrentPlayer().callOrCheck(); //3
+// game.getCurrentPlayer().callOrCheck(); //1
+// game.getCurrentPlayer().raise(1000); //3
+// game.getCurrentPlayer().callOrCheck(); //1
+// game.getCurrentPlayer().callOrCheck(); //3
+// game.getCurrentPlayer().raise(3000); //1
+// game.getCurrentPlayer().callOrCheck(); //3
+// game.getCurrentPlayer().callOrCheck(); //1
+// game.getCurrentPlayer().callOrCheck(); //3
+// game.getCurrentPlayer().callOrCheck(); //1
 
+// game.start();
 /*
 
 Texas Hold'em Rules

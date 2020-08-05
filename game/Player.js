@@ -1,13 +1,16 @@
 class Player {
   constructor(data) {
-    this.username = data.username;
+    this.userId = data.userId;
+    this.username = data.name;
     this.chips = data.balance;
+    this.avatarURL = data.avatar_url;
+
     this.table = null;
 
     this.hand = [];
     this.bet = 0; //current amount player is wagering
 
-    this.actionTaken = false; //perform action for the round (call/check/raise)
+    this.actionTaken = false; //performed action for the round (call/check/raise)
     this.folded = false; // out for the game
   }
 
@@ -71,6 +74,5 @@ class Player {
   getWinnings(pot) {
     this.chips += pot;
   }
-  
 }
 module.exports = Player;

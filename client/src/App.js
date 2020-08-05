@@ -16,13 +16,11 @@ import {
   UpdatesPanel,
   Matcher,
   Lobby,
-} from './views';
+} from "./views";
 
-import {
-  FloatWindowController
-} from './components';
+import { FloatWindowController } from "./components";
 
-import { User } from './models';
+import { User } from "./models";
 
 import { CssBaseline, Typography } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -33,7 +31,6 @@ import socketIOClient from "socket.io-client";
 import { setupUserSocket, setupGameSocket } from "./sockets";
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -47,31 +44,37 @@ class App extends React.Component {
     let user = new User();
 
     this.state = {
-      user: user
+      user: user,
     };
   }
 
   componentDidMount() {
-    let socket_url = (process.env.NODE_ENV === "development") ? "http://localhost:3001" : undefined;
+    let socket_url =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3001"
+        : undefined;
 
     // setup websockets
     this.socket = socketIOClient(socket_url);
-    this.socket.on('message', (msg) => {
-      if (process.env.NODE_ENV === 'development') console.log(msg);
-    })
+    this.socket.on("message", (msg) => {
+      if (process.env.NODE_ENV === "development") console.log(msg);
+    });
     setupUserSocket(this.socket, this);
     setupGameSocket(this.socket, this);
+    this.socket.on("get_table", (game) => {
+      console.log(game);
+    });
 
-    window.addEventListener('pageshow', this.windowInit);    
+    window.addEventListener("pageshow", this.windowInit);
   }
 
   windowInit() {
     const center = {
       x: window.innerWidth / 2,
-      y: window.innerHeight / 2
+      y: window.innerHeight / 2,
     };
 
-    this.windowController.current.init(center, 'Navigator');
+    this.windowController.current.init(center, "Navigator");
     this.cookieAuth();
   }
 
@@ -85,7 +88,7 @@ class App extends React.Component {
       this.setState((state) => {
         return { user: logged_user };
       });
-      this.socket.emit('user-handshake', logged_user.id);
+      this.socket.emit("user-handshake", logged_user.id);
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     }
   }
@@ -146,13 +149,13 @@ class App extends React.Component {
      * returns: void
      */
 
-    this.socket.emit('user-logout', this.user.id);
+    this.socket.emit("user-logout", this.user.id);
 
     const empty_user = await this.user.delete();
     this.setState((state) => {
       return { user: empty_user };
     });
-    
+
     this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
 
@@ -175,19 +178,19 @@ class App extends React.Component {
         return { user: logged_user };
       });
 
-      this.socket.emit('user-handshake', logged_user.id);
+      this.socket.emit("user-handshake", logged_user.id);
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     } catch (err) {
       throw err;
     }
   }
 
-  async logout(emit=true) {
+  async logout(emit = true) {
     /**
      * logs out the logged in user
      */
 
-    if (emit) this.socket.emit('user-logout', this.user.id);
+    if (emit) this.socket.emit("user-logout", this.user.id);
     this.unmatch(this.user.id);
 
     const empty_user = await this.user.logout();
@@ -198,12 +201,12 @@ class App extends React.Component {
     this.windowInit();
   }
 
-
   // matching
 
   match() {
     this.matching = true;
-    this.socket.emit('match', this.user.id);
+
+    this.socket.emit("match", this.user.id);
   }
 
   unmatch(explicit_id) {
@@ -211,8 +214,8 @@ class App extends React.Component {
 
     let id = explicit_id | this.user.id;
     this.matching = false;
-    this.socket.emit('unmatch', this.user.id);
-    this.windowController.current.hide('Match');
+    this.socket.emit("unmatch", this.user.id);
+    this.windowController.current.hide("Match");
   }
 
   game_leave() {
@@ -221,36 +224,66 @@ class App extends React.Component {
      */
 
     this.in_game = false;
-    this.socket.emit('game_leave', this.user.id);
+    this.socket.emit("game_leave", this.user.id);
+  }
+
+  game_start() {
+    /**
+     * Start the game
+     */
+
+    this.in_game = true; // use to conditionally display texas hold em page?
+    this.socket.emit("game_start", this.user.id);
   }
 
   render() {
     // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
     const list = {
-
-      'login / register': <LoginPanel client={this} />,
-      'match': <MatchPanel client={this} />,
-      'chat': <ChatPanel ref={this.chatPanel} client={this} />,
-      'store': <StorePanel client={this} />,
-      'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <NewsPanel client={this} />,
-      'update': <UpdatesPanel client={this} />,
-      'management': <ManagementPanel client={this} />,
-      'billing': <CreditPanel client={this} />,
-      'report': <ReportPanel client={this} />,
-      'user info': <UserPanel client={this} />,
-
+      "login / register": <LoginPanel client={this} />,
+      match: <MatchPanel client={this} />,
+      chat: <ChatPanel ref={this.chatPanel} client={this} />,
+      store: <StorePanel client={this} />,
+      leaderboard: <LeaderBoardPanel client={this} />,
+      news: <NewsPanel client={this} />,
+      update: <UpdatesPanel client={this} />,
+      management: <ManagementPanel client={this} />,
+      billing: <CreditPanel client={this} />,
+      report: <ReportPanel client={this} />,
+      "user info": <UserPanel client={this} />,
     };
 
     return (
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <FloatWindowController ref={this.windowController} client={this} windows={{
-          'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
-          'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
-          'Lobby': { content: <Lobby client={this} ref={this.lobby} />, width: 300, height: 600, variant: 'full', nonClosable: true},
-        }}/>
+        <FloatWindowController
+          ref={this.windowController}
+          client={this}
+          windows={{
+            Navigator: {
+              content: (
+                <Navigator list={list} client={this} ref={this.navigator} />
+              ),
+              width: 1100,
+              height: 800,
+              variant: "transparent",
+            },
+            Match: {
+              content: <Matcher client={this} />,
+              width: 300,
+              height: 300,
+              variant: "full",
+              nonClosable: true,
+            },
+            Lobby: {
+              content: <Lobby client={this} ref={this.lobby} />,
+              width: 300,
+              height: 600,
+              variant: "full",
+              nonClosable: true,
+            },
+          }}
+        />
       </ThemeProvider>
     );
   }
