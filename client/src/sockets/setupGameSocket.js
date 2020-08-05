@@ -17,7 +17,7 @@ export default function setupGameSocket(socket, client) {
       client.lobby.current.setId(game.id);
       client.lobby.current.addPlayers(game.players);
     }, 1000);
-    
+
   });
 
   socket.on('game_terminate', (reason) => {
@@ -25,5 +25,11 @@ export default function setupGameSocket(socket, client) {
     client.windowController.current.hide('Lobby');
 
     if (reason && client.in_game) alert(reason);
+  })
+  socket.on('endOfTurn',(playerInfo, PlayingPlayer)=>{
+
+  })
+  socket.on('endOfRound',(playerInfo)=>{
+
   })
 }

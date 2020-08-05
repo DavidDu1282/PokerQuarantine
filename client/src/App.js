@@ -44,7 +44,6 @@ class App extends React.Component {
     this.game = React.createRef();
     this.windowController = React.createRef();
     this.windowInit = this.windowInit.bind(this);
-
     let user = new User();
 
     this.state = {
@@ -237,7 +236,7 @@ class App extends React.Component {
       'chat': <ChatPanel ref={this.chatPanel} client={this} />,
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <NewsPanel client={this} />,
+      'news': <TexasHoldemGamePage ref = {this.game}  client={this} />,
       'update': <UpdatesPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'billing': <CreditPanel client={this} />,
@@ -250,7 +249,8 @@ class App extends React.Component {
       <ThemeProvider theme={Theme}>
         <CssBaseline />
 
-        <TexasHoldemGamePage client={this} />,
+
+        <Navigator list={list} client={this} ref={this.navigator} display = "none"/>
         <FloatWindowController ref={this.windowController} client={this} windows={{
           'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
           'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
@@ -261,6 +261,6 @@ class App extends React.Component {
   }
 }
 /*
-<Navigator list={list} client={this} ref={this.navigator} display = "none"/>
+<NewsPanel client={this} />,
 */
 export default App;

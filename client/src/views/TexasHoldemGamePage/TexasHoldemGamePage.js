@@ -17,7 +17,7 @@ class TexasHoldemGamePage extends React.Component{
 
   constructor(props) {
     super(props);
-
+    this.socket = this.props.client.socket;
 
     this.state = {
       leftTablePlayers:
@@ -25,6 +25,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Left",
           playerID:2,
+          chipAmount:0,
           cardArray:[
             {
               cardID:1,
@@ -43,6 +44,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"John",
           playerID:1,
+          chipAmount:0,
           cardArray:[
             {
               cardID:1,
@@ -60,6 +62,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Alex",
           playerID:4,
+          chipAmount:0,
           cardArray:[
             {
               cardID:1,
@@ -80,6 +83,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Right",
           playerID:2,
+          chipAmount:0,
           cardArray:[
             {
               cardID:1,
@@ -97,6 +101,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"John",
           playerID:1,
+          chipAmount:0,
           cardArray:[
             {
               cardID:12,
@@ -114,6 +119,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Alex",
           playerID:4,
+          chipAmount:0,
           cardArray:[
             {
               cardID:19,
@@ -134,6 +140,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Top",
           playerID:2,
+          chipAmount:0,
           cardArray:[
             {
               cardID:43,
@@ -151,6 +158,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"John",
           playerID:1,
+          chipAmount:0,
           cardArray:[
             {
               cardID:36,
@@ -168,6 +176,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Alex",
           playerID:4,
+          chipAmount:0,
           cardArray:[
             {
               cardID:46,
@@ -187,6 +196,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Bob",
           playerID:3,
+          chipAmount:0,
           cardArray:[
             {
               cardID:23,
@@ -206,6 +216,7 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Dealer",
           playerID:0,
+          chipAmount:0,
           cardArray:[
             {
               cardID:1,
@@ -241,7 +252,6 @@ class TexasHoldemGamePage extends React.Component{
   }
   handleOpen(){
     this.setState(((state) => {return {open: true}}));
-
   };
 
   handleClose(){
@@ -249,11 +259,18 @@ class TexasHoldemGamePage extends React.Component{
   };
   matchBet(){
     var arr = this.state.self;
+    this.socket.emit('checkOrCall', {
+      player: {name: this.state.self[0].name, id: this.state.self[0].playerID},
+    });
   }
   addBet(num){
     var arr = this.state.self;
     arr[0].betAmount = arr[0].betAmount+num;
     this.setState(((state) => {return {self: arr}}));
+    this.socket.emit('fold', {
+      player: {name: this.state.self[0].name, id: this.state.self[0].playerID},
+      amount: num,
+    });
     //arr
   }
   fold(e){
@@ -262,11 +279,14 @@ class TexasHoldemGamePage extends React.Component{
     arr[0].folded = true;
     document.getElementsByName("AddBet").disabled = true;
     this.setState(((state) => {return {self: arr}}));
+    this.socket.emit('fold', {
+      player: {name: this.state.self[0].name, id: this.state.self[0].playerID},
+    });
   }
   reveal(num){
 
     var arr = this.state.self;
-    arr[0].cardHidden[num] = false;
+    arr[0].cardArray[num].cardHidden = false;
     this.setState(((state) => {return {self: arr}}));
 
   }
@@ -379,7 +399,6 @@ class TexasHoldemGamePage extends React.Component{
           <Button size="medium" color="primary" onClick={() => { this.fold() }}>
             Fold
           </Button>
-
           <Button size="medium" color="primary" onClick={() => this.handleOpen()}>
             Reveal Right
           </Button>
