@@ -24,7 +24,6 @@ class Table {
     this.turnPos = 0;
     this.winner = undefined;
     this.addPlayers();
-    console.log(this.pool);
   }
 
   async addPlayers() {
