@@ -79,7 +79,11 @@ export default function setupGameSocket(socket, client) {
     this.client.TexasHoldemGamePage.setState(((state) => {return {LeftTable: leftTableData}}));
   }),
   socket.on('endOfTurn',(playerInfo, turnPos)=>{
-    
+      this.client.TexasHoldemGamePage.setState(((state) => {return {turnPosition: turnPos}}));
+      this.client.TexasHoldemGamePage.state.LeftTable.map(elem => (
+        if(elem.playerID = playerInfo.playerID)
+      ))
+      this.client.TexasHoldemGamePage.setState(((state) => {return {turnPosition: turnPos}}));
   }),
   socket.on('endOfRound',(playerInfo)=>{
 

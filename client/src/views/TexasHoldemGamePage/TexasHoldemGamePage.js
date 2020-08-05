@@ -26,6 +26,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"Left",
           playerID:2,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:1,
@@ -45,6 +46,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"John",
           playerID:1,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:1,
@@ -63,6 +65,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"Alex",
           playerID:4,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:1,
@@ -84,6 +87,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"Right",
           playerID:2,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:1,
@@ -102,6 +106,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"John",
           playerID:1,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:12,
@@ -120,6 +125,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"Alex",
           playerID:4,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:19,
@@ -141,6 +147,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"Top",
           playerID:2,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:43,
@@ -159,6 +166,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"John",
           playerID:1,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:36,
@@ -177,6 +185,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"Alex",
           playerID:4,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:46,
@@ -197,6 +206,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"Bob",
           playerID:3,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:'2c',
@@ -217,6 +227,7 @@ class TexasHoldemGamePage extends React.Component{
           playerName:"Dealer",
           playerID:0,
           chipAmount:0,
+          playerPosition:0,
           cardArray:[
             {
               cardID:1,
@@ -248,6 +259,7 @@ class TexasHoldemGamePage extends React.Component{
       potTotal:0,
       open:false,
       setOpen:false,
+      turnPosition:0,
     }
   }
   handleOpen(){
@@ -260,7 +272,7 @@ class TexasHoldemGamePage extends React.Component{
   matchBet(){
     var arr = this.state.self;
     this.socket.emit('checkOrCall', {
-      player: {name: this.state.self[0].name, id: this.state.self[0].playerID},
+      userID: this.state.self[0].playerID},
     });
   }
   addBet(num){
@@ -268,7 +280,7 @@ class TexasHoldemGamePage extends React.Component{
     arr[0].betAmount = arr[0].betAmount+num;
     this.setState(((state) => {return {self: arr}}));
     this.socket.emit('raise', {
-      player: {name: this.state.self[0].name, id: this.state.self[0].playerID},
+      userID: this.state.self[0].playerID},
       amount: num,
     });
     //arr
@@ -280,7 +292,7 @@ class TexasHoldemGamePage extends React.Component{
     document.getElementsByName("AddBet").disabled = true;
     this.setState(((state) => {return {self: arr}}));
     this.socket.emit('fold', {
-      player: {name: this.state.self[0].name, id: this.state.self[0].playerID},
+      userID: this.state.self[0].playerID},
     });
   }
   reveal(num){
