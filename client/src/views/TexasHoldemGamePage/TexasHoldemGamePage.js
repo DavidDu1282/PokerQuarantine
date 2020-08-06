@@ -234,19 +234,19 @@ class TexasHoldemGamePage extends React.Component{
           playerPosition:0,
           cardArray:[
             {
-              cardID:1,
+              cardID:"AD",
               cardHidden:false,
             },
             {
-              cardID:2,
+              cardID:"2C",
               cardHidden:false,
             },
             {
-              cardID:4,
+              cardID:"KC",
               cardHidden:false,
             },
             {
-              cardID:5,
+              cardID:"JS",
               cardHidden:false,
             },
             {
