@@ -26,7 +26,29 @@ class Table {
     this.winner = undefined;
     this.addPlayers();
   }
+  /**
+   * socket functions
+   */
 
+  emit_game_status() {
+    this.pool.emit("get_game_status", this.userIds, {
+      round: this.roundState,
+      communityCards: this.communityCards,
+      pot: this.pot,
+      turnPosition: this.turnPos,
+      foldedPlayers: this.foldedPlayers,
+      bet: this.bet,
+    });
+  }
+  emit_winner() {
+    this.pool.emit("endOfGame", this.userIds, {
+      winner: this.winner,
+    });
+  }
+
+  /**
+   * ------------------
+   */
   async addPlayers() {
     for (var i = 0; i < this.userIds.length; i++) {
       var data = await User.findOne({ userId: this.userIds[i] }).exec();
@@ -65,45 +87,22 @@ class Table {
   nextRound() {
     if (this.roundState === "deal") {
       this.gatherBets();
-
       this.flop();
-      this.pool.emit("get_game_status", this.userIds, {
-        round: this.roundState,
-        communityCards: this.communityCards,
-        pot: this.pot,
-      });
+      this.emit_game_status();
     } else if (this.roundState === "flop") {
       this.gatherBets();
       this.turn();
-      this.pool.emit("get_game_status", this.userIds, {
-        round: this.roundState,
-        communityCards: this.communityCards,
-        pot: this.pot,
-        turnPosition: this.turnPos,
-      });
+      this.emit_game_status();
     } else if (this.roundState === "turn") {
       this.gatherBets();
       this.river();
-      this.pool.emit("get_game_status", this.userIds, {
-        round: this.roundState,
-        communityCards: this.communityCards,
-        pot: this.pot,
-        turnPosition: this.turnPos,
-      });
+      this.emit_game_status();
     } else if (this.roundState === "river") {
       this.gatherBets();
-
       this.showdown();
-      this.pool.emit("get_game_status", this.userIds, {
-        round: this.roundState,
-        communityCards: this.communityCards,
-        pot: this.pot,
-        turnPosition: this.turnPos,
-      });
+      this.emit_game_status();
     } else if (this.roundState === "showdown") {
-      this.pool.emit("endOfGame", this.userIds, {
-        winner: this.winner,
-      });
+      this.emit_winner();
       this.endRound();
     }
   }
@@ -164,13 +163,7 @@ class Table {
       "Now it is player " + this.players[this.turnPos].username + "turn"
     );
     this.roundState = "deal";
-    this.pool.emit("get_game_status", this.userIds, {
-      round: this.roundState,
-      communityCards: this.communityCards,
-      pot: this.pot,
-      bet: this.bet,
-      turnPosition: this.turnPos,
-    });
+    this.emit_game_status();
     console.log("************** Round Deal **************");
   }
 
