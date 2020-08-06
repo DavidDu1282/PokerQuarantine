@@ -21,8 +21,8 @@ export default function setupGameSocket(socket, client) {
   });
 
 
-    if (reason && client.in_game) alert(reason);
-  })
+    //if (reason && client.in_game) alert(reason);
+  //}
   socket.on("get_table",(tableData)=>{
     if(process.env.NODE_ENV === "development"){
       console.log("Received get_table!");

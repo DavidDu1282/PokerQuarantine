@@ -281,7 +281,7 @@ class TexasHoldemGamePage extends React.Component{
 
   handleChange(e){
     let betValue = e.target.value;
-    console.log("E IS THIS", betValue);
+    //console.log("E IS THIS", betValue);
     this.setState(((state) => {return {bet:betValue}}));
   }
 
@@ -434,7 +434,7 @@ class TexasHoldemGamePage extends React.Component{
         </div>
         <div className = "controls">
 
-          
+
 
         <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
             <Grid item xs={5}><TextField type = "number" ref = {this.BetNUmber} fullWidth value= {this.state.bet} onChange ={(e)=>{this.handleChange(e)}}/></Grid>
