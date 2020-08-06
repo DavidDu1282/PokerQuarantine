@@ -78,6 +78,7 @@ class App extends React.Component {
 
     window.addEventListener("pageshow", this.windowInit);
 
+
   }
 
   windowInit() {
@@ -92,6 +93,8 @@ class App extends React.Component {
       y: window.innerHeight / 2
 
     };
+
+    this.windowController.current.init(center, 'Navigator');
 
     this.cookieAuth();
   }

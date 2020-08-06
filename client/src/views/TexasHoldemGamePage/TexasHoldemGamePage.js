@@ -12,21 +12,25 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-//client.user
+import TextField from '@material-ui/core/TextField';
+
+
 class TexasHoldemGamePage extends React.Component{
 
   constructor(props) {
     super(props);
     this.socket = this.props.client.socket;
-
+    this.BetNUmber = React.createRef();
     this.state = {
+      display:true,
       leftTablePlayers:
       [
         {
           playerName:"Left",
           playerID:2,
-          chipAmount:0,
-          playerPosition:0,
+          playerPosition: 0,
+          specialStatusString: "",
+
           cardArray:[
             {
               cardID:1,
@@ -273,6 +277,14 @@ class TexasHoldemGamePage extends React.Component{
   handleClose(){
     this.setState(((state) => {return {open: false}}));
   };
+
+
+  handleChange(e){
+    let betValue = e.target.value;
+    console.log("E IS THIS", betValue);
+    this.setState(((state) => {return {bet:betValue}}));
+  }
+
   handleWin(){
     this.setState(((state) => {return {winOpen: true}}));
   };
@@ -286,18 +298,19 @@ class TexasHoldemGamePage extends React.Component{
   handleLoseClose(){
     this.setState(((state) => {return {loseOpen: false}}));
   };
+
   matchBet(){
     var arr = this.state.self;
     this.socket.emit('checkOrCall', {
-      userID: this.state.self[0].playerID},
+      userID: this.state.self[0].playerID,
     });
   }
   addBet(num){
     var arr = this.state.self;
-    arr[0].betAmount = arr[0].betAmount+num;
+    arr[0].betAmount = arr[0].betAmount + parseInt(this.state.bet);
     this.setState(((state) => {return {self: arr}}));
     this.socket.emit('raise', {
-      userID: this.state.self[0].playerID},
+      userID: this.state.self[0].playerID,
       amount: num,
     });
     //arr
@@ -309,7 +322,7 @@ class TexasHoldemGamePage extends React.Component{
     document.getElementsByName("AddBet").disabled = true;
     this.setState(((state) => {return {self: arr}}));
     this.socket.emit('fold', {
-      userID: this.state.self[0].playerID},
+      userID: this.state.self[0].playerID,
     });
   }
   reveal(num){
@@ -320,10 +333,13 @@ class TexasHoldemGamePage extends React.Component{
 
   }
   render() {
+    if(!this.state.display){
+      return(<React.Fragment/>)
+    }
     return (
-      <>
 
-      <div className = "container-padded">
+      <>
+      <div className = "container-GamePage" >
       <Grid item xs>
         {/* <Typography variant="h4">Texas Holdem</Typography> */}
         <Spacing height={1} />
@@ -337,8 +353,8 @@ class TexasHoldemGamePage extends React.Component{
             alignItems="flex"
             alignContent="flex"
             spacing={2}>
-              {this.state.topTablePlayers.map(elem => (
-                <Grid item xs={12} m={3} md={3} key={elem}>
+              {this.state.topTablePlayers.map((elem,index) => (
+                <Grid item xs={12} m={3} md={3} key={index}>
                   <Hand hand = {elem}> </Hand>
                   <div className="TopTable" ></div>
                 </Grid>
@@ -355,8 +371,8 @@ class TexasHoldemGamePage extends React.Component{
               spacing={1}>
               <Grid item xs>
                 <Grid item container spacing={1} direction="column" justify="flex-end" alignItems="flex-start" >
-                  {this.state.leftTablePlayers.map(elem => (
-                    <Grid item xs={12} m={4} md={4} key={this.state.leftTablePlayers.indexOf(elem)}>
+                  {this.state.leftTablePlayers.map((elem,index) => (
+                    <Grid item xs={12} m={4} md={4} key={index}>
                       <Hand hand = {elem} flex-grow = {4}> </Hand>
                     </Grid>
                   ))}
@@ -374,8 +390,8 @@ class TexasHoldemGamePage extends React.Component{
               spacing={1}>
               <Grid item xs>
                 <Grid item container spacing={1} direction="column" justify="flex-end" alignItems="flex-start" >
-                  {this.state.rightTablePlayers.map(elem => (
-                    <Grid item xs={12} m={4} md={4} key={this.state.rightTablePlayers.indexOf(elem)}>
+                  {this.state.rightTablePlayers.map((elem,index)=> (
+                    <Grid item xs={12} m={4} md={4} key={index}>
                       <Hand hand = {elem} flex-grow = {3}> </Hand>
 
                     </Grid>
@@ -396,8 +412,8 @@ class TexasHoldemGamePage extends React.Component{
               <Grid item container spacing={2} direction="column" justify="flex-end" alignItems="flex-start" >
 
                 <div className = "Dealer">
-                {this.state.communityCards.map(elem => (
-                  <Grid item xs={12} m={4} md={4} >
+                {this.state.communityCards.map((elem,index) => (
+                  <Grid item xs={12} m={4} md={4} key ={index} >
                     <Hand hand = {elem} flex-grow = {4}> </Hand>
                   </Grid>
                 ))}
@@ -417,10 +433,18 @@ class TexasHoldemGamePage extends React.Component{
           </Grid>
         </div>
         <div className = "controls">
-          <Button size="medium" className = "AddBet" color="primary" onClick={() => { this.addBet(10) }}>
-            Add/Raise
-          </Button>
-          <Button size="medium" color="primary" onClick={() => this.reveal(0)}>
+
+          
+
+        <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
+            <Grid item xs={5}><TextField type = "number" ref = {this.BetNUmber} fullWidth value= {this.state.bet} onChange ={(e)=>{this.handleChange(e)}}/></Grid>
+            <Grid item xs={5}><Button size = "medium" color="primary" fullWidth onClick={(e) => { this.addBet(e)}}>
+              Bet/Raise
+            </Button></Grid>
+          </Grid>
+
+          <Button size="medium" color="primary" onClick={() => this.matchBet(0)}>
+
             Call/Check
           </Button>
           <Button size="medium" color="primary" onClick={() => { this.fold() }}>
