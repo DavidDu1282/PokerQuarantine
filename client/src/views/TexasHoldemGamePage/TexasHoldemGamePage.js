@@ -12,13 +12,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-//client.user
+import TextField from '@material-ui/core/TextField';
+
+
 class TexasHoldemGamePage extends React.Component{
 
   constructor(props) {
     super(props);
     this.socket = this.props.client.socket;
-
+    this.BetNUmber = React.createRef();
     this.state = {
       display:true,
       leftTablePlayers:
@@ -26,8 +28,9 @@ class TexasHoldemGamePage extends React.Component{
         {
           playerName:"Left",
           playerID:2,
-          chipAmount:0,
-          playerPosition:0,
+          playerPosition: 0,
+          specialStatusString: "",
+
           cardArray:[
             {
               cardID:1,
@@ -274,6 +277,14 @@ class TexasHoldemGamePage extends React.Component{
   handleClose(){
     this.setState(((state) => {return {open: false}}));
   };
+
+
+  handleChange(e){
+    let betValue = e.target.value;
+    console.log("E IS THIS", betValue);
+    this.setState(((state) => {return {bet:betValue}}));
+  }
+
   handleWin(){
     this.setState(((state) => {return {winOpen: true}}));
   };
@@ -287,6 +298,7 @@ class TexasHoldemGamePage extends React.Component{
   handleLoseClose(){
     this.setState(((state) => {return {loseOpen: false}}));
   };
+
   matchBet(){
     var arr = this.state.self;
     this.socket.emit('checkOrCall', {
@@ -295,7 +307,7 @@ class TexasHoldemGamePage extends React.Component{
   }
   addBet(num){
     var arr = this.state.self;
-    arr[0].betAmount = arr[0].betAmount+num;
+    arr[0].betAmount = arr[0].betAmount + parseInt(this.state.bet);
     this.setState(((state) => {return {self: arr}}));
     this.socket.emit('raise', {
       userID: this.state.self[0].playerID,
@@ -421,10 +433,18 @@ class TexasHoldemGamePage extends React.Component{
           </Grid>
         </div>
         <div className = "controls">
-          <Button size="medium" className = "AddBet" color="primary" onClick={() => { this.addBet(10) }}>
-            Add/Raise
-          </Button>
+
+          
+
+        <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
+            <Grid item xs={5}><TextField type = "number" ref = {this.BetNUmber} fullWidth value= {this.state.bet} onChange ={(e)=>{this.handleChange(e)}}/></Grid>
+            <Grid item xs={5}><Button size = "medium" color="primary" fullWidth onClick={(e) => { this.addBet(e)}}>
+              Bet/Raise
+            </Button></Grid>
+          </Grid>
+
           <Button size="medium" color="primary" onClick={() => this.matchBet(0)}>
+
             Call/Check
           </Button>
           <Button size="medium" color="primary" onClick={() => { this.fold() }}>

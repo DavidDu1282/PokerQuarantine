@@ -20,9 +20,6 @@ export default function setupGameSocket(socket, client) {
 
   });
 
-  socket.on('game_terminate', (reason) => {
-    if (client.lobby.current) client.lobby.current.reset();
-    client.windowController.current.hide('Lobby');
 
     if (reason && client.in_game) alert(reason);
   })
@@ -197,4 +194,5 @@ export default function setupGameSocket(socket, client) {
       client.TexasHoldemGamePage.handleLose();
     }
   })
+
 }
