@@ -6,6 +6,7 @@ import socketIOClient from "socket.io-client";
 const user_types = {
   0: "Regular User",
   1: "Moderator",
+  3: "Banned User",
 };
 
 // pages: [login_register, match, store, leaderboard, news, update, management, billing, report, user_info(always false)]

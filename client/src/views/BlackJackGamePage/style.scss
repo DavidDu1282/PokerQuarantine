@@ -1,0 +1,106 @@
+@use "./../../config.scss" as config;
+
+
+.container-padded {
+  //padding:  config.$content-width*0.01;
+  display: flex;
+  align-items: center;
+  margin: none;
+  //width: config.$content-width;
+  //height: config.$app-height*0.35;
+}
+/*
+.LeftTable {
+  position: fixed;
+  top: config.$app-height*0.15;
+  bottom: config.$app-height*0.95;
+  left: config.$content-width*0.10;
+  right: config.$content-width*0.30;
+  padding:  config.$content-width*0.10;
+  display: flex;
+  align-items: center;
+  margin: none;
+  overflow-y: scroll;
+  width: config.$content-width*0.4;
+  -ms-overflow-style: none;  /* IE and Edge */
+  //scrollbar-width: none;  /* Firefox */
+  /*
+}
+.TopTable {
+  position: absolute;
+  top: config.$app-height*0.25;
+  bottom: config.$app-height*0.55;
+  left: config.$content-width*0.30;
+  right: config.$content-width*0.60;
+  padding:  config.$content-width*0.10;
+  display: flex;
+  align-items: center;
+  margin: none;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+//  scrollbar-width: none;  /* Firefox */
+//}
+.empty-spacing {
+  //padding:  config.$content-width*0.10;
+  display: flex;
+  align-items: center;
+  margin: none;
+  width: config.$content-width;
+  height: config.$app-height*0.10;
+}
+.Player {
+  width: 100%;
+  height: config.$app-height;
+  display: flex;
+  margin: none;
+  padding:  none;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.TopTable{
+  margin: 0 auto;
+  width: 460px;
+  height: 170px;
+}
+.LeftTable{
+  margin: 0 auto;
+  width: 270px;
+  height: 360px;
+  margin-left: 100px;
+  float: left;
+}
+.RightTable{
+  margin: 0 auto;
+  width: 170px;
+  height: 360px;
+  margin-right: 100px;
+  float: right;
+}
+.centerTable {
+    //float: left;
+    position:absolute;
+    left:50%;
+    top: 40%;
+    width: 460px;
+    height: 460px;
+}
+.PlayerTable{
+
+}
+.card {
+    width: 67px;
+    height: 100px;
+    border: solid 0.5px black;
+    //margin-left: 3px;
+    /*
+    float: left;
+    -webkit-user-select: none;
+    */
+}

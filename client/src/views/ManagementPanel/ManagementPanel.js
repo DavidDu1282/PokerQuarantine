@@ -37,6 +37,10 @@ deleteContact(_id) { // <-- declare id parameter
   alert("Resolved Case! Refresh to view updated list of reports")
 }
 
+banUser() {
+  // infooooo
+}
+
 
 displayNewsPost = (posts) => {
 
