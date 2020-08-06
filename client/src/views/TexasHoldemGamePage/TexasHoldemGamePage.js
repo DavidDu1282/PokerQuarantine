@@ -213,28 +213,6 @@ class TexasHoldemGamePage extends React.Component{
           folded: false,
         },
       ],
-      CenterTable:[
-        {
-          playerName:"Bob",
-          playerID:3,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:'2c',
-              cardHidden:true,
-            },
-            {
-              cardID:'Kd',
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-      ],
       communityCards:[
         {
           playerName:"Community Card",
@@ -340,17 +318,22 @@ class TexasHoldemGamePage extends React.Component{
 
 
   addBet(num){
-    console.log("running add bet");
-    var player = this.state.self;
+    const player = Object.assign({}, this.state.self);
     if(player.folded === false && (player.playerPosition === this.state.turnPosition)){
       player.betAmount = player.betAmount + parseInt(this.state.bet);
-      this.setState(((state) => {return {self: player}}));
-      console.log("num is: ", num);
-      console.log("bet amount is ", player.betAmount);
+
+      this.setState(((state) => {
+        return {self: player}}
+      ));
+      console.log(this.state.self);
+
+
+      /*
       this.socket.emit('raise', {
         userID: this.state.self.playerID,
         amount: player.betAmount,
       });
+      */
     }
     else{
       this.handleNotYourTurn();
@@ -386,8 +369,11 @@ class TexasHoldemGamePage extends React.Component{
     var topTableData = {};
     var rightTableData = {};
     var centerTableData = {};
-    var leftTableData = {};
     var playerData = {};
+
+    const userIds = tableData.userIds;
+    var this_player = 
+
     tableData.userIds.map((elem, index )=> {
       var temp = {
         playerName:"Left",
@@ -666,11 +652,9 @@ class TexasHoldemGamePage extends React.Component{
                 ))}
                 </div>
                 <div className = "CenterTable">
-                {this.state.CenterTable.map((elem, index) => (
-                  <Grid item xs={12} m={4} md={4} key ={index}>
-                    <Hand hand = {elem} flex-grow = {4}> </Hand>
+                  <Grid item xs={12} m={4} md={4}>
+                    <Hand hand={this.state.self} flex-grow = {4}> </Hand>
                   </Grid>
-                ))}
                 </div>
               </Grid>
             </Grid>

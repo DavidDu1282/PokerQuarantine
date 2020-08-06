@@ -262,7 +262,7 @@ class App extends React.Component {
       'match': <MatchPanel client={this} />,
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <TexasHoldemGamePage ref = {this.TexasHoldemGamePage}  client={this} />,
+      'news': <TexasHoldemGamePage ref = {this.TexasHoldemGamePage} cache={this.chatPool} client={this} />,
       'update': <UpdatesPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'billing': <CreditPanel client={this} />,
