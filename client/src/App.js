@@ -66,7 +66,6 @@ class App extends React.Component {
     })
     setupUserSocket(this.socket, this);
     setupGameSocket(this.socket, this);
-
     window.addEventListener('pageshow', this.windowInit);
   }
 
@@ -77,7 +76,7 @@ class App extends React.Component {
 
     };
 
-    // this.windowController.current.init(center, 'Navigator');
+    this.windowController.current.init(center, 'Navigator');
     this.cookieAuth();
   }
 
@@ -257,8 +256,6 @@ class App extends React.Component {
       <ThemeProvider theme={Theme}>
         <CssBaseline />
 
-
-        <Navigator list={list} client={this} ref={this.navigator} display = "none"/>
         <FloatWindowController ref={this.windowController} client={this} windows={{
           'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
           'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},

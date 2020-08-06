@@ -1,4 +1,4 @@
-.container-padded {
+.container-GamePage {
   //padding:  config.$content-width*0.01;
   align-items: center;
   margin: none;
@@ -6,6 +6,7 @@
   background-image: url('https://img.freepik.com/free-vector/poker-table-background-green-color_47243-1068.jpg?size=626&ext=jpg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  z-index: 200000;
   //width: config.$content-width;
   //height: config.$app-height*0.35;
 }
