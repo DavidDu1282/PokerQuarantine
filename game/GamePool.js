@@ -98,15 +98,16 @@ class GamePool {
 
     const result = game.gameStatus;
     if (process.env.NODE_ENV !== "test") {
-      game.players.map((player) => {
+      game.userIds.map((player) => {
         this.client.del(`${player}_game`);
+        this.emit(
+          "game_terminate",
+          game.userIds,
+          "Game has been terminated because one of the player has left the game."
+        );
       });
     }
-    this.emit(
-      "game_terminate",
-      game.userIds,
-      "Game has been terminated because one of the player has left the game."
-    );
+
     delete this.processes[id];
 
     return true;
