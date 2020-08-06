@@ -21,6 +21,7 @@ class Table {
     this.smallBlind = smallBlind; //the player clockwise next to dealer is "small blind" and is force make first bet
     this.bigBlind = this.smallBlind * 2; //player clockwise next to small blind is big blind, typically twice the size of small blinds
 
+    this.foldedPlayers = [];
     this.turnPos = 0;
     this.winner = undefined;
     this.addPlayers();
@@ -51,7 +52,7 @@ class Table {
 
     this.turnPos = 0;
     this.winner = undefined;
-
+    this.foldedPlayers = [];
     for (var i = 0; i < this.players.length; i++) {
       this.players[i].reset();
     }
