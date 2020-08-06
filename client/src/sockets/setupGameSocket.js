@@ -19,6 +19,11 @@ export default function setupGameSocket(socket, client) {
     }, 1000);
   });
 
+  socket.on("load_game", () => {
+    client.windowController.current.hide("Lobby");
+    client.windowController.current.show("TexasHoldemGamePage");
+  });
+
   socket.on("game_terminate", (reason) => {
     if (client.lobby.current) client.lobby.current.reset();
     client.windowController.current.hide("Lobby");

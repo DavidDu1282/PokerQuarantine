@@ -65,9 +65,6 @@ class App extends React.Component {
     });
     setupUserSocket(this.socket, this);
     setupGameSocket(this.socket, this);
-    this.socket.on("get_table", (game) => {
-      console.log(game);
-    });
 
     window.addEventListener("pageshow", this.windowInit);
   }
@@ -81,10 +78,6 @@ class App extends React.Component {
 
     this.windowController.current.init(center, "Navigator");
     this.cookieAuth();
-
-
-
-
   }
 
   async cookieAuth() {
@@ -256,20 +249,16 @@ class App extends React.Component {
     // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
     const list = {
-
-
-      'login / register': <LoginPanel client={this} />,
-      'match': <MatchPanel client={this} />,
-      'store': <StorePanel client={this} />,
-      'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <TexasHoldemGamePage ref = {this.TexasHoldemGamePage}  client={this} />,
-      'update': <UpdatesPanel client={this} />,
-      'management': <ManagementPanel client={this} />,
-      'billing': <CreditPanel client={this} />,
-      'report': <ReportPanel client={this} />,
-      'user info': <UserPanel client={this} />,
-
-
+      "login / register": <LoginPanel client={this} />,
+      match: <MatchPanel client={this} />,
+      store: <StorePanel client={this} />,
+      leaderboard: <LeaderBoardPanel client={this} />,
+      news: <NewsPanel />,
+      update: <UpdatesPanel client={this} />,
+      management: <ManagementPanel client={this} />,
+      billing: <CreditPanel client={this} />,
+      report: <ReportPanel client={this} />,
+      "user info": <UserPanel client={this} />,
     };
 
     return (
@@ -298,6 +287,18 @@ class App extends React.Component {
               content: <Lobby client={this} ref={this.lobby} />,
               width: 300,
               height: 600,
+              variant: "full",
+              nonClosable: true,
+            },
+            TexasHoldemGamePage: {
+              content: (
+                <TexasHoldemGamePage
+                  client={this}
+                  ref={this.TexasHoldemGamePage}
+                />
+              ),
+              width: 2000,
+              height: 2000,
               variant: "full",
               nonClosable: true,
             },

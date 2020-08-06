@@ -76,6 +76,8 @@ module.exports = function (io, client, pool) {
           folded: pool.processes[gameId].players[playerPos].folded,
           chips: pool.processes[gameId].players[playerPos].chips,
         });
+
+        pool.emit("load_game", pool.processes[gameId].userIds, {});
       });
     });
 
@@ -84,7 +86,6 @@ module.exports = function (io, client, pool) {
         pool.receive("fold", gameId);
 
         pool.emit("get_current_status", pool.processes[gameId].userIds, {
-
           turnPosition: pool.processes[gameId].turnPos,
         });
       });
@@ -94,7 +95,6 @@ module.exports = function (io, client, pool) {
         pool.receive("raise", gameId, amount);
 
         pool.emit("get_current_status", pool.processes[gameId].userIds, {
-
           turnPosition: pool.processes[gameId].turnPos,
           currentBet: pool.processes[gameId].bet,
         });
@@ -105,7 +105,6 @@ module.exports = function (io, client, pool) {
         pool.receive("checkOrCall", gameId);
 
         pool.emit("get_current_status", pool.processes[gameId].userIds, {
-
           turnPosition: pool.processes[gameId].turnPos,
         });
       });
