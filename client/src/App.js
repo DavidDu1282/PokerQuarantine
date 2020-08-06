@@ -38,7 +38,7 @@ class App extends React.Component {
     this.navigator = React.createRef();
     this.lobby = React.createRef();
 
-    this.game = React.createRef();
+    this.TexasHoldemGamePage = React.createRef();
 
     this.multiChat = React.createRef();
     this.chatPool = new ChatPool(this);
@@ -80,8 +80,11 @@ class App extends React.Component {
     };
 
     this.windowController.current.init(center, "Navigator");
-
     this.cookieAuth();
+
+
+
+
   }
 
   async cookieAuth() {
@@ -253,16 +256,20 @@ class App extends React.Component {
     // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
     const list = {
-      "login / register": <LoginPanel client={this} />,
-      match: <MatchPanel client={this} />,
-      store: <StorePanel client={this} />,
-      leaderboard: <LeaderBoardPanel client={this} />,
-      news: <TexasHoldemGamePage ref={this.game} client={this} />,
-      update: <UpdatesPanel client={this} />,
-      management: <ManagementPanel client={this} />,
-      billing: <CreditPanel client={this} />,
-      report: <ReportPanel client={this} />,
-      "user info": <UserPanel client={this} />,
+
+
+      'login / register': <LoginPanel client={this} />,
+      'match': <MatchPanel client={this} />,
+      'store': <StorePanel client={this} />,
+      'leaderboard': <LeaderBoardPanel client={this} />,
+      'news': <TexasHoldemGamePage ref = {this.TexasHoldemGamePage}  client={this} />,
+      'update': <UpdatesPanel client={this} />,
+      'management': <ManagementPanel client={this} />,
+      'billing': <CreditPanel client={this} />,
+      'report': <ReportPanel client={this} />,
+      'user info': <UserPanel client={this} />,
+
+
     };
 
     return (

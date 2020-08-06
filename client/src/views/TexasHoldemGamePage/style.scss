@@ -10,7 +10,10 @@
   //width: config.$content-width;
   //height: config.$app-height*0.35;
 }
-
+.center{
+  left:50%;
+  position:fixed;
+}
 .controls {
   //padding:  config.$content-width*0.01;
   display: flex;
@@ -76,7 +79,7 @@
   align-items: center;
 }
 
-.Self {
+.CenterTable {
   position:fixed;
   left:58%;
   top: 70%;
