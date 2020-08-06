@@ -20,19 +20,19 @@ export default function setupGameSocket(socket, client) {
 
   });
 
-  socket.on('game_terminate', (reason) => {
-    if (client.lobby.current) client.lobby.current.reset();
-    client.windowController.current.hide('Lobby');
+//   socket.on('game_terminate', (reason) => {
+//     if (client.lobby.current) client.lobby.current.reset();
+//     client.windowController.current.hide('Lobby');
 
-    if (reason && client.in_game) alert(reason);
-  })
-  socket.on('endOfTurn',(playerInfo, playingPlayer)=>{
+//     if (reason && client.in_game) alert(reason);
+//   })
+//   socket.on('endOfTurn',(playerInfo, playingPlayer)=>{
 
-  }),
-  socket.on('endOfRound',(playerInfo)=>{
+//   }),
+//   socket.on('endOfRound',(playerInfo)=>{
 
-  }),
-  socket.on('endOfGame',(playerInfo, winningPlayer)=>{
+//   }),
+//   socket.on('endOfGame',(playerInfo, winningPlayer)=>{
 
-  })
+//   })
 }
