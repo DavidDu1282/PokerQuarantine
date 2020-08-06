@@ -81,7 +81,7 @@ module.exports = function (io, client, pool) {
     socket.on("fold", (userId) => {
       client.get(`${userId}_game`, (error, gameId) => {
         pool.receive("fold", gameId);
-        pool.emit("get_game_status", pool.processes[gameId].userIds, {
+        pool.emit("get_current_status", pool.processes[gameId].userIds, {
           turnPosition: pool.processes[gameId].turnPos,
         });
       });
@@ -89,7 +89,7 @@ module.exports = function (io, client, pool) {
     socket.on("raise", (userId, amount) => {
       client.get(`${userId}_game`, (error, gameId) => {
         pool.receive("raise", gameId, amount);
-        pool.emit("get_game_status", pool.processes[gameId].userIds, {
+        pool.emit("get_current_status", pool.processes[gameId].userIds, {
           turnPosition: pool.processes[gameId].turnPos,
           currentBet: pool.processes[gameId].bet,
         });
@@ -98,7 +98,7 @@ module.exports = function (io, client, pool) {
     socket.on("checkOrCall", (userId) => {
       client.get(`${userId}_game`, (error, gameId) => {
         pool.receive("checkOrCall", gameId);
-        pool.emit("get_game_status", pool.processes[gameId].userIds, {
+        pool.emit("get_current_status", pool.processes[gameId].userIds, {
           turnPosition: pool.processes[gameId].turnPos,
         });
       });
