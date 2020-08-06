@@ -31,13 +31,13 @@ export default function Hand(props) {
     <Grid
       container
       direction="row"
-      justify="flex"
-      alignItems="flex"
-      alignContent="flex"
+      justify="center"
+      alignItems="flex-start"
+      alignContent="flex-start"
       spacing={0}>
 
-      {props.hand.cardArray.map(elem => (
-        <Grid item xs={3} spacing sm={1} md={1}>
+      {props.hand.cardArray.map((elem, index) => (
+        <Grid item xs={3} sm={1} md={1} key = {index}>
           <img src= {(() => {
             switch (elem.cardHidden) {
               case true:   return "/cards_jpeg_zip/JPEG/Red_back.jpg";

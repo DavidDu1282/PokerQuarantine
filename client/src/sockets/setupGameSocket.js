@@ -72,6 +72,7 @@ export default function setupGameSocket(socket, client) {
       }
       else{
         client.TexasHoldemGamePage.setState(((state) => {return {round: updateData.round}}));
+
       }
       client.TexasHoldemGamePage.setState(((state) => {return {
         lastPlayerBetAmount: newBet,

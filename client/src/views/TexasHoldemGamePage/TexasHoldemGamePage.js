@@ -337,21 +337,26 @@ class TexasHoldemGamePage extends React.Component{
   };
 
   //Game Input Functions
-  addBet(num){
 
+
+  addBet(num){
+    console.log("running add bet");
     var player = this.state.self;
     if(player.folded === false && (player.playerPosition === this.state.turnPosition)){
       player.betAmount = player.betAmount + parseInt(this.state.bet);
       this.setState(((state) => {return {self: player}}));
+      console.log("num is: ", num);
+      console.log("bet amount is ", player.betAmount);
       this.socket.emit('raise', {
         userID: this.state.self.playerID,
-        amount: num,
+        amount: player.betAmount,
       });
     }
     else{
       this.handleNotYourTurn();
     }
   }
+
   fold(e){
     var player = this.state.self;
     if(player.folded === false && (player.playerPosition === this.state.turnPosition)){
@@ -572,6 +577,9 @@ class TexasHoldemGamePage extends React.Component{
   turnOffDisplay(){
     this.setState(((state) => {return {display: false}}));
   }
+  handleRoundChange(){
+    this.state.TopTable.map((elem, index )=> {});
+  }
   render() {
     if(!this.state.display){
       return(<React.Fragment/>)
@@ -590,9 +598,9 @@ class TexasHoldemGamePage extends React.Component{
           <Grid
             container
             direction="row"
-            justify="flex"
-            alignItems="flex"
-            alignContent="flex"
+            justify="center"
+            alignItems="flex-start"
+            alignContent="flex-start"
             spacing={2}>
               {this.state.topTablePlayers.map((elem,index) => (
                 <Grid item xs={12} m={3} md={3} key={index}>
@@ -606,9 +614,9 @@ class TexasHoldemGamePage extends React.Component{
           <Grid
               container
               direction="column"
-              justify="flex"
-              alignItems="flex"
-              alignContent="flex"
+              justify="center"
+              alignItems="flex-start"
+              alignContent="flex-start"
               spacing={1}>
               <Grid item xs>
                 <Grid item container spacing={1} direction="column" justify="flex-end" alignItems="flex-start" >
@@ -625,9 +633,9 @@ class TexasHoldemGamePage extends React.Component{
           <Grid
               container
               direction="column"
-              justify="flex"
-              alignItems="flex"
-              alignContent="flex"
+              justify="center"
+              alignItems="flex-start"
+              alignContent="flex-start"
               spacing={1}>
               <Grid item xs>
                 <Grid item container spacing={1} direction="column" justify="flex-end" alignItems="flex-start" >
@@ -645,8 +653,8 @@ class TexasHoldemGamePage extends React.Component{
             container
             direction="column"
             justify="flex-start"
-            alignItems="flex"
-            alignContent="flex"
+            alignItems="flex-start"
+            alignContent="flex-start"
             spacing={2}>
             <Grid item xs>
               <Grid item container spacing={2} direction="column" justify="flex-end" alignItems="flex-start" >
@@ -658,8 +666,8 @@ class TexasHoldemGamePage extends React.Component{
                 ))}
                 </div>
                 <div className = "CenterTable">
-                {this.state.CenterTable.map(elem => (
-                  <Grid item xs={12} m={4} md={4} >
+                {this.state.CenterTable.map((elem, index) => (
+                  <Grid item xs={12} m={4} md={4} key ={index}>
                     <Hand hand = {elem} flex-grow = {4}> </Hand>
                   </Grid>
                 ))}
@@ -669,8 +677,8 @@ class TexasHoldemGamePage extends React.Component{
           </Grid>
         </div>
         <div className = "controls">
-        <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
-            <Grid item xs={5}><TextField type = "number" ref = {this.BetNUmber} fullWidth value= {this.state.bet} onChange ={(e)=>{this.handleChange(e)}}/></Grid>
+          <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
+            <Grid item xs={5}><TextField type = "number" ref = {this.BetNUmber} fullWidth onChange ={(e)=>{this.handleChange(e)}}/></Grid>
             <Grid item xs={5}><Button size = "medium" color="primary" fullWidth onClick={(e) => { this.addBet(e)}}>
               Bet/Raise
             </Button></Grid>
