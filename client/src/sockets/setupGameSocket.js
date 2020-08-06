@@ -34,69 +34,107 @@ export default function setupGameSocket(socket, client) {
     if(process.env.NODE_ENV === "development"){
       console.log("Received get_table!");
     }
-    var temp = {
-      playerName:"Left",
-      playerID:2,
-      chipAmount:0,
 
-      playerPosition:0,
-      cardArray:[
-        {
-          cardID:'1c',
-          cardHidden:true,
-        },
-        {
-          cardID:'2c',
-          cardHidden:false,
-        }
-      ],
+    var topTableData = {};
+    var rightTableData = {};
+    var centerTableData = {};
+    var leftTableData = {};
+    var playerData = {};
+    tableData.userIds.map((elem, index )=> {
+      var temp = {
+        playerName:"Left",
+        playerID:2,
+        chipAmount:0,
+        playerPosition:0,
+        userStatusString:'',
+        cardArray:[
+          {
+            cardID:'1c',
+            cardHidden:true,
+          },
+          {
+            cardID:'2c',
+            cardHidden:false,
+          }
+        ],
 
-      cardSum: 0,
-      betAmount: 0,
-      folded: false,
-    };
-    var topTableData;
-    var rightTableData;
-    var centerTableData;
-    var leftTableData;
-    tableData.userIds.map(elem => {
-      if (tableData.userIds.indexOf(elem)<3){
+        cardSum: 0,
+        betAmount: 0,
+        folded: false,
+      };
+      if (index<3){
         temp.playerID = elem;
         //temp.playerPos = tableData.playerPosition;
-        tableData.playersHand[elem].map(elem1=>{
-          temp.cardArray[tableData.playersHand[elem].indexOf(elem1)].cardID = elem1;
-          if(client.user.id === elem){
-            temp.cardHidden = false;
+        tableData.playersHand[elem].map((elem1, index1)=>{
+          temp.cardArray[index1].cardID = elem1;
+          if(index === tableData.dealersPosition){
+            temp.userStatusString = '(Dealer)';
+          }
+          else if(index === (tableData.dealersPosition+1)){
+            temp.userStatusString = '(SmallBet)';
+          }
+          else if(index === (tableData.dealersPosition+1)){
+            temp.userStatusString = '(BigBet)';
           }
           temp.chipAmount = tableData.chips;
+          if(client.user.id === elem){
+            temp.cardHidden = false;
+            client.TexasHoldemGamePage.setState(((state) => {return {
+              self: temp,
+            }}));
+          }
         }
 
         )
         topTableData.push(temp)
       }
-      else if (tableData.playerIDs.indexOf(elem)<6){
+      else if (index<6){
         temp.playerID = elem;
         //temp.playerPos = tableData.playerPosition;
-        tableData.playersHand[elem].map(elem1=>{
-          temp.cardArray[tableData.playersHand[elem].indexOf(elem1)].cardID = elem1;
-          if(client.user.id === elem){
-            temp.cardHidden = false;
+        tableData.playersHand[elem].map((elem1, index)=>{
+          temp.cardArray[index].cardID = elem1;
+          if(index === tableData.dealersPosition){
+            temp.userStatusString = '(Dealer)';
+          }
+          else if(index === (tableData.dealersPosition+1)){
+            temp.userStatusString = '(SmallBet)';
+          }
+          else if(index === (tableData.dealersPosition+1)){
+            temp.userStatusString = '(BigBet)';
           }
           temp.chipAmount = tableData.chips;
+          if(client.user.id === elem){
+            temp.cardHidden = false;
+            client.TexasHoldemGamePage.setState(((state) => {return {
+              self: temp,
+            }}));
+          }
         }
 
         )
         rightTableData.push(temp)
       }
-      else if(tableData.playerIDs.indexOf(elem)<7){
+      else if(index<7){
         temp.playerID = elem;
         //temp.playerPos = tableData.playerPosition;
-        tableData.playersHand[elem].map(elem1=>{
-          temp.cardArray[tableData.playersHand[elem].indexOf(elem1)].cardID = elem1;
-          if(client.user.id === elem){
-            temp.cardHidden = false;
+        tableData.playersHand[elem].map((elem1, index1)=>{
+          temp.cardArray[index1].cardID = elem1;
+          if(index === tableData.dealersPosition){
+            temp.userStatusString = '(Dealer)';
+          }
+          else if(index === (tableData.dealersPosition+1)){
+            temp.userStatusString = '(SmallBet)';
+          }
+          else if(index === (tableData.dealersPosition+1)){
+            temp.userStatusString = '(BigBet)';
           }
           temp.chipAmount = tableData.chips;
+          if(client.user.id === elem){
+            temp.cardHidden = false;
+            client.TexasHoldemGamePage.setState(((state) => {return {
+              self: temp,
+            }}));
+          }
         }
 
         )
@@ -105,12 +143,24 @@ export default function setupGameSocket(socket, client) {
       else{
         temp.playerID = elem;
         //temp.playerPos = tableData.playerPosition;
-        tableData.playersHand[elem].map(elem1=>{
-          temp.cardArray[tableData.playersHand[elem].indexOf(elem1)].cardID = elem1;
-          if(client.user.id === elem){
-            temp.cardHidden = false;
+        tableData.playersHand[elem].map((elem1, index1)=>{
+          temp.cardArray[index1].cardID = elem1;
+          if(index === tableData.dealersPosition){
+            temp.userStatusString = '(Dealer)';
+          }
+          else if(index === (tableData.dealersPosition+1)){
+            temp.userStatusString = '(SmallBet)';
+          }
+          else if(index === (tableData.dealersPosition+1)){
+            temp.userStatusString = '(BigBet)';
           }
           temp.chipAmount = tableData.chips;
+          if(client.user.id === elem){
+            temp.cardHidden = false;
+            client.TexasHoldemGamePage.setState(((state) => {return {
+              self: temp,
+            }}));
+          }
         }
 
         )
@@ -160,7 +210,7 @@ export default function setupGameSocket(socket, client) {
       TopTable: topTableData,
       RightTable: rightTableData,
       communityCards: temp1,
-      self: centerTableData,
+      CenterTable: centerTableData,
       LeftTable: leftTableData,
     }}));
 
