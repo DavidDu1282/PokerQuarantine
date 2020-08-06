@@ -26,7 +26,7 @@ class GamePool {
     this.processes = {}; // holds a collection of game processes by id
 
     this.matchQueue = []; // match queue
-    this.minPlayer = 3;
+    this.minPlayer = 2;
   }
 
   queue(playerId) {
@@ -101,16 +101,15 @@ class GamePool {
       game.players.map((player) => {
         this.client.del(`${player}_game`);
       });
-
-      this.emit(
-        "game_terminate",
-        game.players,
-        "Game has been terminated because one of the player has left the game."
-      );
     }
+    this.emit(
+      "game_terminate",
+      game.userIds,
+      "Game has been terminated because one of the player has left the game."
+    );
     delete this.processes[id];
 
-    return result;
+    return true;
   }
 }
 
