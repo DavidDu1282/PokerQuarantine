@@ -55,6 +55,7 @@ class Player {
   fold() {
     console.log("Player " + this.username + " FOLD ");
     this.folded = true;
+    this.table.foldedPlayers.push(this.userId);
     this.table.incrementPlayerTurn();
     this.table.checkForNextRound();
   }

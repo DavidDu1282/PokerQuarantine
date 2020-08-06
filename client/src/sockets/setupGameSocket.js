@@ -41,6 +41,7 @@ export default function setupGameSocket(socket, client) {
   socket.on("get_current_status", (updateData) => {
     if (process.env.NODE_ENV === "development") {
       console.log("Received get_game_status!");
+      console.log(updateData);
     }
     var newBet = 0;
     if (client.TexasHoldemGamePage.state.round === updateData.round) {
@@ -70,6 +71,7 @@ export default function setupGameSocket(socket, client) {
   socket.on("get_game_status", (updateData) => {
     if (process.env.NODE_ENV === "development") {
       console.log("Received get_game_status!");
+      console.log(updateData);
     }
     var newBet = 0;
     if (client.TexasHoldemGamePage.state.round === updateData.round) {
