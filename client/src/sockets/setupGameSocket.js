@@ -27,6 +27,9 @@ export default function setupGameSocket(socket, client) {
     if (reason && client.in_game) alert(reason);
   })
   socket.on("get_table",(tableData)=>{
+    if(process.env.NODE_ENV === "development"){
+      console.log("Received get_table!");
+    }
     var temp = {
       playerName:"Left",
       playerID:2,
@@ -155,6 +158,9 @@ export default function setupGameSocket(socket, client) {
 
   }),
   socket.on('get_game_status',(updateData)=>{
+      if(process.env.NODE_ENV === "development"){
+        console.log("Received get_game_status!");
+      }
       var newBet = 0;
       if(client.TexasHoldemGamePage.state.round === updateDate.round){
         newBet = updateData.pot - this.client.TexasHoldemGamePage.state.potTotal;
@@ -177,11 +183,14 @@ export default function setupGameSocket(socket, client) {
   }),
 
   socket.on('endOfGame',(playerInfo)=>{
+    if(process.env.NODE_ENV === "development"){
+      console.log("Received endOfGame!");
+    }
     if(client.user.id === playerInfo.winner){
       client.TexasHoldemGamePage.handleWin();
     }
     else{
-      client.TexasHoldemGamePage.handleLost();
+      client.TexasHoldemGamePage.handleLose();
     }
   })
 }
