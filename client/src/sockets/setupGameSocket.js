@@ -34,6 +34,7 @@ export default function setupGameSocket(socket, client) {
   socket.on("get_table", (tableData) => {
     if (process.env.NODE_ENV === "development") {
       console.log("Received get_table!");
+      console.log(tableData);
     }
 
     client.TexasHoldemGamePage.get_table(tableData);

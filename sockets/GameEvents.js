@@ -1,12 +1,8 @@
 module.exports = function (io, client, pool) {
   /**
-   * Game events
+   * socket functions
    */
-
-  /**
-   * emit functions
-   */
-  function get_game_status(pool, gameId) {
+  function emit_game_status(pool, gameId) {
     pool.emit("get_current_status", pool.processes[gameId].userIds, {
       turnPosition: pool.processes[gameId].turnPos,
       round: pool.processes[gameId].roundState,
@@ -17,6 +13,10 @@ module.exports = function (io, client, pool) {
       currentBet: pool.processes[gameId].bet,
     });
   }
+
+  /**
+   * Game events
+   */
 
   io.on("connect", function (socket) {
     socket.on("match", () => {
@@ -78,8 +78,18 @@ module.exports = function (io, client, pool) {
         pool.start(gameId);
 
         var playerPos = pool.processes[gameId].userIds.indexOf(userId);
-
-        get_game_status(pool, gameId);
+        pool.emit("get_table", [userId], {
+          playerIds: pool.processes[gameId].userIds,
+          turnPosition: pool.processes[gameId].turnPos,
+          dealersPosition: pool.processes[gameId].dealerPos,
+          playerPosition: pool.processes[gameId].userIds.indexOf(userId),
+          playersHand: pool.processes[gameId].playersHands,
+          pot: pool.processes[gameId].pot,
+          bet: pool.processes[gameId].bet,
+          communityCards: pool.processes[gameId].communityCards,
+          folded: pool.processes[gameId].players[playerPos].folded,
+          chips: pool.processes[gameId].players[playerPos].chips,
+        });
 
         pool.emit("load_game", pool.processes[gameId].userIds, {});
       });
