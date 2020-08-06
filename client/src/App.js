@@ -44,7 +44,7 @@ class App extends React.Component {
     this.navigator = React.createRef();
     this.lobby = React.createRef();
 
-    this.game = React.createRef();
+    this.TexasHoldemGamePage = React.createRef();
 
     this.multiChat = React.createRef();
     this.chatPool = new ChatPool(this);
@@ -273,7 +273,7 @@ class App extends React.Component {
       'match': <MatchPanel client={this} />,
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <TexasHoldemGamePage ref = {this.game}  client={this} />,
+      'news': <TexasHoldemGamePage ref = {this.TexasHoldemGamePage}  client={this} />,
       'update': <UpdatesPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'billing': <CreditPanel client={this} />,
