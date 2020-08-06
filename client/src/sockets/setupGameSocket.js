@@ -26,11 +26,13 @@ export default function setupGameSocket(socket, client) {
 
     if (reason && client.in_game) alert(reason);
   })
-  socket.on("gameStart",(tableData)=>{
+  socket.on("get_table",(tableData)=>{
     var temp = {
       playerName:"Left",
       playerID:2,
       chipAmount:0,
+
+      playerPosition:0,
       cardArray:[
         {
           cardID:'1c',
@@ -44,18 +46,19 @@ export default function setupGameSocket(socket, client) {
 
       cardSum: 0,
       betAmount: 0,
-      folded: true,
+      folded: false,
     };
     var topTableData;
     var rightTableData;
     var centerTableData;
     var leftTableData;
-    tableData.playerIDs.map(elem => (
-      if(tableData.playerIDs.indexOf(elem)<3){
+    tableData.userIds.map(elem => (
+      if(tableData.userIds.indexOf(elem)<3){
         temp.playerID = elem;
+        //temp.playerPos = tableData.playerPosition;
         tableData.playersHand[elem].map(elem1=>(
           temp.cardArray[tableData.playersHand[playerID].indexOf(elem1)].cardID = elem1;
-          if(client.user.ID == elem){
+          if(client.user.id === elem){
             temp.cardHidden = false;
           }
         )
@@ -64,31 +67,121 @@ export default function setupGameSocket(socket, client) {
         topTableData.push(temp)
       }
       else if(tableData.playerIDs.indexOf(elem)<6){
+        temp.playerID = elem;
+        //temp.playerPos = tableData.playerPosition;
+        tableData.playersHand[elem].map(elem1=>(
+          temp.cardArray[tableData.playersHand[playerID].indexOf(elem1)].cardID = elem1;
+          if(client.user.id === elem){
+            temp.cardHidden = false;
+          }
+        )
+        temp.chipAmount = tableData.chips;
+        )
         rightTableData.push(temp)
       }
       else if(tableData.playerIDs.indexOf(elem)<7){
+        temp.playerID = elem;
+        //temp.playerPos = tableData.playerPosition;
+        tableData.playersHand[elem].map(elem1=>(
+          temp.cardArray[tableData.playersHand[playerID].indexOf(elem1)].cardID = elem1;
+          if(client.user.id === elem){
+            temp.cardHidden = false;
+          }
+        )
+        temp.chipAmount = tableData.chips;
+        )
         centerTableData.push(temp);
       }
       else{
+        temp.playerID = elem;
+        //temp.playerPos = tableData.playerPosition;
+        tableData.playersHand[elem].map(elem1=>(
+          temp.cardArray[tableData.playersHand[playerID].indexOf(elem1)].cardID = elem1;
+          if(client.user.id === elem){
+            temp.cardHidden = false;
+          }
+        )
+        temp.chipAmount = tableData.chips;
+        )
         leftTableData.push(temp);
       }
     ))
-    this.client.TexasHoldemGamePage.setState(((state) => {return {TopTable: topTableData}}));
-    this.client.TexasHoldemGamePage.setState(((state) => {return {RightTable: rightTableData}}));
-    this.client.TexasHoldemGamePage.setState(((state) => {return {self: centerTableData}}));
-    this.client.TexasHoldemGamePage.setState(((state) => {return {LeftTable: leftTableData}}));
+    /*
+          playerIds: pool.processes[gameId].userIds,
+          turnPosition: pool.processes[gameId].turnPos,
+          dealersPosition: pool.processes[gameId].dealerPos,
+          playerPosition: pool.processes[gameId].userIds.indexOf(userId),
+          playersHand: pool.processes[gameId].playersHands,
+          pot: pool.processes[gameId].pot,
+          bet: pool.processes[gameId].bet,
+          communityCards: pool.processes[gameId].communityCards,
+          folded: pool.processes[gameId].players[playerPos].folded,
+          chips: pool.processes[gameId].players[playerPos].chips,
+    */
+    temp = [
+      {
+        playerName:"Community Cards",
+        //playerID:0,
+        chipAmount:0,
+        playerPosition:0,
+        cardArray:[
+          {
+            cardID:tableDate.communityCards[0],
+            cardHidden:false,
+          },
+          {
+            cardID:tableDate.communityCards[1],
+            cardHidden:false,
+          },
+          {
+            cardID:tableDate.communityCards[2],
+            cardHidden:false,
+          },
+        ],
+        betAmount: 0,
+      },
+    ],
+    client.TexasHoldemGamePage.setState(((state) => {return {
+      selfPosition: tableData.playerPosition,
+      dealersPosition: tableData.dealersPosition,
+      potTotal: tableData.pot,
+      turnPosition: tableData.turnPosition,
+      TopTable: topTableData,
+      RightTable: rightTableData,
+      communityCards: temp,
+      self: centerTableData,
+      LeftTable: leftTableData,
+    }}));
+
   }),
-  socket.on('endOfTurn',(playerInfo, turnPos)=>{
-      this.client.TexasHoldemGamePage.setState(((state) => {return {turnPosition: turnPos}}));
+  socket.on('get_game_status',(updateData)=>{
+      var newBet = 0;
+      if(client.TexasHoldemGamePage.state.round === updateDate.round){
+        newBet = updateData.pot - this.client.TexasHoldemGamePage.state.potTotal;
+      }
+      else{
+        client.TexasHoldemGamePage.setState(((state) => {return {round: updateDate.round}}));
+      }
+      client.TexasHoldemGamePage.setState(((state) => {return {
+        lastPlayerBetAmount: newBet,
+        turnPosition: updateDate.turnPos
+      }}));
+      if(updateDate.turnPos === client.TexasHoldemGamePage.state.playerPosition){
+        client.TexasHoldemGamePage.handleOpen();
+      }
+      /*
       this.client.TexasHoldemGamePage.state.LeftTable.map(elem => (
-        if(elem.playerID = playerInfo.playerID)
+        if(elem.playerID = updateDataplayerID)
       ))
-      this.client.TexasHoldemGamePage.setState(((state) => {return {turnPosition: turnPos}}));
+      */
   }),
-  socket.on('endOfRound',(playerInfo)=>{
 
-  }),
-  socket.on('endOfGame',(playerInfo, winningPlayerPos)=>{
-
+  socket.on('endOfGame',(playerInfo)=>{
+    if(client.user.id === playerInfo.winner){
+      client.TexasHoldemGamePage.handleWin();
+    }
+    else{
+      client.TexasHoldemGamePage.handleLost();
+    }
   })
 }

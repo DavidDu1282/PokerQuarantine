@@ -222,9 +222,9 @@ class TexasHoldemGamePage extends React.Component{
           folded: false,
         },
       ],
-      dealer:[
+      communityCards:[
         {
-          playerName:"Dealer",
+          playerName:"Community Card",
           playerID:0,
           chipAmount:0,
           playerPosition:0,
@@ -260,14 +260,31 @@ class TexasHoldemGamePage extends React.Component{
       open:false,
       setOpen:false,
       turnPosition:0,
+      dealersPosition:0,
+      selfPosition:0,
+      round:'',
+      winOpen:false,
+      loseOpen:false,
     }
   }
   handleOpen(){
     this.setState(((state) => {return {open: true}}));
   };
-
   handleClose(){
     this.setState(((state) => {return {open: false}}));
+  };
+  handleWin(){
+    this.setState(((state) => {return {winOpen: true}}));
+  };
+
+  handleWinClose(){
+    this.setState(((state) => {return {winOpen: false}}));
+  };
+  handleLose(){
+    this.setState(((state) => {return {loseOpen: true}}));
+  };
+  handleLoseClose(){
+    this.setState(((state) => {return {loseOpen: false}}));
   };
   matchBet(){
     var arr = this.state.self;
@@ -379,7 +396,7 @@ class TexasHoldemGamePage extends React.Component{
               <Grid item container spacing={2} direction="column" justify="flex-end" alignItems="flex-start" >
 
                 <div className = "Dealer">
-                {this.state.dealer.map(elem => (
+                {this.state.communityCards.map(elem => (
                   <Grid item xs={12} m={4} md={4} >
                     <Hand hand = {elem} flex-grow = {4}> </Hand>
                   </Grid>
@@ -426,6 +443,42 @@ class TexasHoldemGamePage extends React.Component{
             </DialogContent>
             <DialogActions>
               <Button onClick={() => { this.handleClose() }} color="primary">
+                Okay
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={this.state.winOpen}
+            onClose={() => { this.handleWinClose() }}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"You Win!"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {"The last player betted " + this.state.lastPlayerBetAmount + " and the pot total is " + this.state.potTotal}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => { this.handleWinClose()  }} color="primary">
+                Okay
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={this.state.loseOpen}
+            onClose={() => { this.handleLoseClose() }}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"You lose!"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {"The last player betted " + this.state.lastPlayerBetAmount + " and the pot total is " + this.state.potTotal}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => { this.handleLoseClose()  }} color="primary">
                 Okay
               </Button>
             </DialogActions>
