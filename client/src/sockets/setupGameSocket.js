@@ -35,8 +35,7 @@ export default function setupGameSocket(socket, client) {
     if (process.env.NODE_ENV === "development") {
       console.log("Received get_table!");
     }
-
-    client.TexasHoldemGamePage.get_table(tableData);
+    client.TexasHoldemGamePage.current.get_table(tableData);
   });
   socket.on("get_current_status", (updateData) => {
     if (process.env.NODE_ENV === "development") {
@@ -44,26 +43,26 @@ export default function setupGameSocket(socket, client) {
       console.log(updateData);
     }
     var newBet = 0;
-    if (client.TexasHoldemGamePage.state.round === updateData.round) {
-      newBet = updateData.pot - this.client.TexasHoldemGamePage.state.potTotal;
+    if (client.TexasHoldemGamePage.current.state.round === updateData.round) {
+      newBet = updateData.pot - this.client.TexasHoldemGamePage.current.state.potTotal;
     } else {
-      client.TexasHoldemGamePage.setState((state) => {
+      client.TexasHoldemGamePage.current.setState((state) => {
         return { round: updateData.round };
       });
     }
-    client.TexasHoldemGamePage.setState((state) => {
+    client.TexasHoldemGamePage.current.setState((state) => {
       return {
         lastPlayerBetAmount: newBet,
         turnPosition: updateData.turnPos,
       };
     });
     if (
-      updateData.turnPos === client.TexasHoldemGamePage.state.playerPosition
+      updateData.turnPos === client.TexasHoldemGamePage.current.state.playerPosition
     ) {
-      client.TexasHoldemGamePage.handleOpen();
+      client.TexasHoldemGamePage.current.handleOpen();
     }
     /*
-      this.client.TexasHoldemGamePage.state.LeftTable.map(elem => (
+      this.client.TexasHoldemGamePage.current.state.LeftTable.map(elem => (
         if(elem.playerID = updateDataplayerID)
       ))
       */
@@ -74,26 +73,26 @@ export default function setupGameSocket(socket, client) {
       console.log(updateData);
     }
     var newBet = 0;
-    if (client.TexasHoldemGamePage.state.round === updateData.round) {
-      newBet = updateData.pot - this.client.TexasHoldemGamePage.state.potTotal;
+    if (client.TexasHoldemGamePage.current.state.round === updateData.round) {
+      newBet = updateData.pot - this.client.TexasHoldemGamePage.current.state.potTotal;
     } else {
-      client.TexasHoldemGamePage.setState((state) => {
+      client.TexasHoldemGamePage.current.setState((state) => {
         return { round: updateData.round };
       });
     }
-    client.TexasHoldemGamePage.setState((state) => {
+    client.TexasHoldemGamePage.current.setState((state) => {
       return {
         lastPlayerBetAmount: newBet,
         turnPosition: updateData.turnPos,
       };
     });
     if (
-      updateData.turnPos === client.TexasHoldemGamePage.state.playerPosition
+      updateData.turnPos === client.TexasHoldemGamePage.current.state.playerPosition
     ) {
-      client.TexasHoldemGamePage.handleOpen();
+      client.TexasHoldemGamePage.current.handleOpen();
     }
     /*
-      this.client.TexasHoldemGamePage.state.LeftTable.map(elem => (
+      this.client.TexasHoldemGamePage.current.state.LeftTable.map(elem => (
         if(elem.playerID = updateDataplayerID)
       ))
       */
@@ -103,9 +102,9 @@ export default function setupGameSocket(socket, client) {
       console.log("Received endOfGame!");
     }
     if (client.user.id === playerInfo.winner) {
-      client.TexasHoldemGamePage.handleWin();
+      client.TexasHoldemGamePage.current.handleWin();
     } else {
-      client.TexasHoldemGamePage.handleLose();
+      client.TexasHoldemGamePage.current.handleLose();
     }
   });
 }

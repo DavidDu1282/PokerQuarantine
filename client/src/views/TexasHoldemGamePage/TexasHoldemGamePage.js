@@ -22,251 +22,7 @@ class TexasHoldemGamePage extends React.Component{
     this.socket = this.props.client.socket;
     this.BetNUmber = React.createRef();
     this.state = {
-      display:true,
-      leftTablePlayers:
-      [
-        {
-          playerName:"Left",
-          playerID:2,
-          playerPosition: 0,
-          specialStatusString: "",
-          chipAmount:0,
-          cardArray:[
-            {
-              cardID:1,
-              cardHidden:true,
-            },
-            {
-              cardID:2,
-              cardHidden:true,
-            }
-          ],
-
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-        {
-          playerName:"John",
-          playerID:1,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:1,
-              cardHidden:true,
-            },
-            {
-              cardID:2,
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-        {
-          playerName:"Alex",
-          playerID:4,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:1,
-              cardHidden:true,
-            },
-            {
-              cardID:2,
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-      ],
-      rightTablePlayers:
-      [
-        {
-          playerName:"Right",
-          playerID:2,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:1,
-              cardHidden:true,
-            },
-            {
-              cardID:2,
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-        {
-          playerName:"John",
-          playerID:1,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:12,
-              cardHidden:true,
-            },
-            {
-              cardID:28,
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-        {
-          playerName:"Alex",
-          playerID:4,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:19,
-              cardHidden:true,
-            },
-            {
-              cardID:15,
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-      ],
-      topTablePlayers:
-      [
-        {
-          playerName:"Top",
-          playerID:2,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:43,
-              cardHidden:true,
-            },
-            {
-              cardID:34,
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-        {
-          playerName:"John",
-          playerID:1,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:36,
-              cardHidden:true,
-            },
-            {
-              cardID:24,
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-        {
-          playerName:"Alex",
-          playerID:4,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:46,
-              cardHidden:true,
-            },
-            {
-              cardID:48,
-              cardHidden:true,
-            }
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-      ],
-      communityCards:[
-        {
-          playerName:"Community Card",
-          playerID:0,
-          chipAmount:0,
-          playerPosition:0,
-          userStatusString:'',
-          cardArray:[
-            {
-              cardID:"AD",
-              cardHidden:false,
-            },
-            {
-              cardID:"2C",
-              cardHidden:false,
-            },
-            {
-              cardID:"KC",
-              cardHidden:false,
-            },
-            {
-              cardID:"JS",
-              cardHidden:false,
-            },
-            {
-              cardID:3,
-              cardHidden:false,
-            },
-          ],
-          cardSum: 0,
-          betAmount: 0,
-          folded: false,
-        },
-      ],
-      self:{
-        playerName:"Bob",
-        playerID:3,
-        chipAmount:0,
-        playerPosition:0,
-        userStatusString:'',
-        cardArray:[
-          {
-            cardID:'2c',
-            cardHidden:true,
-          },
-          {
-            cardID:'Kd',
-            cardHidden:true,
-          }
-        ],
-        cardSum: 0,
-        betAmount: 0,
-        folded: false,
-      },
+      display: false,
       lastPlayerBetAmount:0,
       potTotal:0,
       open:false,
@@ -364,188 +120,92 @@ class TexasHoldemGamePage extends React.Component{
       this.handleNotYourTurn();
     }
   }
+
+
+  initPlayer(user, tableData, hideCards=true) {
+    return {
+      name: user.name,
+      userId: user.id,
+      chipAmount: tableData.chips,
+      playerPosition: tableData.userIds.indexOf(user.id),
+      userStatusString:'',
+      cardArray:[
+        {
+          cardID: tableData.playersHands[user.id][0],
+          cardHidden: hideCards,
+         },
+        {
+          cardID:tableData.playersHands[user.id][1],
+          cardHidden: hideCards,
+        }
+      ],
+
+      cardSum: 0,
+      betAmount: 0,
+      folded: false,
+    };
+  }
+
   //Game Receiving input Functions
   get_table(tableData){
-    var topTableData = {};
-    var rightTableData = {};
-    var centerTableData = {};
-    var playerData = {};
+    //var topTableData = {};
+    var leftTablePlayers = [];
+    var rightTablePlayers = [];
 
+    const cache = this.props.cache;
     const userIds = tableData.userIds;
-    var this_player = 
+    
+    const userLoc = userIds.indexOf(this.client.user.id);
+    var leftOfUser = userIds.slice(0, userLoc);
+    var rightOfUser = userIds.slice(userLoc+1);
 
-    tableData.userIds.map((elem, index )=> {
-      var temp = {
-        playerName:"Left",
-        playerID:2,
-        chipAmount:0,
-        playerPosition:0,
-        userStatusString:'',
-        cardArray:[
-          {
-            cardID:'1c',
-            cardHidden:true,
-          },
-          {
-            cardID:'2c',
-            cardHidden:false,
-          }
-        ],
+    if (leftOfUser.length === 4) {
+      const topUserId = leftOfUser[3];
+      leftOfUser = leftOfUser.slice(0, 3);
+      rightOfUser = [ topUserId, ...rightOfUser ];
+    } else if (rightOfUser.length === 4) {
+      const topUserId = rightOfUser[0];
+      rightOfUser = rightOfUser.slice(1, 3);
+      leftOfUser = [ ...leftOfUser, topUserId ];
+    }
 
-        cardSum: 0,
-        betAmount: 0,
-        folded: false,
-      };
-      if (index<3){
-        temp.playerID = elem;
-        //temp.playerPos = tableData.playerPosition;
-        tableData.playersHand[elem].map((elem1, index1)=>{
-          temp.cardArray[index1].cardID = elem1;
-          if(index === tableData.dealersPosition){
-            temp.userStatusString = '(Dealer)';
-          }
-          else if(index === (tableData.dealersPosition+1)){
-            temp.userStatusString = '(SmallBet)';
-          }
-          else if(index === (tableData.dealersPosition+1)){
-            temp.userStatusString = '(BigBet)';
-          }
-          temp.chipAmount = tableData.chips;
-          if(this.client.user.id === elem){
-            temp.cardHidden = false;
-            this.setState(((state) => {return {
-              self: temp,
-            }}));
-          }
+    leftOfUser = leftOfUser.reverse();
+    leftOfUser.map((userId) => {
+      let user = cache.getUser(userId);
+      leftTablePlayers.push(this.initPlayer(user, tableData))
+    });
+
+    rightOfUser.map((userId) => {
+      let user = cache.getUser(userId);
+      rightTablePlayers.push(this.initPlayer(user, tableData))
+    });
+
+    this.setState((state) => { return {
+      leftTablePlayers: leftTablePlayers,
+      rightTablePlayers: rightTablePlayers,
+    }});
+
+    var temp1 = {
+      playerName:"Community Cards",
+      //playerID:0,
+      chipAmount:0,
+      playerPosition:0,
+      cardArray: tableData.communityCards.map((cardId) => {
+        return {
+          cardID: cardId,
+          cardHidden: false,
         }
-
-        )
-        topTableData.push(temp)
-      }
-      else if (index<6){
-        temp.playerID = elem;
-        //temp.playerPos = tableData.playerPosition;
-        tableData.playersHand[elem].map((elem1, index)=>{
-          temp.cardArray[index].cardID = elem1;
-          if(index === tableData.dealersPosition){
-            temp.userStatusString = '(Dealer)';
-          }
-          else if(index === (tableData.dealersPosition+1)){
-            temp.userStatusString = '(SmallBet)';
-          }
-          else if(index === (tableData.dealersPosition+1)){
-            temp.userStatusString = '(BigBet)';
-          }
-          temp.chipAmount = tableData.chips;
-          if(this.client.user.id === elem){
-            temp.cardHidden = false;
-            this.setState(((state) => {return {
-              self: temp,
-            }}));
-          }
-        }
-
-        )
-        rightTableData.push(temp)
-      }
-      else if(index<7){
-        temp.playerID = elem;
-        //temp.playerPos = tableData.playerPosition;
-        tableData.playersHand[elem].map((elem1, index1)=>{
-          temp.cardArray[index1].cardID = elem1;
-          if(index === tableData.dealersPosition){
-            temp.userStatusString = '(Dealer)';
-          }
-          else if(index === (tableData.dealersPosition+1)){
-            temp.userStatusString = '(SmallBet)';
-          }
-          else if(index === (tableData.dealersPosition+1)){
-            temp.userStatusString = '(BigBet)';
-          }
-          temp.chipAmount = tableData.chips;
-          if(this.client.user.id === elem){
-            temp.cardHidden = false;
-            this.setState(((state) => {return {
-              self: temp,
-            }}));
-          }
-        }
-
-        )
-        centerTableData.push(temp);
-      }
-      else{
-        temp.playerID = elem;
-        //temp.playerPos = tableData.playerPosition;
-        tableData.playersHand[elem].map((elem1, index1)=>{
-          temp.cardArray[index1].cardID = elem1;
-          if(index === tableData.dealersPosition){
-            temp.userStatusString = '(Dealer)';
-          }
-          else if(index === (tableData.dealersPosition+1)){
-            temp.userStatusString = '(SmallBet)';
-          }
-          else if(index === (tableData.dealersPosition+1)){
-            temp.userStatusString = '(BigBet)';
-          }
-          temp.chipAmount = tableData.chips;
-          if(this.client.user.id === elem){
-            temp.cardHidden = false;
-            this.setState(((state) => {return {
-              self: temp,
-            }}));
-          }
-        }
-
-        )
-        leftTableData.push(temp);
-      }
-    })
-    /*
-          playerIds: pool.processes[gameId].userIds,
-          turnPosition: pool.processes[gameId].turnPos,
-          dealersPosition: pool.processes[gameId].dealerPos,
-          playerPosition: pool.processes[gameId].userIds.indexOf(userId),
-          playersHand: pool.processes[gameId].playersHands,
-          pot: pool.processes[gameId].pot,
-          bet: pool.processes[gameId].bet,
-          communityCards: pool.processes[gameId].communityCards,
-          folded: pool.processes[gameId].players[playerPos].folded,
-          chips: pool.processes[gameId].players[playerPos].chips,
-    */
-    var temp1=[
-      {
-        playerName:"Community Cards",
-        //playerID:0,
-        chipAmount:0,
-        playerPosition:0,
-        cardArray:[
-          {
-            cardID:tableData.communityCards[0],
-            cardHidden:false,
-          },
-          {
-            cardID:tableData.communityCards[1],
-            cardHidden:false,
-          },
-          {
-            cardID:tableData.communityCards[2],
-            cardHidden:false,
-          },
-        ],
-        betAmount: 0,
-      },
-    ]
+      }),
+      betAmount: 0,
+    };
+    
     this.setState(((state) => {return {
-      selfPosition: tableData.playerPosition,
+      self: this.initPlayer(this.client.user.userdata, tableData, true),
+      selfPosition: userLoc,
       dealersPosition: tableData.dealersPosition,
       potTotal: tableData.pot,
       turnPosition: tableData.turnPosition,
-      TopTable: topTableData,
-      RightTable: rightTableData,
       communityCards: temp1,
-      CenterTable: centerTableData,
-      LeftTable: leftTableData,
     }}));
   }
   /*
@@ -578,23 +238,6 @@ class TexasHoldemGamePage extends React.Component{
           <Typography variant="h4">Texas Holdem</Typography>
           <br></br>
           <Typography variant="h3">{this.state.round}</Typography>
-        </div>
-
-        <div className="TopTable" >
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="flex-start"
-            alignContent="flex-start"
-            spacing={2}>
-              {this.state.topTablePlayers.map((elem,index) => (
-                <Grid item xs={12} m={3} md={3} key={index}>
-                  <Hand hand = {elem}> </Hand>
-                  <div className="TopTable" ></div>
-                </Grid>
-              ))}
-          </Grid>
         </div>
         <div className="LeftTable" >
           <Grid
@@ -645,11 +288,9 @@ class TexasHoldemGamePage extends React.Component{
             <Grid item xs>
               <Grid item container spacing={2} direction="column" justify="flex-end" alignItems="flex-start" >
                 <div className = "Dealer">
-                {this.state.communityCards.map((elem,index) => (
-                  <Grid item xs={12} m={4} md={4} key ={index} >
-                    <Hand hand = {elem} flex-grow = {4}> </Hand>
+                  <Grid item xs={12} m={4} md={4}>
+                    <Hand hand = {this.state.communityCards} flex-grow = {4}> </Hand>
                   </Grid>
-                ))}
                 </div>
                 <div className = "CenterTable">
                   <Grid item xs={12} m={4} md={4}>

@@ -79,9 +79,18 @@ module.exports = function (io, client, pool) {
 
         var playerPos = pool.processes[gameId].userIds.indexOf(userId);
 
-        get_game_status(pool, gameId);
-
-        pool.emit("load_game", pool.processes[gameId].userIds, {});
+        pool.emit("get_table", [userId], {
+          playerIds: pool.processes[gameId].userIds,
+          turnPosition: pool.processes[gameId].turnPos,
+          dealersPosition: pool.processes[gameId].dealerPos,
+          playerPosition: pool.processes[gameId].userIds.indexOf(userId),
+          playersHand: pool.processes[gameId].playersHands,
+          pot: pool.processes[gameId].pot,
+          bet: pool.processes[gameId].bet,
+          communityCards: pool.processes[gameId].communityCards,
+          folded: pool.processes[gameId].players[playerPos].folded,
+          chips: pool.processes[gameId].players[playerPos].chips,
+        });
       });
     });
 

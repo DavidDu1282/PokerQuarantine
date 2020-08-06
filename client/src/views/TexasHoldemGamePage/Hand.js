@@ -27,7 +27,7 @@ export default function Hand(props) {
   const classes = useStyles();
   return (
     <>
-    <Typography>{props.hand.playerName + " " + props.hand.betAmount}</Typography>
+    <Typography>{props.hand.name + " " + props.hand.betAmount}</Typography>
     <Grid
       container
       direction="row"
