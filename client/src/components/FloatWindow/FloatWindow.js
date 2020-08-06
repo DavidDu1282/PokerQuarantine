@@ -29,24 +29,26 @@ export default function FloatWindow(props) {
       {props.variant === 'full' && (
         <div>
           <DarkContainer style={{borderRadius: "4px 4px 0 0"}} elevation={0}>
-            <Grid
-              container
-            >
-              <Grid item xs={10}><div 
+            <div>
+              <div 
                 className="float-drag"
-                style={{zIndex: props.z}}
+                style={{zIndex: props.z, width: `${props.width-30}px`}}
                 onMouseDown={props.onMouseDown}
                 onMouseUp={props.onMouseUp}
               >
                 <Typography style={{color: 'grey'}} variant='overline'>{props.name}</Typography>
-              </div></Grid>
-              <Grid item xs={2}>
+              </div>
+              <span style={{zIndex: props.z, width: `30px`, height: `30px`, float: 'right'}}>
                 {props.nonClosable ? (<React.Fragment />) : (<IconButton size='small' style={{color: 'grey'}} onClick={() => props.controller.hide(props.name)}><MinimizeIcon /></IconButton>)}
-              </Grid>
-            </Grid>
+              </span>
+            </div>
           </DarkContainer>
           <LightContainer style={{borderRadius: "0 0 4px 4px"}} elevation={0}>
-            <div className="scroll-container"><div className="container-padded" style={{height: `${props.height-30}px`, padding: '2em'}}>{props.children}</div></div>
+            {props.nonPadded ?
+              (<div style={{height: `${props.height-30}px`, padding: 'none'}}>{props.children}</div>) :
+              (<div className="scroll-container"><div className="container-padded" style={{height: `${props.height-30}px`, padding: '2em'}}>{props.children}</div></div>)
+            }
+            
           </LightContainer>
         </div>
       )}

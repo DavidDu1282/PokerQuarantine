@@ -2,6 +2,7 @@ import React from 'react';
 import { DarkContainer, LightContainer } from '../../components';
 import { Tab, Tabs, withStyles, ButtonBase, Grid, Typography, IconButton, Avatar, Fade } from '@material-ui/core';
 import { ExitToApp } from '@material-ui/icons';
+import ChatIcon from '@material-ui/icons/Chat';
 import './Navigator.scss';
 import styles from './../../config.scss';
 
@@ -120,15 +121,20 @@ class Navigator extends React.Component {
                 alignItems="center"
                 spacing={0}
               >
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                   <ButtonBase
                     disableRipple
                     disableTouchRipple
-                    onClick={e => this.setSelectedTab(10)}
+                    onClick={e => this.setSelectedTab(9)}
                   >
                     <Avatar src={this.props.client.user.avatar_url} alt={this.props.client.user.name}/>
                     <Typography style={{color: "white", marginLeft: "0.8em"}} variant="body2">{this.props.client.user.name}</Typography>
                   </ButtonBase>
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton size="small" onClick={() => this.props.client.windowController.current.show('Chat')}>
+                    <ChatIcon color="primary"/>
+                  </IconButton>
                 </Grid>
                 <Grid item xs={2}>
                   <IconButton size="small" onClick={async (e) => await this.props.client.logout()}>
