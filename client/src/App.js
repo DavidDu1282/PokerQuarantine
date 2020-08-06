@@ -16,6 +16,7 @@ import {
   UpdatesPanel,
   Matcher,
   Lobby,
+  TexasHoldemGamePage,
 } from './views';
 
 import {
@@ -40,12 +41,14 @@ class App extends React.Component {
 
     this.navigator = React.createRef();
     this.lobby = React.createRef();
+
+    this.game = React.createRef();
+
     this.multiChat = React.createRef();
     this.chatPool = new ChatPool(this);
 
     this.windowController = React.createRef();
     this.windowInit = this.windowInit.bind(this);
-
     let user = new User();
 
     this.state = {
@@ -64,16 +67,17 @@ class App extends React.Component {
     setupUserSocket(this.socket, this);
     setupGameSocket(this.socket, this);
 
-    window.addEventListener('pageshow', this.windowInit);    
+    window.addEventListener('pageshow', this.windowInit);
   }
 
   windowInit() {
     const center = {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2
+
     };
 
-    this.windowController.current.init(center, 'Navigator');
+    // this.windowController.current.init(center, 'Navigator');
     this.cookieAuth();
   }
 
@@ -155,7 +159,7 @@ class App extends React.Component {
     this.setState((state) => {
       return { user: empty_user };
     });
-    
+
     this.navigator.current.setDisplay(empty_user.display_setting, 0);
   }
 
@@ -230,6 +234,7 @@ class App extends React.Component {
     this.socket.emit('game_leave', this.user.id);
   }
 
+
   render() {
     // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
@@ -239,7 +244,7 @@ class App extends React.Component {
       'match': <MatchPanel client={this} />,
       'store': <StorePanel client={this} />,
       'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <NewsPanel client={this} />,
+      'news': <TexasHoldemGamePage ref = {this.game}  client={this} />,
       'update': <UpdatesPanel client={this} />,
       'management': <ManagementPanel client={this} />,
       'billing': <CreditPanel client={this} />,
@@ -251,6 +256,9 @@ class App extends React.Component {
     return (
       <ThemeProvider theme={Theme}>
         <CssBaseline />
+
+
+        <Navigator list={list} client={this} ref={this.navigator} display = "none"/>
         <FloatWindowController ref={this.windowController} client={this} windows={{
           'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
           'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
@@ -261,5 +269,7 @@ class App extends React.Component {
     );
   }
 }
-
+/*
+<NewsPanel client={this} />,
+*/
 export default App;
