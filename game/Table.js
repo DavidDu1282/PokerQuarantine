@@ -297,6 +297,7 @@ class Table {
     console.log("************** Game Ended  **************");
     this.roundState = "endround";
     this.dealerPos = (this.dealerPos + 1) % this.players.length;
+    this.userIds.map((userId) => {});
   }
 
   incrementPlayerTurn() {
