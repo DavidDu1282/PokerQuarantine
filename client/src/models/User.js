@@ -8,12 +8,12 @@ const user_types = {
   1: "Moderator",
 };
 
-// pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
+// pages: [login_register, match, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
 const display_array = {
-  9: [true, false, false, false, false, true, false, false, false, false, false],
-  0: [false, true, true, true, true, true, false, false, true, true, false],
-  1: [false, true, true, true, true, true, true, true, true, true, false],
+  9: [true, false, false, false, true, false, false, false, false, false],
+  0: [false, true, true, true, true, false, false, true, true, false],
+  1: [false, true, true, true, true, true, true, true, true, false],
 };
 
 class User {
@@ -35,7 +35,7 @@ class User {
 
   async login(auth) {
     const authdata = {
-      email: auth.username,
+      email: auth.email,
       password: auth.password,
     };
 

@@ -28,7 +28,7 @@ class LoginPanel extends React.Component {
     if (!result) return;
 
     const data = {
-      username: result.body.username,
+      email: result.body.email,
       password: result.body.password,
     };
 
@@ -134,7 +134,7 @@ class LoginPanel extends React.Component {
         </Grid>
         <QuickForm
           fields={{
-            username: {
+            email: {
               label: "Email",
               type: "text",
             },

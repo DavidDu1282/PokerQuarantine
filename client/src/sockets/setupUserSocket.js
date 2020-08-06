@@ -14,9 +14,7 @@ export default function setupUserSocket(socket, client) {
      * Render the recieved msg on screen
      */
 
-    client.chatPanel.current.insertChat(
-      msg.text, msg.user, msg.date
-    );
+    client.chatPool.recieveMessage(msg);
   })
 
   socket.on('duplicate-session', async () => {

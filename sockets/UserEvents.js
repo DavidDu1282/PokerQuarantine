@@ -36,7 +36,7 @@ module.exports = function(io, client) {
       /**
        * Get user id from client
        * --------------------
-       * data: {chat} {user: user, msg, time}
+       * data: msg
        */
 
       socket.broadcast.emit('chat', msg);

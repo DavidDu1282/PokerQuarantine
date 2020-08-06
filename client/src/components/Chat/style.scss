@@ -2,17 +2,13 @@
 
 
 .containerMessage {
-  padding:  config.$content-width*0.07;
-  display: flex;
-  align-items: center;
-  margin: none;
-  width: config.$content-width;
-  height: config.$app-height;
+  width: 100%;
+  height: 100%;
 }
+
 .containerMessageContext {
   width: 100%;
-  height: config.$app-height*0.55;
-  display: flex;
+  height: 87%;
   margin: none;
   padding:  none;
   overflow-y: scroll;
@@ -24,4 +20,15 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.textEntry {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 13%;
+  padding: 0 1em;
+  border-top: 1px solid rgba(0,0,0,0.23);
 }
