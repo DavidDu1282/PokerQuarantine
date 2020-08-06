@@ -21,10 +21,7 @@ export default function setupGameSocket(socket, client) {
   });
 
 
-<<<<<<< HEAD
-    //if (reason && client.in_game) alert(reason);
-  //}
-=======
+
   socket.on("game_terminate", (reason) => {
     if (client.lobby.current) client.lobby.current.reset();
     client.windowController.current.hide("Lobby");
@@ -32,7 +29,7 @@ export default function setupGameSocket(socket, client) {
 
     if (reason && client.in_game) alert(reason);
   })
->>>>>>> a9b50d93ea5f80ee3a12a02eabf82e4b72396c5c
+
   socket.on("get_table",(tableData)=>{
     if(process.env.NODE_ENV === "development"){
       console.log("Received get_table!");

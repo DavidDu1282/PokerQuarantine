@@ -89,14 +89,9 @@ class App extends React.Component {
     };
 
     this.windowController.current.init(center, "Navigator");
-
-      y: window.innerHeight / 2
-
-    };
-
-    this.windowController.current.init(center, 'Navigator');
-
     this.cookieAuth();
+
+
   }
 
   async cookieAuth() {
