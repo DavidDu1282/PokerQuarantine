@@ -36,6 +36,8 @@ class Table {
       communityCards: this.communityCards,
       pot: this.pot,
       turnPosition: this.turnPos,
+      foldedPlayers: this.foldedPlayers,
+      bet: this.bet,
     });
   }
   emit_winner() {
