@@ -35,7 +35,7 @@ export default function setupGameSocket(socket, client) {
       console.log("Received get_table!");
     }
 
-    this.client.TexasHoldemGamePage.get_table(tableData);
+    client.TexasHoldemGamePage.get_table(tableData);
 
   })
   socket.on('get_current_status',(updateData)=>{
