@@ -16,16 +16,10 @@ import {
   UpdatesPanel,
   Matcher,
   Lobby,
-
   TexasHoldemGamePage,
-} from './views';
+} from "./views";
 
-
-import {
-  FloatWindowController,
-  ChatPool,
-} from './components';
-
+import { FloatWindowController, ChatPool } from "./components";
 
 import { User } from "./models";
 
@@ -75,10 +69,7 @@ class App extends React.Component {
       console.log(game);
     });
 
-
     window.addEventListener("pageshow", this.windowInit);
-
-
   }
 
   windowInit() {
@@ -89,12 +80,6 @@ class App extends React.Component {
     };
 
     this.windowController.current.init(center, "Navigator");
-
-      y: window.innerHeight / 2
-
-    };
-
-    this.windowController.current.init(center, 'Navigator');
 
     this.cookieAuth();
   }
@@ -110,8 +95,8 @@ class App extends React.Component {
         return { user: logged_user };
       });
 
-      this.chatPool.init(this.state.user, this.multiChat).then(() => { });
-      this.socket.emit('user-handshake', logged_user.id);
+      this.chatPool.init(this.state.user, this.multiChat).then(() => {});
+      this.socket.emit("user-handshake", logged_user.id);
 
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     }
@@ -203,9 +188,8 @@ class App extends React.Component {
         return { user: logged_user };
       });
 
-
-      this.chatPool.init(this.state.user, this.multiChat).then(() => { });
-      this.socket.emit('user-handshake', logged_user.id);
+      this.chatPool.init(this.state.user, this.multiChat).then(() => {});
+      this.socket.emit("user-handshake", logged_user.id);
 
       this.navigator.current.setDisplay(logged_user.display_setting, 1);
     } catch (err) {
@@ -218,10 +202,8 @@ class App extends React.Component {
      * logs out the logged in user
      */
 
-
-    if (emit) this.socket.emit('user-logout', this.user.id);
+    if (emit) this.socket.emit("user-logout", this.user.id);
     this.unmatch();
-
 
     const empty_user = await this.user.logout();
     this.setState((state) => {
@@ -230,7 +212,6 @@ class App extends React.Component {
     this.navigator.current.setDisplay(empty_user.display_setting, 0);
     this.windowInit();
     this.chatPool.reset();
-
   }
 
   // matching
@@ -255,6 +236,7 @@ class App extends React.Component {
      */
 
     this.in_game = false;
+    this.windowController.current.hide("Lobby");
     this.socket.emit("game_leave", this.user.id);
   }
 
@@ -267,37 +249,66 @@ class App extends React.Component {
     this.socket.emit("game_start", this.user.id);
   }
 
-
   render() {
     // pages: [login_register, match, chat, store, leaderboard, news, update, management, billing, report, user_info(always false)]
 
     const list = {
-
-
-      'login / register': <LoginPanel client={this} />,
-      'match': <MatchPanel client={this} />,
-      'store': <StorePanel client={this} />,
-      'leaderboard': <LeaderBoardPanel client={this} />,
-      'news': <TexasHoldemGamePage ref = {this.game}  client={this} />,
-      'update': <UpdatesPanel client={this} />,
-      'management': <ManagementPanel client={this} />,
-      'billing': <CreditPanel client={this} />,
-      'report': <ReportPanel client={this} />,
-      'user info': <UserPanel client={this} />,
-
-
+      "login / register": <LoginPanel client={this} />,
+      match: <MatchPanel client={this} />,
+      store: <StorePanel client={this} />,
+      leaderboard: <LeaderBoardPanel client={this} />,
+      news: <TexasHoldemGamePage ref={this.game} client={this} />,
+      update: <UpdatesPanel client={this} />,
+      management: <ManagementPanel client={this} />,
+      billing: <CreditPanel client={this} />,
+      report: <ReportPanel client={this} />,
+      "user info": <UserPanel client={this} />,
     };
 
     return (
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <FloatWindowController ref={this.windowController} client={this} windows={{
-          'Navigator': { content: <Navigator list={list} client={this} ref={this.navigator} />, width: 1100, height: 800, variant: 'transparent'},
-          'Match': { content: <Matcher client={this} />, width: 300, height: 300, variant: 'full', nonClosable: true},
-          'Lobby': { content: <Lobby client={this} ref={this.lobby} />, width: 300, height: 600, variant: 'full', nonClosable: true},
-          'Chat': { content: <MultiChat client={this} pool={this.chatPool} ref={this.multiChat} />,  width: 700, height: 400, variant: 'full', nonPadded: true}
-        }}/>
-
+        <FloatWindowController
+          ref={this.windowController}
+          client={this}
+          windows={{
+            Navigator: {
+              content: (
+                <Navigator list={list} client={this} ref={this.navigator} />
+              ),
+              width: 1100,
+              height: 800,
+              variant: "transparent",
+            },
+            Match: {
+              content: <Matcher client={this} />,
+              width: 300,
+              height: 300,
+              variant: "full",
+              nonClosable: true,
+            },
+            Lobby: {
+              content: <Lobby client={this} ref={this.lobby} />,
+              width: 300,
+              height: 600,
+              variant: "full",
+              nonClosable: true,
+            },
+            Chat: {
+              content: (
+                <MultiChat
+                  client={this}
+                  pool={this.chatPool}
+                  ref={this.multiChat}
+                />
+              ),
+              width: 700,
+              height: 400,
+              variant: "full",
+              nonPadded: true,
+            },
+          }}
+        />
       </ThemeProvider>
     );
   }
