@@ -1,15 +1,15 @@
 import { AlternateEmail } from "@material-ui/icons";
 
 export default function setupGameSocket(socket, client) {
-  socket.on('match', (game) => {
+  socket.on("match", (game) => {
     /**
      * Matched into a room, set room to display
      */
 
     client.in_game = true;
     client.matching = false;
-    client.windowController.current.hide('Match');
-    client.windowController.current.show('Lobby');
+    client.windowController.current.hide("Match");
+    client.windowController.current.show("Lobby");
 
     // init lobby(game)
     setTimeout(() => {
@@ -21,8 +21,18 @@ export default function setupGameSocket(socket, client) {
   });
 
 
+<<<<<<< HEAD
     //if (reason && client.in_game) alert(reason);
   //}
+=======
+  socket.on("game_terminate", (reason) => {
+    if (client.lobby.current) client.lobby.current.reset();
+    client.windowController.current.hide("Lobby");
+
+
+    if (reason && client.in_game) alert(reason);
+  })
+>>>>>>> a9b50d93ea5f80ee3a12a02eabf82e4b72396c5c
   socket.on("get_table",(tableData)=>{
     if(process.env.NODE_ENV === "development"){
       console.log("Received get_table!");
