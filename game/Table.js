@@ -1,12 +1,18 @@
 var Deck = require("./Deck.js");
 var Player = require("./Player.js");
 var PokerEvaluator = require("poker-evaluator");
+const mongoose = require("mongoose");
+const User = mongoose.model("users");
 
 class Table {
-  constructor(smallBlind = 10) {
+  constructor(id, userIds, pool, smallBlind = 100) {
+    this.id = id;
+    this.pool = pool;
+    this.userIds = userIds;
     this.pot = 0;
-
+    this.bet = 0;
     this.players = [];
+    this.playersHands = {};
     this.roundState = "idle";
     this.communityCards = [];
     this.deck = new Deck();
@@ -16,16 +22,24 @@ class Table {
     this.bigBlind = this.smallBlind * 2; //player clockwise next to small blind is big blind, typically twice the size of small blinds
 
     this.turnPos = 0;
+    this.winner = undefined;
+    this.addPlayers();
   }
 
-  addPlayer(Player) {
-    Player.table = this;
-    this.players.push(Player);
+  async addPlayers() {
+    for (var i = 0; i < this.userIds.length; i++) {
+      var data = await User.findOne({ userId: this.userIds[i] }).exec();
+      var newPlayer = new Player(data);
+
+      newPlayer.table = this;
+      this.players.push(newPlayer);
+    }
   }
 
   reset() {
     this.bet = 0;
     this.pot = 0;
+    this.playersHands = {};
 
     this.roundState = "idle";
     this.communityCards = [];
@@ -36,6 +50,7 @@ class Table {
     this.bigBlind = this.smallBlind * 2; //player clockwise next to small blind is big blind, typically twice the size of small blinds
 
     this.turnPos = 0;
+    this.winner = undefined;
 
     for (var i = 0; i < this.players.length; i++) {
       this.players[i].reset();
@@ -49,17 +64,45 @@ class Table {
   nextRound() {
     if (this.roundState === "deal") {
       this.gatherBets();
+
       this.flop();
+      this.pool.emit("get_game_status", this.userIds, {
+        round: this.roundState,
+        communityCards: this.communityCards,
+        pot: this.pot,
+      });
     } else if (this.roundState === "flop") {
       this.gatherBets();
       this.turn();
+      this.pool.emit("get_game_status", this.userIds, {
+        round: this.roundState,
+        communityCards: this.communityCards,
+        pot: this.pot,
+        turnPosition: this.turnPos,
+      });
     } else if (this.roundState === "turn") {
       this.gatherBets();
       this.river();
+      this.pool.emit("get_game_status", this.userIds, {
+        round: this.roundState,
+        communityCards: this.communityCards,
+        pot: this.pot,
+        turnPosition: this.turnPos,
+      });
     } else if (this.roundState === "river") {
       this.gatherBets();
+
       this.showdown();
+      this.pool.emit("get_game_status", this.userIds, {
+        round: this.roundState,
+        communityCards: this.communityCards,
+        pot: this.pot,
+        turnPosition: this.turnPos,
+      });
     } else if (this.roundState === "showdown") {
+      this.pool.emit("endOfGame", this.userIds, {
+        winner: this.winner,
+      });
       this.endRound();
     }
   }
@@ -100,6 +143,7 @@ class Table {
     //small and big pay blind
     this.players[smallBlindPos].addBet(this.smallBlind);
     this.players[bigBlindPos].addBet(this.bigBlind);
+    this.bet = this.bigBlind;
 
     //deal cards to players
     for (var i = 0; i < this.players.length; i++) {
@@ -109,6 +153,8 @@ class Table {
       console.log(
         "Player " + this.players[i].username + " get cards " + c1 + " & " + c2
       );
+
+      this.playersHands[this.players[i].userId] = [c1, c2];
     }
 
     //determine whose turn it is now
@@ -117,6 +163,13 @@ class Table {
       "Now it is player " + this.players[this.turnPos].username + "turn"
     );
     this.roundState = "deal";
+    this.pool.emit("get_game_status", this.userIds, {
+      round: this.roundState,
+      communityCards: this.communityCards,
+      pot: this.pot,
+      bet: this.bet,
+      turnPosition: this.turnPos,
+    });
     console.log("************** Round Deal **************");
   }
 
@@ -178,6 +231,7 @@ class Table {
         ", " +
         this.communityCards[4]
     );
+
     this.requestPlayerActions();
   }
 
@@ -227,6 +281,7 @@ class Table {
         evalHands[highestIndex].handName
     );
     //Distribute the pot to winner
+    this.winner = this.players[highestIndex].userId;
     this.players[highestIndex].getWinnings(this.pot);
     this.pot = 0;
 
@@ -242,6 +297,7 @@ class Table {
     console.log("************** Game Ended  **************");
     this.roundState = "endround";
     this.dealerPos = (this.dealerPos + 1) % this.players.length;
+    this.userIds.map((userId) => {});
   }
 
   incrementPlayerTurn() {
@@ -257,6 +313,7 @@ class Table {
       this.pot += this.players[i].bet;
       this.players[i].bet = 0;
     }
+    this.bet = 0;
     console.log("total pot: " + this.pot);
   }
 
@@ -284,38 +341,40 @@ class Table {
         highestBet = this.players[i].bet;
       }
     }
+    this.bet = highestBet;
     return highestBet;
   }
 }
 
 module.exports = Table;
 
-var game = new Table();
-var player1 = new Player({ username: "DayTime", balance: 40000 });
-var player2 = new Player({ username: "Luna", balance: 50000 });
-var player3 = new Player({ username: "MidNight", balance: 50000 });
+// var game = new Table();
+// var player1 = new Player({ username: "DayTime", balance: 40000 });
+// var player2 = new Player({ username: "Luna", balance: 50000 });
+// var player3 = new Player({ username: "MidNight", balance: 50000 });
 
-game.addPlayer(player1);
-game.addPlayer(player2);
-game.addPlayer(player3);
+// game.addPlayer(player1);
+// game.addPlayer(player2);
+// game.addPlayer(player3);
 
-game.start();
-game.getCurrentPlayer().callOrCheck(); //1
-game.getCurrentPlayer().callOrCheck(); //2
-game.getCurrentPlayer().raise(2000); //3
-game.getCurrentPlayer().raise(2000); //1
-game.getCurrentPlayer().fold(); //2
-game.getCurrentPlayer().callOrCheck(); //3
-game.getCurrentPlayer().callOrCheck(); //1
-game.getCurrentPlayer().raise(1000); //3
-game.getCurrentPlayer().callOrCheck(); //1
-game.getCurrentPlayer().callOrCheck(); //3
-game.getCurrentPlayer().raise(3000); //1
-game.getCurrentPlayer().callOrCheck(); //3
-game.getCurrentPlayer().callOrCheck(); //1
-game.getCurrentPlayer().callOrCheck(); //3
-game.getCurrentPlayer().callOrCheck(); //1
+// game.start();
+// game.getCurrentPlayer().callOrCheck(); //1
+// game.getCurrentPlayer().callOrCheck(); //2
+// game.getCurrentPlayer().raise(2000); //3
+// game.getCurrentPlayer().raise(2000); //1
+// game.getCurrentPlayer().fold(); //2
+// game.getCurrentPlayer().callOrCheck(); //3
+// game.getCurrentPlayer().callOrCheck(); //1
+// game.getCurrentPlayer().raise(1000); //3
+// game.getCurrentPlayer().callOrCheck(); //1
+// game.getCurrentPlayer().callOrCheck(); //3
+// game.getCurrentPlayer().raise(3000); //1
+// game.getCurrentPlayer().callOrCheck(); //3
+// game.getCurrentPlayer().callOrCheck(); //1
+// game.getCurrentPlayer().callOrCheck(); //3
+// game.getCurrentPlayer().callOrCheck(); //1
 
+// game.start();
 /*
 
 Texas Hold'em Rules

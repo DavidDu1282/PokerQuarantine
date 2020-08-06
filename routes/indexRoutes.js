@@ -1,7 +1,6 @@
-
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
-var express = require('express');
+var express = require("express");
 
 var router = express.Router();
 
@@ -10,11 +9,9 @@ router.get("/", function (req, res, next) {
   res.sendFile("index.html");
 });
 
-
-router.get('/users/:userId', async (req, res) => {
-
+router.get("/users/:userId", async (req, res) => {
   /**
-   * GET public info of user 
+   * GET public info of user
    * ----------
    * params:
    *  userId: str
@@ -27,7 +24,7 @@ router.get('/users/:userId', async (req, res) => {
    *  200 res.body: {
    *  userId: str,
    *  name: str,
-   *  ballance: int, 
+   *  ballance: int,
    *  role: int,
    *  games_played: int,
    *  wins: int,
@@ -47,15 +44,13 @@ router.get('/users/:userId', async (req, res) => {
   res.send({
     userId: user.userId,
     name: user.name,
-    ballance: user.ballance, 
+    ballance: user.balance,
     role: user.role,
     games_played: user.games_played,
     wins: user.wins,
     losses: user.losses,
-    avatar_url: user.avatar_url
+    avatar_url: user.avatar_url,
   });
-
 });
 
 module.exports = router;
-
