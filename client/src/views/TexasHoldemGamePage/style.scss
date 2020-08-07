@@ -1,28 +1,24 @@
 .container-GamePage {
-  //padding:  config.$content-width*0.01;
+  height: 100%;
+  width: 100%;
+
   align-items: center;
   margin: none;
-  position: fixed;
-  background-image: url('https://img.freepik.com/free-vector/poker-table-background-green-color_47243-1068.jpg?size=626&ext=jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  z-index: 200000;
-  //width: config.$content-width;
-  //height: config.$app-height*0.35;
+  position: relative;
 }
 .center{
   left:50%;
-  position:fixed;
+  position: absolute;
+  align-items: center;
 }
 .controls {
   //padding:  config.$content-width*0.01;
-  display: flex;
 
   margin: none;
-  position:fixed;
   // width: config.$content-width*0.3;
   left:40%;
   top: 90%;
+  position: absolute;
   //width: config.$content-width;
   //height: config.$app-height*0.35;
 }
@@ -55,35 +51,34 @@
 }
 
 .TopTable{
-  position: fixed;
   left: 45%;
   top: 10%;
-
+  position: absolute;
 }
 
 .LeftTable{
-  position: fixed;
   left: 85%;
   top: 30%;
+  position: absolute;
 }
 .RightTable{
-  position: fixed;
   left: 32%;
   top: 30%;
+  position: absolute;
 }
 
 .Dealer {
-  position:fixed;
   left:57%;
   top: 40%;
   align-items: center;
+  position: absolute;
 }
 
 .CenterTable {
-  position:fixed;
   left:58%;
   top: 70%;
   align-items: center;
+  position: absolute;
 }
 .card {
     width: 67px;

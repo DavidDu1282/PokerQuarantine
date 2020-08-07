@@ -38,7 +38,7 @@ deleteContact(_id) { // <-- declare id parameter
       .then((response) => {
         const data = response.data;
         this.setState({ posts: data });
-        console.log('Data has been received!!');
+        //console.log('Data has been received!!');
       })
       .catch(() => {
         alert('Error retrieving data!!!');
@@ -79,7 +79,7 @@ deleteContact(_id) { // <-- declare id parameter
     }
 
     render() {
-      console.log('State: ', this.state);
+      //console.log('State: ', this.state);
         return (
           <div className="container-padded">
           <Grid

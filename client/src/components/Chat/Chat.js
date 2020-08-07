@@ -42,7 +42,6 @@ class Chat extends React.Component {
 
     if (message === '') return;
 
-    //console.log(this.chatText.current.value);
     this.setState(((state) => {return {textMessage:''}}));
     this.props.sendMessage(message);
     
@@ -50,7 +49,6 @@ class Chat extends React.Component {
 
   handleChange(e){
     let message = e.target.value;
-    //console.log(e.target.value);
     this.setState(((state) => {return {textMessage:message}}));
 
   }

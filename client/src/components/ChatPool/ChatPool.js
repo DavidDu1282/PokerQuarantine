@@ -11,7 +11,9 @@ class ChatPool {
 
   getUser(userId) {
     if (!this.cache_users[userId]) {
-      return this.cacheUser(userId).then((res) => {return res});
+      return this.cacheUser(userId).then((res) => {
+        return res
+      });
     } else {
       return this.cache_users[userId];
     }
@@ -22,6 +24,7 @@ class ChatPool {
       .get(`/users/${userId}`)
       .then((res) => {
         this.cache_users[userId] = res.data;
+        
         return res.data;
       });
   }

@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import CardHeader from '@material-ui/core/CardHeader';
 import { useState, useEffect  } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 // import tileData from './tileData';
 
 class NewsPanel extends React.Component {
@@ -26,7 +27,6 @@ class NewsPanel extends React.Component {
     .then((response) => {
       const data = response.data;
       this.setState({ posts: data });
-      console.log('Data has been received!!');
     });
 }
 displayNewsPost = (posts) => {
@@ -37,7 +37,7 @@ displayNewsPost = (posts) => {
     <Grid item container spacing={2}>
     <Grid item xs={12} key={post._id}>
     <Card width="100%">
-    <CardHeader title={post.title} subheader={post.date}/>
+    <CardHeader title={post.title} subheader={moment(post.date).format("MMMM Do, YYYY")}/>
     <CardContent>
       <Typography variant="body2" color="textSecondary" component="p">
         {post.body}  
@@ -57,7 +57,6 @@ displayNewsPost = (posts) => {
   ));
 };
   render(){
-    console.log('State: ', this.state);
     return (
       <div className="container-padded">
       <Grid

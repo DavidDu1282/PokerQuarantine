@@ -298,8 +298,8 @@ class App extends React.Component {
                   ref={this.TexasHoldemGamePage}
                 />
               ),
-              width: 2000,
-              height: 2000,
+              width: 1500,
+              height: 1000,
               variant: "full",
               nonClosable: true,
             },

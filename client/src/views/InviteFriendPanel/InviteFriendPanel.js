@@ -23,7 +23,6 @@ class InviteFriendPanel extends React.Component {
       handleSubmit = (event) => {
         this.setState(((state) => {return {name: event.body}}));
         //this.setState(((state) => {return {email: event.body}}));
-        console.log(event);
         const {email} = event.body;
         //alert(`${email} Email Sent Successfully !!!!`);
         /*
@@ -31,7 +30,6 @@ class InviteFriendPanel extends React.Component {
           <MyEmail name={this.state.name}> {this.state.feedback}</MyEmail>
         );
         */
-        console.log("Attempting to post request")
         axios.post(
             'api/email/sendEmail',
             {

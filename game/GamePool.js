@@ -5,13 +5,13 @@ function eventMapper(game) {
   // map events to corresponding function
 
   return {
-    action: game.action,
+    
     fold: game.getCurrentPlayer().fold,
-    addBet: game.getCurrentPlayer().raise,
-    checkOrCall: game.getCurrentPlayer().checkOrCall,
+    raise: game.getCurrentPlayer().raise,
+    checkOrCall: game.getCurrentPlayer().callOrCheck,
   };
 }
-
+//
 class GamePool {
   /**
    * Controller that allows multiple games to co-exist
@@ -69,6 +69,7 @@ class GamePool {
 
   emit(event, players, data) {
     // emit data to targeted players in game
+    
     players.map((player) => {
       this.client.get(player, (error, socketId) => {
         this.io.to(socketId).emit(event, data);
@@ -77,10 +78,10 @@ class GamePool {
   }
 
   receive(event, id, data) {
-    // map events revceived by socket io
+    // map events revceived by socket io//
     const game = this.processes[id];
+    
     if (game == null) throw new Error("no game with such id");
-
     const map = eventMapper(game);
     return map[event](data);
   }

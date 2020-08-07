@@ -1,17 +1,22 @@
 class Player {
-  constructor(data) {
+  constructor(data, table) {
     this.userId = data.userId;
     this.username = data.name;
-    this.chips = data.balance;
+    this.chips = 1000000 //data.balance
     this.avatarURL = data.avatar_url;
 
-    this.table = null;
+    this.table = table;
 
     this.hand = [];
     this.bet = 0; //current amount player is wagering
 
     this.actionTaken = false; //performed action for the round (call/check/raise)
     this.folded = false; // out for the game
+
+    this.callOrCheck = this.callOrCheck.bind(this);
+    this.raise = this.raise.bind(this);
+    this.fold = this.fold.bind(this);
+    
   }
 
   reset() {
@@ -42,10 +47,14 @@ class Player {
    */
   raise(amount) {
     this.actionTaken = true;
+    amount = parseInt(amount)
     var diff = this.table.getHighestBet() - this.bet;
-    this.table.bet = diff + amount;
-    this.addBet(diff + amount);
-    console.log("Player " + this.username + " RAISE : " + (diff + amount));
+    console.log(diff + " " + this.table.getHighestBet());
+    this.table.bet = amount
+    this.bet = amount;
+    //this.addBet(amount);
+    //this.addBet(diff + amount);
+    console.log("Player " + this.username + " RAISE : " + (amount));
 
     this.table.requestPlayerActions();
     this.table.incrementPlayerTurn();
@@ -63,7 +72,9 @@ class Player {
    * transfer player's chips to bet
    */
   addBet(amount) {
+    amount = parseInt(amount)
     if (this.chips < amount) {
+      console.log("not enough chips")
       return "error: not enough chips";
     }
     this.chips -= amount;

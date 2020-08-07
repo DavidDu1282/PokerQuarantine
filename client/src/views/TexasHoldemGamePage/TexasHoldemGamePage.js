@@ -19,11 +19,16 @@ class TexasHoldemGamePage extends React.Component{
 
   constructor(props) {
     super(props);
+    this.client = this.props.client;
     this.socket = this.props.client.socket;
     this.BetNUmber = React.createRef();
     this.state = {
-      display: false,
-      lastPlayerBetAmount:0,
+      //display: false,
+      leftTablePlayers: [],
+      rightTablePlayers: [],
+      communityCards:[
+      {}],
+      lastPlayerBetAmount:100,
       potTotal:0,
       open:false,
       setOpen:false,
@@ -53,6 +58,7 @@ class TexasHoldemGamePage extends React.Component{
   };
   handleLoseClose(){
     this.setState(((state) => {return {loseOpen: false}}));
+    this.client.windowController.current.hide("TexasHoldemGamePage");
   };
   handleNotYourTurn(){
     this.setState(((state) => {return {notYourTurnOpen: true}}));
@@ -65,6 +71,7 @@ class TexasHoldemGamePage extends React.Component{
   };
   handleWinClose(){
     this.setState(((state) => {return {winOpen: false}}));
+    this.client.windowController.current.hide("TexasHoldemGamePage");
   };
   handleOpen(){
     this.setState(((state) => {return {open: true}}));
@@ -75,21 +82,19 @@ class TexasHoldemGamePage extends React.Component{
 
   addBet(num){
     const player = Object.assign({}, this.state.self);
-    if(player.folded === false && (player.playerPosition === this.state.turnPosition)){
-      player.betAmount = player.betAmount + parseInt(this.state.bet);
+    if(player.folded === false && (this.state.selfPosition === this.state.turnPosition)){
+
+      
+      //console.log(player.betAmount);
+      this.socket.emit('raise', {
+        userId: this.state.self.userId,
+        amount: this.state.bet,
+      });
+      player.betAmount = parseInt(this.state.bet);
 
       this.setState(((state) => {
         return {self: player}}
       ));
-      console.log(this.state.self);
-
-
-      /*
-      this.socket.emit('raise', {
-        userID: this.state.self.playerID,
-        amount: player.betAmount,
-      });
-      */
     }
     else{
       this.handleNotYourTurn();
@@ -98,12 +103,10 @@ class TexasHoldemGamePage extends React.Component{
 
   fold(e){
     var player = this.state.self;
-    if(player.folded === false && (player.playerPosition === this.state.turnPosition)){
+    if(player.folded === false && (this.state.selfPosition === this.state.turnPosition)){
       player.folded = true;
       this.setState(((state) => {return {self: player}}));
-      this.socket.emit('fold', {
-        userID: this.state.self.playerID,
-      });
+      this.socket.emit('fold', {userId: this.state.self.userId});
     }
     else{
       this.handleNotYourTurn();
@@ -111,9 +114,9 @@ class TexasHoldemGamePage extends React.Component{
   }
   matchBet(){
     var player = this.state.self;
-    if(player.folded === false && (player.playerPosition === this.state.turnPosition)){
-      this.socket.emit('checkOrCall', {
-        userID: this.state.self.playerID,
+    if(player.folded === false && (this.state.selfPosition === this.state.turnPosition)){
+      this.socket.emit('checkOrCall',{ 
+        userId: this.state.self.userId,
       });
     }
     else{
@@ -123,19 +126,20 @@ class TexasHoldemGamePage extends React.Component{
 
 
   initPlayer(user, tableData, hideCards=true) {
+    let loc = tableData.playerIds.indexOf(user.userId);
     return {
       name: user.name,
-      userId: user.id,
+      userId: user.userId,
       chipAmount: tableData.chips,
-      playerPosition: tableData.userIds.indexOf(user.id),
+      playerPosition: loc,
       userStatusString:'',
       cardArray:[
         {
-          cardID: tableData.playersHands[user.id][0],
+          cardID: tableData.playersHand[user.userId][0],
           cardHidden: hideCards,
          },
         {
-          cardID:tableData.playersHands[user.id][1],
+          cardID:tableData.playersHand[user.userId][1],
           cardHidden: hideCards,
         }
       ],
@@ -153,7 +157,7 @@ class TexasHoldemGamePage extends React.Component{
     var rightTablePlayers = [];
 
     const cache = this.props.cache;
-    const userIds = tableData.userIds;
+    const userIds = tableData.playerIds;
     
     const userLoc = userIds.indexOf(this.client.user.id);
     var leftOfUser = userIds.slice(0, userLoc);
@@ -171,13 +175,23 @@ class TexasHoldemGamePage extends React.Component{
 
     leftOfUser = leftOfUser.reverse();
     leftOfUser.map((userId) => {
-      let user = cache.getUser(userId);
-      leftTablePlayers.push(this.initPlayer(user, tableData))
+      cache.cacheUser(userId).then(
+        _ => {
+          let user = cache.getUser(userId);
+          leftTablePlayers.push(this.initPlayer(user, tableData));
+        }
+      );
     });
 
     rightOfUser.map((userId) => {
-      let user = cache.getUser(userId);
-      rightTablePlayers.push(this.initPlayer(user, tableData))
+      cache.cacheUser(userId).then(
+        _ => {
+          let user = cache.getUser(userId);
+          rightTablePlayers.push(this.initPlayer(user, tableData));
+
+        }
+      );
+      
     });
 
     this.setState((state) => { return {
@@ -186,10 +200,10 @@ class TexasHoldemGamePage extends React.Component{
     }});
 
     var temp1 = {
-      playerName:"Community Cards",
+      name: "Community Cards",
       //playerID:0,
       chipAmount:0,
-      playerPosition:0,
+      //playerPosition:0,
       cardArray: tableData.communityCards.map((cardId) => {
         return {
           cardID: cardId,
@@ -200,7 +214,7 @@ class TexasHoldemGamePage extends React.Component{
     };
     
     this.setState(((state) => {return {
-      self: this.initPlayer(this.client.user.userdata, tableData, true),
+      self: this.initPlayer(this.client.user.userdata, tableData, false),
       selfPosition: userLoc,
       dealersPosition: tableData.dealersPosition,
       potTotal: tableData.pot,
@@ -217,22 +231,24 @@ class TexasHoldemGamePage extends React.Component{
 
   }
   */
+ /*
   turnOnDisplay(){
     this.setState(((state) => {return {display: true}}));
   }
   turnOffDisplay(){
     this.setState(((state) => {return {display: false}}));
   }
+  */
   handleRoundChange(){
     this.state.TopTable.map((elem, index )=> {});
   }
   render() {
-    if(!this.state.display){
-      return(<React.Fragment/>)
-    }
+    //if(!this.state.display){
+      //return(<React.Fragment/>)
+    //}
     return (
 
-      <>
+      
       <div className = "container-GamePage" >
         <div className = "center">
           <Typography variant="h4">Texas Holdem</Typography>
@@ -303,20 +319,12 @@ class TexasHoldemGamePage extends React.Component{
         </div>
         <div className = "controls">
           <Grid item container direction="row" alignItems="center" justify="center" alignContent="center" spacing={2} xs>
-            <Grid item xs={5}><TextField type = "number" ref = {this.BetNUmber} fullWidth onChange ={(e)=>{this.handleChange(e)}}/></Grid>
-            <Grid item xs={5}><Button size = "medium" color="primary" fullWidth onClick={(e) => { this.addBet(e)}}>
-              Bet/Raise
-            </Button></Grid>
+
           </Grid>
           <Button size="medium" color="primary" onClick={() => this.matchBet(0)}>
             Call/Check
           </Button>
-          <Button size="medium" color="primary" onClick={() => { this.fold() }}>
-            Fold
-          </Button>
-          <Button size="medium" color="primary" onClick={() => this.handleNotYourTurn()}>
-            Test Functions
-          </Button>
+
           <Dialog
             open={this.state.open}
             onClose={() => { this.handleClose() }}
@@ -326,7 +334,7 @@ class TexasHoldemGamePage extends React.Component{
             <DialogTitle id="alert-dialog-title">{"It is your turn to play!"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                {"The last player betted " + this.state.lastPlayerBetAmount + " and the pot total is " + this.state.potTotal}
+                {/*"The last player changed their bet to " + this.state.lastPlayerBetAmount + " and the pot total is " + this.state.potTotal*/}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -391,7 +399,7 @@ class TexasHoldemGamePage extends React.Component{
           </Dialog>
           </div>
         </div>
-      </>
+      
     );
   }
 }

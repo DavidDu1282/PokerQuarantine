@@ -26,7 +26,7 @@ class LeaderBoardPanel extends React.Component {
     .then((response) => {
       const data = response.data;
       this.setState({ posts: data });
-      console.log('Data has been received!!');
+      //console.log('Data has been received!!');
     })
     .catch(() => {
       alert('Error retrieving data!!!');
@@ -50,7 +50,7 @@ displayNewsPost = (posts) => {
   ));
 };
   render(){
-    console.log('State: ', this.state);
+    //console.log('State: ', this.state);
     return (
       <div className="container-padded">
       <Grid

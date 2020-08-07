@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const User = mongoose.model("users");
 
 class Table {
-  constructor(id, userIds, pool, smallBlind = 100) {
+  constructor(id, userIds, pool) {
     this.id = id;
     this.pool = pool;
     this.userIds = userIds;
@@ -18,8 +18,8 @@ class Table {
     this.deck = new Deck();
 
     this.dealerPos = 0; //"dealer button" indicates which player is dealer for current game
-    this.smallBlind = smallBlind; //the player clockwise next to dealer is "small blind" and is force make first bet
-    this.bigBlind = this.smallBlind * 2; //player clockwise next to small blind is big blind, typically twice the size of small blinds
+    this.smallBlind = 0; //the player clockwise next to dealer is "small blind" and is force make first bet
+    this.bigBlind = 0; //player clockwise next to small blind is big blind, typically twice the size of small blinds
 
     this.foldedPlayers = [];
     this.turnPos = 0;
@@ -47,16 +47,20 @@ class Table {
   }
 
   /**
-   * ------------------
+   * function------------------
    */
-  async addPlayers() {
-    for (var i = 0; i < this.userIds.length; i++) {
-      var data = await User.findOne({ userId: this.userIds[i] }).exec();
-      var newPlayer = new Player(data);
+   
+  
 
-      newPlayer.table = this;
-      this.players.push(newPlayer);
-    }
+  addPlayers() {
+    for (var i = 0; i < this.userIds.length; i++) {
+      User.findOne({ userId: this.userIds[i] }).then(data=>{
+        var newPlayer = new Player(data, this);
+        
+        this.players.push(newPlayer);
+      })
+      
+      }
   }
 
   reset() {
@@ -85,6 +89,7 @@ class Table {
    */
 
   nextRound() {
+    
     if (this.roundState === "deal") {
       this.gatherBets();
       this.flop();
@@ -110,9 +115,18 @@ class Table {
    * Players check for next round after each action they perform (ie callOrCheck, Raise, Fold)
    */
   checkForNextRound() {
+    if (this.foldedPlayers.length === this.players.length-1){
+      var winner = this.players.filter(e => !this.foldedPlayers.includes(e))
+      this.winner = winner[0]
+      this.emit_game_status()
+      this.emit_winner()
+      this.endRound()
+    }
+
     if (this.isEndRound()) {
       this.nextRound();
     }
+    
   }
 
   /**
@@ -134,9 +148,12 @@ class Table {
     this.reset();
     console.log("************** STARTING GAME **************");
     //determine dealer, small blind, big blind
+    // console.log(this.dealerPos);
+    
     console.log(
       "Player " + this.players[this.dealerPos].username + " is the dealer"
     );
+
     var smallBlindPos = (this.dealerPos + 1) % this.players.length;
     var bigBlindPos = (this.dealerPos + 2) % this.players.length;
 

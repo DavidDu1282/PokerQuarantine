@@ -73,12 +73,15 @@ module.exports = function (io, client, pool) {
       /**
        * Start game
        */
-
+//
       client.get(`${userId}_game`, (error, gameId) => {
-        pool.start(gameId);
+        console.log(pool.processes + " " + gameId);
+        pool.emit("load_game", pool.processes[gameId].userIds);
 
+        pool.start(gameId);
         var playerPos = pool.processes[gameId].userIds.indexOf(userId);
-        pool.emit("get_table", [userId], {
+
+        pool.emit("get_table", pool.processes[gameId].userIds, {
           playerIds: pool.processes[gameId].userIds,
           turnPosition: pool.processes[gameId].turnPos,
           dealersPosition: pool.processes[gameId].dealerPos,
@@ -91,26 +94,29 @@ module.exports = function (io, client, pool) {
           chips: pool.processes[gameId].players[playerPos].chips,
         });
 
-        pool.emit("load_game", pool.processes[gameId].userIds, {});
       });
     });
 
-    socket.on("fold", (userId) => {
-      client.get(`${userId}_game`, (error, gameId) => {
+    socket.on("fold", (dataField) => {
+      console.log("Received fold!");
+      client.get(`${dataField.userId}_game`, (error, gameId) => {
         pool.receive("fold", gameId);
 
         emit_game_status(pool, gameId);
       });
     });
-    socket.on("raise", (userId, amount) => {
-      client.get(`${userId}_game`, (error, gameId) => {
-        pool.receive("raise", gameId, amount);
+    socket.on("raise", (dataField) => {
+      console.log(dataField);
+      client.get(`${dataField.userId}_game`, (error, gameId) => {
+        pool.receive("raise", gameId, dataField.amount);
 
         emit_game_status(pool, gameId);
       });
     });
-    socket.on("checkOrCall", (userId) => {
-      client.get(`${userId}_game`, (error, gameId) => {
+    //
+    socket.on("checkOrCall", (dataField) => {
+      console.log("Received checkOrCall!");
+      client.get(`${dataField.userId}_game`, (error, gameId) => {
         pool.receive("checkOrCall", gameId);
 
         emit_game_status(pool, gameId);

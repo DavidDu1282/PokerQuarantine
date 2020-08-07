@@ -20,20 +20,6 @@ class MatchPanel extends React.Component {
           description : 'Two cards, known as hole cards, are dealt face down to each player, and then five community cards are dealt face up in three stages. The stages consist of a series of three cards ("the flop"), later an additional single card ("the turn" or "fourth street"), and a final card ("the river" or "fifth street"). Each player seeks the best five card poker hand from any combination of the seven cards of the five community cards and their two hole cards. Players have betting options to check, call, raise, or fold.',
           short_description: 'Two cards, known as hole cards, are dealt face down to each player, and then five community cards are dealt...',
           amount: 5.99
-        },
-        {
-          id:2,
-          title:'Sample Game',
-          description : 'This is a sample game',
-          short_description : 'This is a sample game, This is a sample game, This is a sample game ,This is a sample game This is a sample game... ',
-          amount: 10.99
-        },
-        {
-          id:3,
-          title:'Sample Game',
-          description : 'This is a sample game',
-          short_description : 'This is a sample game, This is a sample game, This is a sample game ,This is a sample game This is a sample game... ',
-          amount: 20.99
         }
       ]
     };
@@ -71,7 +57,7 @@ class MatchPanel extends React.Component {
         >
           <Grid item><Typography variant="h4">Match</Typography></Grid>
           <Grid item container
-          justify="flex-end"
+          justify="center"
           alignItems="center"
           spacing={2}
           direction="row">

@@ -27,7 +27,6 @@ class ManagementPanel extends React.Component {
     .then((response) => {
       const data = response.data;
       this.setState({ posts: data });
-      console.log('Data has been received!!');
     })
 }
 
@@ -58,7 +57,6 @@ displayNewsPost = (posts) => {
   ));
 };
   render(){
-    console.log('State: ', this.state);
     return (
       <div className="container-padded">
       <Grid
