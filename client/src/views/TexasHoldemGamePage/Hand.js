@@ -26,7 +26,7 @@ export default function Hand(props) {
             <img src= {(() => {
               switch (elem.cardHidden) {
                 case true:   return "/cards_jpeg_zip/JPEG/Red_back.jpg";
-                default:      return "/cards_jpeg_zip/JPEG/" + elem.cardID + ".jpg";
+                default:      return "/cards_jpeg_zip/JPEG/" + elem.cardID.toUpperCase() + ".jpg";
               }
 
             })()} className = "card" ></img>
