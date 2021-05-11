@@ -29,7 +29,7 @@
     "http": "0.0.1-security",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.27.0",
     "mongoose": "^5.9.21",
     "morgan": "~1.9.1",
