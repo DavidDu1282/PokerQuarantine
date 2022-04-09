@@ -30,7 +30,7 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "lodash": "^4.17.19",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.21",
     "morgan": "~1.9.1",
     "passport": "^0.4.1",
