@@ -24,7 +24,7 @@
     "cors": "^2.8.5",
     "date-fns": "^2.14.0",
     "debug": "~2.6.9",
-    "express": "~4.16.1",
+    "express": "~4.17.3",
     "fs": "0.0.1-security",
     "http": "0.0.1-security",
     "http-errors": "~1.6.3",
